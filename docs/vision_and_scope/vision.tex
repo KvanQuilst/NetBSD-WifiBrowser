@@ -1,6 +1,9 @@
 \section{Vision of the Solution}
 % Now that we know what the customer needs, 
-% what will the solution look like? 
+% what will the solution look like?
+
+The solution will look like an API to interact with WPA Suplicant and IOCTL and a user interface to interat and use the API to connect to wifi
+
 \subsection{Vision Statement}
 % This is the formal vision statement.  
 %
@@ -10,12 +13,22 @@
 % Is:          statement of solution
 % Unlike:      closest alternative solution
 % Our Product: differentiation statement  
+
+For:         NetBSD users
+Who:         need to connect to wifi in a timely manner
+The:         NetBSD Wifi Browser
+Is:          A user interface
+Unlike:      Any other solution within NetBSD
+Our Product: will streamline the connection to wifi
   
 \subsection{Major Features}
 % Describe the major features that solve the customer's needs.
+
+The major feature is that our product will quickly connect the user to wifi in a variety of methods catering to the users comfort level
 
 \subsection{Assumptions and Dependencies}
 % What does this product depend on?  
 % The goal here is to describe, with as much detail as possible, what the envisioned
 % solution needs to operate.  
 
+Our product depends on WPA Suplicant, IOCTL, and NetBSD wifi drivers.
