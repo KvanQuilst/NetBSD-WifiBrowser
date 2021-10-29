@@ -3,36 +3,29 @@
 % What is the business context for the project?
 % What does the reader need to know about the customer's industry?
 
-In NetBSD, in order to connect to Wi-Fi the user must manually connect using WPA Supplicant and IOCTL to determine the Wi-Fi information. 
-We hope to create an API that will streamline the process of connecting to Wi-Fi. In windows, users connect to Wi-Fi using an API, in which 
-the user does not need to type specific commands into the command line interface. The business context involves creating an API that will make 
-the process of connecting to Wi-Fi much easier for the user. 
+Currently, in NetBSD, in order to connect to Wi-Fi the user must manually connect, utlizing \begin{verbatim}wpa\_supplicant\end{Verbatim} and \begin{verbatim}IOCTL\end{verbatim} to determine the Wi-Fi information, constructing a configuration file, and then starting wpa\_supplicant with the configuration file to connect.
+In contrast, Windows users connect to Wi-Fi using an API through a GUI, in which the user does not need to type specific commands into the command line interface, but rather click a few buttons, enter a password, and they're finished (generally). 
 
 \subsection{Business Opportunity}
 % What is the customer's need?
 % How does this need fit in the industrial context?
 
-The customer’s need is a streamlined method to connect devices to Wi-Fi, this would be helpful because NetBSD has no available options to do this. 
-This could potentially save time for the average user upon loading the system. An API that would make the process much simpler for the user. 
+There is an opportunity to bring similar functionality that Windows currently has in connecting to wifi networks to NetBSD, ultimately streamlining the process in which a NetBSD user connects to wifi networks. As an affect of this addition, time and effort spent in connecting to a wifi network will be greatly reduced, thus potentially providing a more inviting NetBSD experience.
 
 \subsection{Business Objectives and Success Criteria}
 % Why does the customer need this product?
 % How will the customer know that the product is a success?
 %   You must be very specific here.  What experiment can we do to verify success?
 
-The customer needs this product to help minimize the time and effort spent connecting to Wi-Fi. The customer will know the product is a success if 
+The customer needs this product to help minimize the time and effort spent connecting to Wi-Fi in NetBSD. The customer will know the product is a success if 
 the user is able to effortlessly connect to Wi-Fi in less time. Creating an API to streamline the process would take less effort for the typical user. 
-We can determine if our product is a success by thoroughly testing it before deployment. If we can effortlessly connect to Wi-Fi, using our API, we will 
-consider our project a success in this context. 
+We can determine if our product is a success by thoroughly testing it before deployment and verifying that wifi connecting is indeed a simpler process than it originally was.
 
 \subsection{Customer and Market Needs}
 % Connect the objectives and success criteria back to the customer's business.
 % That is, why does the industry require the customer to have this solution? 
 
-The industry requires this solution because a more efficient method of connecting to Wi-Fi is needed in the NetBSD operating system. Customers and 
-stakeholders alike would prefer a more efficient solution for connecting to Wi-Fi through the NetBSD operating system. NetBSD would have an additional 
-API that would make it’s process for setting network connections much simpler. This is a preference to most customers as it is often time consuming to 
-connect through Wi-Fi every time through the command line interface. 
+Meeting the objectives successfully would enhance many NetBSD users' experience within the operating system, especially those who spend much time connecting to wifi networks. The NetBSD has had a request for this functionality for many years, and thus it was fitting for our customer to source a solution through this project which would directly address the request.
 
 \subsection{Business Risks}
 % This is a hazard assessment.  What could go wrong?  How bad would it be if it
@@ -40,6 +33,6 @@ connect through Wi-Fi every time through the command line interface.
 
 We can determine our biggest failure if our API is not efficient in connecting to Wi-Fi, or if the API does not work altogether. However, business risks 
 and hazard is very low. We will thoroughly test our product before deployment to ensure it works before customers use the new system. If our API does not work, 
-customers will still be able to connect to Wi-Fi using the wpa_client. This puts our risk very low as our API will only work to improve a system where no current 
+customers will still be able to connect to Wi-Fi using the \begin{verbatim}wpa_client\end{verbatim}. This puts our risk very low as our API will only work to improve a system where no current 
 solution exists. We can work to protect against this by thoroughly testing our product before deployment. 
 
