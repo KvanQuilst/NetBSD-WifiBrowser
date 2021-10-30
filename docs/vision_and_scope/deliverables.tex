@@ -1,16 +1,14 @@
 \section{Deliverables}
 % The purpose of this section is to formally list the major components that you
 % will produce as part of this project. 
-
-The main deliverables for this project will be an API that interacts with WPA supplicant, IOTCL and the interactive interface built 
-on the API that allows users to connect to Wi-Fi, without the need for the command line client. We are hoping to use any extra time 
-to slowly improve the user interface with the progression of a CLI, then into a TUI, and finally a GUI if time permits. 
-
-\subsection{Software/Hardware}
-% List the software components and hardware, if any, that you will deliver as
-% part of this project.  
-
-The software that we will be delivering as a part of this project will be a CLI, TUI, and GUI application.
+\begin{itemize}
+	\item API\\
+				The API would be the central component of the product produced, serving as the true mediator between the user and communicating with wpa\_supplicant and IOCTL to accomplish the task of connecting to a wifi network. 
+	\item Command Line Interface (CLI)\\
+				The CLI would allow the user to connect to a wifi network easiliy utilizing the command line and the aforementioned API.
+	\item Terminal User Interface (TUI)\\
+				The TUI would a curses based interface that would enable a user to connect to wifi more visually, presenting information without the necessity of a series of commands, but rather through automatically presenting the necesasry imformation
+\end{itemize}
 
 \subsection{Documentation}
 % What user documentation will you deliver.
@@ -20,9 +18,5 @@ The main user documentation that will come with our deliverables will be man pag
 \subsection{Key Presentations}
 % You will present your project at the end of 492 and 493.
 
-When we finally get here, we hope to have a detailed presentation of our API. 
-
-\subsection{Other Deliverables}
-% Are there any other deliverables like in-person training?
-
-There aren't any more deliverables for our project
+At the end of CSCI 492, ideally we will have an API to present to our peers with a semi-functional CLI to show off its capabilities and features.
+By the end of CSCI 493, at minimum we will have a complete CLI and TUI to present, and if development allows, a GUI (themed by one of the popular NetBSD desktop envrionments) to show to final functionality of our API and the success of simplifying the wifi connection process.

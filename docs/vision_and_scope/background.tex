@@ -3,7 +3,7 @@
 % What is the business context for the project?
 % What does the reader need to know about the customer's industry?
 
-Currently, in NetBSD, in order to connect to Wi-Fi the user must manually connect, utlizing \begin{verbatim}wpa\_supplicant\end{Verbatim} and \begin{verbatim}IOCTL\end{verbatim} to determine the Wi-Fi information, constructing a configuration file, and then starting wpa\_supplicant with the configuration file to connect.
+Currently, in NetBSD, in order to connect to Wi-Fi the user must manually connect, utlizing wpa\_supplicant and IOCTL to determine the Wi-Fi information, constructing a configuration file, and then starting wpa\_supplicant with the configuration file to connect.
 In contrast, Windows users connect to Wi-Fi using an API through a GUI, in which the user does not need to type specific commands into the command line interface, but rather click a few buttons, enter a password, and they're finished (generally). 
 
 \subsection{Business Opportunity}
@@ -33,10 +33,6 @@ Meeting the objectives successfully would enhance many NetBSD users' experience 
 
 We can determine our biggest failure if our API is not efficient in connecting to Wi-Fi, or if the API does not work altogether. However, business risks 
 and hazard is very low. We will thoroughly test our product before deployment to ensure it works before customers use the new system. If our API does not work, 
-<<<<<<< HEAD
-customers will still be able to connect to Wi-Fi using the wpa client. This puts our risk very low as our API will only work to improve a system where no current 
-=======
-customers will still be able to connect to Wi-Fi using the \begin{verbatim}wpa_client\end{verbatim}. This puts our risk very low as our API will only work to improve a system where no current 
->>>>>>> dabecaed9e24ca3575b063506cf02d3067217528
+customers will still be able to connect to Wi-Fi using the wpa\_client. This puts our risk very low as our API will only work to improve a system where no current 
 solution exists. We can work to protect against this by thoroughly testing our product before deployment. 
 

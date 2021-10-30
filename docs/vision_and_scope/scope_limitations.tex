@@ -3,6 +3,27 @@
 % developed in this current project or version, what will be delayed until
 % latter projects, and what is out of scope for the whole product.  
 %
+Within the scope of the next 8 months in which we have to work, we will accomplish three major tasks: the creation of an API which interfaces with
+wpa\_supplicant and IOCTL, a command line interface built on top of the API, and a terminal user interface also built on the API, both of which will
+allow a user to easily interact with wpa\_supplicant to connect to a wifi network. If time and development progress is permitting, a GUI in the 
+style of one of the popular desktop environments of NetBSD will also be created similarly to the CLI and the TUI. An aspect that will have to wait
+for later projects and probably other teams is the development of GUI interfaces for each of the popular desktop environments. Out of scope for
+the wifi browser project is the porting of the applications and API to other UNIX or BSD based operating systems.
+
 \subsection{Scope of Initial Release}
+
+Our initial release of the product will certainly feature the API and the command line interface. This will meet the bare minimum of the product
+requirements and provide a foundational perspective of the future of the product, as well as inform the changes that may be needed from either our
+API or CLI.
+
 \subsection{Scope of Subsequent Releases}
+
+The release immediate proceeding from the initial release will be the creation of a terminal-base user interface. Subsequent releases will most
+likely focus on the implementation of proper GUI's built on the API, and, in the event that wpa\_supplicant or IOCTL change significantly, updating
+our API to continue proper interfacing with both programs.
+
 \subsection{Limitations and Exclusions}
+
+Our major limitations for this project is the team having minimal experience with the NetBSD operating system and the amount of time we will
+have to work towards our goal. On top of this limitation, we will need to allot time to understand how to use wpa\_supplicant and IOCTL to 
+connect to wifi networks of all standards and protocols so that we properly design an API to do that for us.
