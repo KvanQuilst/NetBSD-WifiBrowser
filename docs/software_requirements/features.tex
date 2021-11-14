@@ -4,21 +4,194 @@
 % requirement can be verified.  For example, the software shall authenticate
 % users with at least two identification factors.  
 
+\begin{enumerate}
+  \item The API shall interface with wpa\_supplicant and IOCTL
+  \item The API shall hash passkeys and passwords provided to it
+  \item The API shall provide a manual process for connecting to a wifi network
+  \item The API shall provide a semi-automatic process for connection to a wifi network
+  \item The CLI/TUI shall provide an interface to the API for the user
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % [For Each Feature]
-\subsection{Name of feature}
+\subsection{The API shall interface with wpa\_supplicant and IOCTL}
 \subsubsection{Description}
 % Describe the feature and how it fits into the overall product.  
+In NetBSD, wpa\_supplicant and IOCTL are utilized to determine available wifi networks and
+the specific details of a particular wifi network. The information from these are used to
+construct a wpa\_supplicant configuration file, with which the wpa\_supplicant daemon is
+then run, connecting the wifi interface to the wifi network. The API would streamline this
+process, grabbing all of the necessary information from wpa\_supplicant and IOCTL
+and putting it into a configuration file upon a network selection, requiring minimal
+intervention from the user.
 
 \subsubsection{Priority}
 % Describe the relative importance of this feature. 
+The feature is of high priority as it is the core of the purpose of the existence of this 
+product.
 
 \subsubsection{Stimulus and Response}
 % What event will trigger the feature and how should the system respond.  This
 % is probably an excerpt of a use case. 
+This feature will be utilized every time a user needs to connect to a new network.
+Upon it's use, the API will present the available (visible) networks and a network
+will then need to be selected from that list. The API will then handle the configuration
+file and restarting wpa\_supplicant for the connection to take affect.
 
 \subsubsection{Functional Requirements}
 % Formally state the functional requirement.
 % The low-level format command shall require authorization by two
 % system-administrators before beginning the low-level format operation.
 
+\begin{itemize}
+  \item The API shall require a call to it to gather available network information
+  \item The API shall provide a list of available networks to connect to
+  \item The API shall handle wpa\_supplicant configuration
+  \item The API shall restart the wpa\_supplicant service (to read in new/appended 
+  \item The API shall not require root privileges from the user
+    config file)
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The API shall hash passkeys and passwords}
+\subsubsection{Description}
+% Describe the feature and how it fits into the overall product.  
+When using wpa\_supplicant, the default method of providing a passkey (to connect
+to a network) or a password (for connecting to a network with a specific user account)
+is be storing them in plain text in the configuration file. However, wpa\_supplicant
+supports hashed passkeys and passwords in the configuration file, providing a
+small additional layer to security. For passkeys, the wpa\_supplicant package provides
+a hasher program. For passwords, piping a password through iconv and openssl provides
+a hashed password.
+
+\subsubsection{Priority}
+% Describe the relative importance of this feature. 
+This feature is important as it further protects a user's personal data and prevents
+potentially malicious actors from having an easier entrance into a network.
+
+\subsubsection{Stimulus and Response}
+% What event will trigger the feature and how should the system respond.  This
+% is probably an excerpt of a use case. 
+This feature will be triggered any time the user inputs a passkey or a password.
+Upon receiving a passkey, the API will run the passkey through the provided 
+wpa\_supplicant hashing program before storing it in the configuration file. For
+passwords, wpa\_supplicant will pipe the provided password through iconv and openssl
+before storing the password in the configuration file.
+
+\subsubsection{Functional Requirements}
+% Formally state the functional requirement.
+% The low-level format command shall require authorization by two
+% system-administrators before beginning the low-level format operation.
+\begin{itemize}
+  \item The API shall hash passkeys and passwords before storage in the configuration file
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The API shall provide a manual process for connecting to a network}
+\subsubsection{Description}
+% Describe the feature and how it fits into the overall product.  
+In using this product, there may be a time that a user will want to manually configure
+a network connection. Instead of writing a seperate wpa\_supplicant configuration file,
+the user will be able to provide the network information to the API and the API will handle
+the actual interfacing with wpa\_supplicant and append it to the API's configuration file.
+
+\subsubsection{Priority}
+% Describe the relative importance of this feature. 
+This feature is not of the highest priority as it does not actively work towards streamlining
+the interaction with wpa\_supplicant and IOCTL in a significant way, but should be easily 
+implementable with the existing infrastructure since the user will be providing the same
+information that might be provided by wpa\_supplicant and IOCTL, and thus can be processed
+similarly.
+
+\subsubsection{Stimulus and Response}
+% What event will trigger the feature and how should the system respond.  This
+% is probably an excerpt of a use case. 
+This feature will occur when the user invokes the call specifying there will be
+manual input from the user. The user will provide at minimum the necessary information,
+as well as any extra information for connecting to a network. If there is cause for more
+information to be provided in the configuration, the API will grab the remaining necessary
+information through a query with wpa\_supplicant or IOCTL.
+
+\subsubsection{Functional Requirements}
+% Formally state the functional requirement.
+% The low-level format command shall require authorization by two
+% system-administrators before beginning the low-level format operation.
+
+\begin{itemize}
+  \item The API will provide a library call for manual configuration
+  \item The API will fill in any necessary information not provided by the user
+    (the minimum provision being an SSID)
+  \item The API will add the configuration information to its internal wpa\_supplicant
+    configuration file
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The API will provide a semi-automatic process for connecting to a wifi network}
+\subsubsection{Description}
+% Describe the feature and how it fits into the overall product.  
+In NetBSD, much of the time spent connecting to a wifi network is spent identifying
+the necessary information for the wpa\_supplicant configuration file. The API
+can circumvent this by gathering the information automatically for the user
+and automatically updating the internal wpa\_supplicant configuration file.
+
+\subsubsection{Priority}
+% Describe the relative importance of this feature. 
+The priority of this high as this is the main feature that provides the streamlined
+experience of connecting to a wifi network in NetBSD.
+
+\subsubsection{Stimulus and Response}
+% What event will trigger the feature and how should the system respond.  This
+% is probably an excerpt of a use case. 
+This feature will occur when the call for semi-automatic configuration is made
+on the API. Upon invocation, the API will gather the SSIDs of the available 
+(visible) networks and return them. The API will then require a network to be
+selected from the list and the passkey or password associated with the connection
+before gathering all the necessary information of the network from wpa\_supplicant
+and IOCTL, appending it into the API's internal wpa\_supplicant configuration file.
+
+\subsubsection{Functional Requirements}
+% Formally state the functional requirement.
+% The low-level format command shall require authorization by two
+% system-administrators before beginning the low-level format operation.
+\begin{itemize}
+  \item The API shall return a list of available (visible) networks when requested
+  \item The API shall handle the configuration of a wpa\_supplicant configuration file
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{The CLI/TUI shall provide an interface to the API for the user}
+\subsubsection{Description}
+% Describe the feature and how it fits into the overall product.  
+The API by itself is only useful if using as a library in source code of the
+same language. Thus, a CLI/TUI will be provided as a way for a user to actually
+interface with the API and its services. Through the interface, the user will be
+able to take advantage of the API's features.
+
+\subsubsection{Priority}
+% Describe the relative importance of this feature. 
+The priority of at least one of these interfaces is high as this will serve as the 
+face of the product. Not many people will want to build their own interface on our
+API library, so providing one that supplies all the necessary functionality is a must.
+
+\subsubsection{Stimulus and Response}
+% What event will trigger the feature and how should the system respond.  This
+% is probably an excerpt of a use case. 
+The CLI/TUI will be used any time a user needs to manage their network connections,
+new or current. The interface will provided the tools necessary for interacting with
+those networks and manage (most of) the heavy lifting for the user.
+
+\subsubsection{Functional Requirements}
+% Formally state the functional requirement.
+% The low-level format command shall require authorization by two
+% system-administrators before beginning the low-level format operation.
+\begin{itemize}
+    \item The CLI/TUI will provide the user with the ability to directly interface
+      with the API
+    \item The CLI/TUI will provide formatted presentation of the user's options
+    \item The CLI/TUI will present formatted output from the API
+\end{itemize}
