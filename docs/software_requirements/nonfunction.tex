@@ -5,27 +5,47 @@
 % function shall return the nth Fibonacci number when provided n as input.  A
 % nonfunctional requirement would be these: the function shall take time O(n)
 % and all lines of the software shall be reachable by some test-case.
-%
+\begin{description}
+  \item[Location of Configuration File] The \texttt{wpa\_supplicant} configuration file
+    will be stored locally per user. This makes it so that root access is not
+    required to modify the network configurations. With this, a central file
+    will exist in conjunction containing "generic" versions of configured
+    networks on the machine so that other users can utilize those configured
+    networks, potentially with their own information (like with a WPA-EAP network).
+\end{description}
 
 \subsection{Performance Requirements}
 % Your project will have performance requirements.  How long is the user willing
 % to wait for the different features to execute?   For example, the software
 % shall authenticate authorized users withing 250ms.   
-
-\subsection{Safety Requirements}
-% It is unlikely that your project will have any safety requirements.  This
-% section would be used for software that controls a physical device that could
-% potentially cause harm.  
+\begin{itemize}
+  \item In the API, automatic configuration should not take more than 1 second
+    past the time it takes for the user to choose and network and enter the
+    passkey or a username and password.
+  \item After changing a configuration file, the configuration should not take
+    more than 5-10 seconds to take effect in the \texttt{wpa\_supplicant} process.
+\end{itemize}
 
 \subsection{Security Requirements}
 % Do not overlook this section.  Consider the three primary topics of computer
 % security: Confidentiality, Integrity, and Availability.   Your project will
 % have security requirements. 
-%
+\begin{description}
+  \item[Hashing of Passkeys and Passwords] Passkeys will be hashed with the
+    passkey hasher provided in the \texttt{wpa\_supplicant} package, and passwords will
+    be hashed via a pipe through \texttt{iconv} to change the encoding to utf16 and piped
+    to \texttt{openssl} to encrypt in an md4 hash. The purpose of this is to prevent storing
+    passkeys and password in plain text, and offer an extra (albeit extremely thin)
+    layer of security.
+\end{description}
 
 \subsection{Software Quality Attributes}
 % Quality requirements can be the most difficult to write.  The desired quality
 % must be written in a meaningful and testable way.  For example, All functions
 % within the software shall have a cyclomatic number less than 10.  
-
-
+\begin{itemize}
+  \item The API will accurately determine and place configuration information
+    in the \texttt{wpa\_supplicant} configuration file for a given network.
+  \item The CLI/TUI will encapsulate all of the functionality that the API
+    offers and way to easily interact with that functionality.
+\end{itemize}
