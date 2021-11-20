@@ -1,4 +1,28 @@
 \section{Analysis Models}
 % This is an optional section.  All of the analytically artifacts like models,
 % use cases, and diagrams should be included here.  
+\subsection{Use Cases}
 
+\textbf{Use Case 1:} Connect to Wi-Fi using our API\\ 
+\textbf{Actor:} User\\
+\textbf{Use Case Overview:} The user of the system wants to connect to Wi-Fi using our API.\\
+\textbf{Subject Area:} Ethernet\\
+\textbf{Trigger:} The system has no current Wi-Fi connection and the user wishes to implement one.\\
+\textbf{Precondition 1:} There is a valid internet connection available.\\
+\textbf{Basic Flow:} The user wishes to connect to Wi-Fi semi – automatically using our API. The user clicks 
+on our API and then clicks on the list of available Wi-Fi connections. The user clicks connect on the 
+Wi-Fi connection they wish to establish. Our API processes the passkeys and passwords in the configuration 
+file. The user successfully connects to Wi-Fi.\\
+\textbf{Alternative Flow 1:} The user wishes to connect to Wi-Fi manually using our API. The user clicks on set up Wi-Fi 
+connection. The user manually inputs the network information required to establish a connection. The user clicks 
+establish connection. Our API processes the required information and successfully connects to Wi-Fi.\\
+\textbf{Termination Outcome:} The user has successfully connected to Wi-Fi using our API.\\
+
+\textbf{Use Case 2:} Disconnect from Wi-Fi using our API\\
+\textbf{Actor:} User
+\textbf{Use Case Overview:} The user of the system wants to disconnect from Wi-Fi using our API.\\
+\textbf{Subject Area:} Ethernet\\
+\textbf{Trigger:} The system has a valid Wi-Fi connection and the user wishes to disconnect.\\
+\textbf{Precondition 1:} A valid internet connection is established within’ the system.\\
+\textbf{Basic Flow:} The user clicks disconnect from Wi-Fi on our API. The system successfully disconnects from Wi-Fi.\\
+\textbf{Termination Outcome:} The user has successfully disconnected from Wi-Fi using our API.\\
