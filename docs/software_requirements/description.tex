@@ -9,10 +9,46 @@
 % intended to fit the software into their business activities?   Consider
 % including a figure that illustrates these relationships. 
 
+This product fits into the business process by providing a more efficient means of connecting 
+to Wi-Fi. For people who use NetBSD, we can reduce the time that is taken to enter commands manually 
+through \texttt{wpa\_client}. Currently, commands are entered through the terminal, and many different 
+commands are needed. Such commands involve searching for network interfaces, accessing the network 
+interface, scanning the interface and then connecting to a specific Wi-Fi connection through that 
+interface. We wish to reduce the time needed to do this by creating an API that can streamline this 
+process for us. I don’t believe a figure is needed for this relationship, because our API will simply 
+reduce the time needed for a process that already exists. 
+
 \subsection{Product Features}
 % This is a list of high-level description of the functional behavior of the
 % product.  This should give the reader a better understanding of how the formal
 % requirements fit together. 
+
+The following features of our Wi-Fi API involve the following: 
+
+\begin{enumerate}
+\item An interface that interacts with \texttt{wpa\_supplicant} and IOCTL 
+\item The hashing of passkeys and passwords 
+\item A manual process for connecting to Wi-Fi networks 
+\item A semi-automatic process for connecting to Wi-Fi networks 
+\item A process for removing known/configured networks 
+\item A client and text interface for the user. 
+\end{enumerate} 
+
+Each feature of our product implements a specific component of our API and is fairly descriptive on their own. 
+The interface that interacts with \texttt{wpa\_supplicate} and IOCTL will involve a process that is similar to 
+windows. Where a user can interact with the peripherals of their device to connect to a Wi-Fi network, without 
+inputting specific commands into \texttt{wpa\_client}. The hashing of passkeys and passwords is typically done 
+through a configuration file on the system. However, our API will implement this feature by running the passkey 
+and password and storing them in the configuration file through our API. For establishing manual network connections, 
+we will create a process where the user can manually configure a network where our API will then append the new network 
+connection to the configuration file of the system. \\
+The semi-automatic feature is fairly straight forward in that our API simply processes the information already stored in the 
+configuration file. For removing known / configured networks, our API simply accesses the information in the configuration file 
+and simply removes the data for the specific network. This involves developing a process that is the reverse of establishing 
+a manual connection through Wi-Fi, since our API will be removing data instead of adding it to the file. We will also need 
+to establish as least a client terminal interface and text editor user interface for our API. While we hope to eventually 
+establish a GUI component of our interface, the client terminal interface and text editor interface will provide the user with a 
+method of interacting with our API.
 
 \subsection{User Classes and Characteristics}
 % Describe the different rolls or classes of users.  For each user class,
@@ -26,7 +62,7 @@
 % with a mobile application for mountain biking that keeps track of GPS locations.
 
 \subsection{Design and Implementation Constraints}
-% List an constraints that are part of the project.  For example, health
+% List any constraints that are part of the project.  For example, health
 % services applications must implement HIPAA regulations.  
 
 \subsection{Assumptions and Dependencies}
