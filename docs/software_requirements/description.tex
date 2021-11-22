@@ -56,17 +56,44 @@ method of interacting with our API.
 % systems have at least two classes of users: system administrators and
 % operators.  
 
+We expect our API to interact with any user of the system. Implementing or changing current or existing Wi-Fi connections is 
+not typically done by a root user of the system, and any user of the NetBSD operating system will have the ability of 
+establishing their own Wi-Fi connections. Granted that user has access to the Wi-Fi network, as well as the proper information 
+to connect to the specific connection they wish to establish. 
+
 \subsection{Operating Environment}
 % What is the expected environment?  For example, the product could be a desktop
 % application with users who work in a formal office environment.  Contrast this
 % with a mobile application for mountain biking that keeps track of GPS locations.
 
+The expected operating environment is the NetBSD operating system. We are constructing an application program interface to 
+interact with this specific type of operating system. This is not an API that can run on mobile devices, and is a standard 
+desktop API used for making the process of connecting to existing Wi-Fi connections much simpler. 
+
 \subsection{Design and Implementation Constraints}
 % List any constraints that are part of the project.  For example, health
 % services applications must implement HIPAA regulations.  
+
+We don’t believe there are too many constraints with our API. Although NetBSD uses the Lua programming language, I’m almost 
+certain we can develop our API in any language we choose. Granted, we will likely choose the C programming language or Java 
+to do so. Implementation constraints involve developing an API that can interact with any changes or updates made to the NetBSD 
+operating system. However, since NetBSD is only a PC operating system, we will be limited to developing our API specifically for 
+computers, and not mobile or android devices. Design constraints will involve the performance of our system. We are also limited 
+in design in that our functions must be able to interact with the NetBSD operating system. As well as effective design in accessing 
+the configuration files and other resources required for our API to function properly. 
 
 \subsection{Assumptions and Dependencies}
 % List assumptions and dependencies that are not formal constraints.  Items in
 % this list will, if changed, will cause a change in the formal requirements in
 % the next section.
 %
+
+Dependencies certainly include the NetBSD operating system as a whole. Including the ability to interact with many of the features 
+the system already provides. Such as \texttt{wpa\_supplicant}, CLI and TUI features, as well as IOCTL. Assumptions are those 
+we already consider are in place. We assume most hardware devices that run the NetBSD operating system can make additional space 
+for our API to function. Granted, not much space is required. Additionally, we can assume the NetBSD operating system will be able 
+to interact efficiently with the methods and functions required for our API to function. 
+
+
+
+
