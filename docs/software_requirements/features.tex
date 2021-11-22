@@ -5,7 +5,7 @@
 % users with at least two identification factors.  
 
 \begin{enumerate}
-  \item The API shall interface with \texttt{wpa\_supplicant} and IOCTL
+  \item The API shall interface with \texttt{wpa\_supplicant} and \texttt{ioctl}
   \item The API shall hash passkeys and passwords provided to it
   \item The API shall provide a manual process for connecting to a wifi network
   \item The API shall provide a semi-automatic process for connection to a wifi network
@@ -16,14 +16,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % [For Each Feature]
-\subsection{The API shall interface with \texttt{wpa\_supplicant} and IOCTL}
+\subsection{The API shall interface with \texttt{wpa\_supplicant} and \texttt{ioctl}}
 \subsubsection{Description}
 % Describe the feature and how it fits into the overall product.  
-In NetBSD, \texttt{wpa\_supplicant} and \texttt{IOCTL} are utilized to determine available wifi networks and
+In NetBSD, \texttt{wpa\_supplicant} and \texttt{ioctl} are utilized to determine available wifi networks and
 the specific details of a particular wifi network. The information from these are used to
 construct a \texttt{wpa\_supplicant} configuration file, with which the \texttt{wpa\_supplicant} daemon is
 then run, connecting the wifi interface to the wifi network. The API would streamline this
-process, grabbing all of the necessary information from \texttt{wpa\_supplicant} and IOCTL
+process, grabbing all of the necessary information from \texttt{wpa\_supplicant} and ioctl
 and putting it into a configuration file upon a network selection, requiring minimal
 intervention from the user.
 \subsubsection{Priority}
@@ -101,9 +101,9 @@ the actual interfacing with \texttt{wpa\_supplicant} and append it to the API's 
 \subsubsection{Priority}
 % Describe the relative importance of this feature. 
 This feature is not of the highest priority as it does not actively work towards streamlining
-the interaction with \texttt{wpa\_supplicant} and IOCTL in a significant way, but should be easily 
+the interaction with \texttt{wpa\_supplicant} and ioctl in a significant way, but should be easily 
 implementable with the existing infrastructure since the user will be providing the same
-information that might be provided by \texttt{wpa\_supplicant} and \texttt{IOCTL}, and thus can be processed
+information that might be provided by \texttt{wpa\_supplicant} and \texttt{ioctl}, and thus can be processed
 similarly.
 
 \subsubsection{Stimulus and Response}
@@ -113,7 +113,7 @@ This feature will occur when the user invokes the call specifying there will be
 manual input from the user. The user will provide at minimum the necessary information,
 as well as any extra information for connecting to a network. If there is cause for more
 information to be provided in the configuration, the API will grab the remaining necessary
-information through a query with \texttt{wpa\_supplicant} or \texttt{IOCTL}.
+information through a query with \texttt{wpa\_supplicant} or \texttt{ioctl}.
 
 \subsubsection{Functional Requirements}
 % Formally state the functional requirement.
@@ -151,7 +151,7 @@ on the API. Upon invocation, the API will gather the SSIDs of the available
 (visible) networks and return them. The API will then require a network to be
 selected from the list and the passkey or password associated with the connection
 before gathering all the necessary information of the network from \texttt{wpa\_supplicant}
-and \texttt{IOCTL}, appending it into the API's internal \texttt{wpa\_supplicant} configuration file.
+and \texttt{ioctl}, appending it into the API's internal \texttt{wpa\_supplicant} configuration file.
 
 \subsubsection{Functional Requirements}
 % Formally state the functional requirement.

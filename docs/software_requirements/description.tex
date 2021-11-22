@@ -3,69 +3,48 @@
 % not include specific features.  Give the reader an understand of how those
 % features fit into the larger setting. 
 %
+The NetBSD Wifi Browser is to fill a void that exists within the NetBSD operating
+system: the need for a streamlined method to connect to wifi. At the current
+moment, wifi connection requires a lot of manual effort and configuration to
+achieve a connection. The NetBSD Wifi Browser will simplify this process
+by automating some of the manual configuration bits, significantly reducing the
+effort and time required of the user.
 
 \subsection{Product Perspective}
 % How does the product fit in the business larger processes.  How is the user
 % intended to fit the software into their business activities?   Consider
 % including a figure that illustrates these relationships. 
-
-This product fits into the business process by providing a more efficient means of connecting 
-to Wi-Fi. For people who use NetBSD, we can reduce the time that is taken to enter commands manually 
-through \texttt{wpa\_client}. Currently, commands are entered through the terminal, and many different 
-commands are needed. Such commands involve searching for network interfaces, accessing the network 
-interface, scanning the interface and then connecting to a specific Wi-Fi connection through that 
-interface. We wish to reduce the time needed to do this by creating an API that can streamline this 
-process for us. I don’t believe a figure is needed for this relationship, because our API will simply 
-reduce the time needed for a process that already exists. 
+This product will be particularly beneficial when a user needs to connect to
+a new network, a common occurrence with fresh installs of NetBSD and when the
+computer with NetBSD has moved to a new location.
 
 \subsection{Product Features}
 % This is a list of high-level description of the functional behavior of the
 % product.  This should give the reader a better understanding of how the formal
 % requirements fit together. 
-
-The following features of our Wi-Fi API involve the following: 
-
-\begin{enumerate}
-\item An interface that interacts with \texttt{wpa\_supplicant} and IOCTL 
-\item The hashing of passkeys and passwords 
-\item A manual process for connecting to Wi-Fi networks 
-\item A semi-automatic process for connecting to Wi-Fi networks 
-\item A process for removing known/configured networks 
-\item A client and text interface for the user. 
-\end{enumerate} 
-
-Each feature of our product implements a specific component of our API and is fairly descriptive on their own. 
-The interface that interacts with \texttt{wpa\_supplicate} and IOCTL will involve a process that is similar to 
-windows. Where a user can interact with the peripherals of their device to connect to a Wi-Fi network, without 
-inputting specific commands into \texttt{wpa\_client}. The hashing of passkeys and passwords is typically done 
-through a configuration file on the system. However, our API will implement this feature by running the passkey 
-and password and storing them in the configuration file through our API. For establishing manual network connections, 
-we will create a process where the user can manually configure a network where our API will then append the new network 
-connection to the configuration file of the system. \\
-The semi-automatic feature is fairly straight forward in that our API simply processes the information already stored in the 
-configuration file. For removing known / configured networks, our API simply accesses the information in the configuration file 
-and simply removes the data for the specific network. This involves developing a process that is the reverse of establishing 
-a manual connection through Wi-Fi, since our API will be removing data instead of adding it to the file. We will also need 
-to establish as least a client terminal interface and text editor user interface for our API. While we hope to eventually 
-establish a GUI component of our interface, the client terminal interface and text editor interface will provide the user with a 
-method of interacting with our API.
+The NetBSD Wifi Browser will be comprised of two components: an API and a
+user interface. The API will handle the interactions with \texttt{wpa\_supplicant}
+and be the source of automation of network configuration, with the only required
+input from the user being the network (chosen from a list typically) and the
+passkey or username and password for that network. The UI then will utilize the
+API to allow a user to take advantage of the features the API will contain.
 
 \subsection{User Classes and Characteristics}
 % Describe the different rolls or classes of users.  For each user class,
 % describe the user class's principal characteristics.  For example, unix
 % systems have at least two classes of users: system administrators and
 % operators.  
-
-We expect our API to interact with any user of the system. Implementing or changing current or existing Wi-Fi connections is 
-not typically done by a root user of the system, and any user of the NetBSD operating system will have the ability of 
-establishing their own Wi-Fi connections. Granted that user has access to the Wi-Fi network, as well as the proper information 
-to connect to the specific connection they wish to establish. 
+\begin{description}
+  \item[General User] The general user will have a desire to easily connect
+    to wifi networks and remove known networks.
+  \item[Developer] The developer may use the API in their own development projects
+    or in an alternative user interface.
+\end{description}
 
 \subsection{Operating Environment}
 % What is the expected environment?  For example, the product could be a desktop
 % application with users who work in a formal office environment.  Contrast this
 % with a mobile application for mountain biking that keeps track of GPS locations.
-
 The expected operating environment is the NetBSD operating system. We are constructing an application program interface to 
 interact with this specific type of operating system. This is not an API that can run on mobile devices, and is a standard 
 desktop API used for making the process of connecting to existing Wi-Fi connections much simpler. 
@@ -73,27 +52,15 @@ desktop API used for making the process of connecting to existing Wi-Fi connecti
 \subsection{Design and Implementation Constraints}
 % List any constraints that are part of the project.  For example, health
 % services applications must implement HIPAA regulations.  
-
-We don’t believe there are too many constraints with our API. Although NetBSD uses the Lua programming language, I’m almost 
-certain we can develop our API in any language we choose. Granted, we will likely choose the C programming language or Java 
-to do so. Implementation constraints involve developing an API that can interact with any changes or updates made to the NetBSD 
-operating system. However, since NetBSD is only a PC operating system, we will be limited to developing our API specifically for 
-computers, and not mobile or android devices. Design constraints will involve the performance of our system. We are also limited 
-in design in that our functions must be able to interact with the NetBSD operating system. As well as effective design in accessing 
-the configuration files and other resources required for our API to function properly. 
+The intended environment for the NetBSD Wifi Browser is on a NetBSD desktop,
+initially only within a terminal as the only provided user interfaces will be
+a CLI or TUI.
 
 \subsection{Assumptions and Dependencies}
 % List assumptions and dependencies that are not formal constraints.  Items in
 % this list will, if changed, will cause a change in the formal requirements in
 % the next section.
 %
-
-Dependencies certainly include the NetBSD operating system as a whole. Including the ability to interact with many of the features 
-the system already provides. Such as \texttt{wpa\_supplicant}, CLI and TUI features, as well as IOCTL. Assumptions are those 
-we already consider are in place. We assume most hardware devices that run the NetBSD operating system can make additional space 
-for our API to function. Granted, not much space is required. Additionally, we can assume the NetBSD operating system will be able 
-to interact efficiently with the methods and functions required for our API to function. 
-
-
-
-
+The NetBSD Wifi Browser API will heavily depend on \texttt{wpa\_supplicant} and its
+provided interfaces. The API will be designed and implemented under the assumption
+that \texttt{wpa\_supplicant} and its interfaces will not change its policies.
