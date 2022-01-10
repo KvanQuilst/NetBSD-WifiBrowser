@@ -1,7 +1,6 @@
 \documentclass[11pt]{article}
 \setlength{\parindent}{0em}
 \usepackage[margin=1in]{geometry}
-\usepackage{array}
 
 \begin{document}
 
@@ -10,6 +9,50 @@
   Dylan Roy, Stephen Loudiana, Kevin McGrane
 \end{center}
 
+\section{API Testing}
+The testing of the Wifi Browser API will utilize white box testing to ensure correctness at each step.
+\begin{itemize}
+  \item Configuration Manipulation Testing
+  \begin{itemize}
+    \item Create configuration file at correct location: /home/\$USER/TBD
+    \item Add new network config to configuration file
+    \item Populate a network config in the configuration file with data
+    \item Populate the desired network config (out of many) in the configuration file with data
+    \item \texttt{edit\_configured()} modifies an existing network configuration
+    \item \texttt{delete\_configured()} removes a specified network config from the configuration file
+    \item Create a new configuration file in a specified location
+    \item Use a specified configuration (not the default location's)
+    \item Set the default configuration location
+  \end{itemize}
+
+  \item Wifi Network Information Gathering
+  \begin{itemize}
+    \item \texttt{list\_available()} returns a list of networks$^1$ 
+    \item \texttt{list\_configured()} returns a list of configured networks
+    \item \texttt{function} grabs correct key management protocol for a specified network$^1$
+    \item \texttt{function} hashes passkeys (hash against SSID and verify in testing)
+    \item \texttt{function} grabs correct EAP network information (pairwise, group, eap, phase2, etc.)$^1$
+    \item \texttt{function} hashes EAP passwords (check if password in configuration file different than provided, verify connection)
+  \end{itemize}
+
+  \item \texttt{wpa\_supplicant} Communication
+  \begin{itemize}
+    \item Detect running \texttt{wpa\_supplicant} process
+    \item Detect no \texttt{wpa\_supplicant} process
+    \item Kill \texttt{wpa\_supplicant}$^2$
+    \item Start \texttt{wpa\_supplicant} with a specified configuration file (and driver and interface)
+    \item \texttt{wpa\_supplicant} connects to a specified network using the API generated configuration file
+  \end{itemize}
+
+\end{itemize}
+
+\small$^1$ testing that requires a preconfigured wifi router in order to complete with consistency
+\small$^2$ requires sudo privileges
+
+\section{CLI Testing}
+
+
+\section{TUI Testing}
 
 
 \end{document}
