@@ -52,17 +52,40 @@ The testing of the Wifi Browser API will utilize white box testing to ensure cor
 \section{CLI Testing}
 The testing of the Wifi Browser CLI will utilize white box testing to ensure correctness at each step.
 \begin{itemize}
-  \item Configuration Manipulation Testing
-  \begin{itemize}
-    \item Printing correct prompts and information
-    \item user inputs are processed correctly
-    
-  \item \texttt{API} Communication
-    \item supports functionality of the API
-    \item recives and gives information to the API correctly
+  \item User commands are processed correctly
+  \item Print list of available networks to stdout
+  \item Print list of configured networks to stdout
+  \item Connect to network of provided ssid (unsecured)
+  \item Connect to secured network of provided ssid:
+    \begin{itemize}
+      \item Prompt for passkey
+    \end{itemize}
+
+  \item Connect to secured network of provided ssid and passkey
+  \item Connect to EAP network of provided ssid:
+    \begin{itemize}
+      \item Prompt for username
+      \item Prompt for password
+    \end{itemize}
+
+  \item Connect to manually configured network
+    \begin{itemize}
+      \item Prompt for ssid
+      \item Create a new network configuration using ssid; select as current configuration
+      \item Commands to add information to configuration
+    \end{itemize}
+
+  \item Edit a configured network
+    \begin{itemize}
+      \item Prompt for ssid
+      \item Focus network configuration of the specified ssid
+      \item Commands to edit/add information to the configuration
+    \end{itemize}
+  \item Change default configuration file
+  \item Use specified configuration file
+\end{itemize}
 
 \section{TUI Testing}
 The testing of the Wifi Browser TUI will utilize white box testing to ensure correctness at each step.
-\begin{itemize}
 
 \end{document}
