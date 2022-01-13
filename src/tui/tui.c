@@ -6,7 +6,7 @@
  * See README for more details.
  */
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
 }

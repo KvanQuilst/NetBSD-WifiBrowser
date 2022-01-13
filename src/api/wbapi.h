@@ -1,3 +1,6 @@
+#include <stdlib.h>
+#include <stdio.h>
+
 /*
  * Wifi Browser API / wbapi.h
  * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
@@ -31,7 +34,7 @@ int conf_connectAuto(char *ssid, char *psk);
 int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
 int conf_connectManual(struct wifi_conf conf);
 int conf_editNetwork(char *ssid, struct wifi_conf conf);
-int conf_deleteNetwork(char **ssid);
+int conf_deleteNetwork(char *ssid);
 
 /* Wifi Network Information Gathering */
 char **listAvailable();
