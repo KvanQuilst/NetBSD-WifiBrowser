@@ -2,13 +2,6 @@ CC=gcc
 CFLAGS=-Wall -g
 LDFLAGS=
 
-#API Compilation
-all: wbapi
-wbapi: wbapi.o
-	$(CC) -o wbapi wbapi.o $(LDFLAGS)
-wbapi.o: . ../src/api/wbapi.c
-	$(CC) $(CFLAGS) -c . ../src/api/wbapi.c
-
 #TUI Compilation
 tui: tui
 tui: tui.o
