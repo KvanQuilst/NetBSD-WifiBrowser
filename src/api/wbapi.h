@@ -1,3 +1,4 @@
+#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -26,10 +27,12 @@ struct wifi_conf {
   char *phase2;
 };
 
+int init();
+
 /* Configuration File Manipulation */
 char **conf_list();
-int conf_setDefault(char *conf_file);
-int conf_setCurrent(char *conf_file);
+int conf_setDefault(const char *filepath);
+int conf_setCurrent(const char *filepath);
 int conf_connectAuto(char *ssid, char *psk);
 int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
 int conf_connectManual(struct wifi_conf conf);

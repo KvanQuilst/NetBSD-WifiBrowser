@@ -1,4 +1,3 @@
-
 /*
  * Wifi Browser API / wbapi.c
  * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
@@ -8,6 +7,24 @@
  *
  * Central point for processing requests made against Wifi Browser API
  */
+
+/**************************
+
+  Global Variables
+
+**************************/
+
+int currFile;
+
+// initialize wifi browser api
+// returns: 0 if successful, -1 if fail
+int init()
+{
+  if (conf_setCurrent("wpa.conf") == -1) {
+    return -1;
+
+  return 0;
+}
 
 /**************************
  *
@@ -24,29 +41,36 @@ char **conf_list()
 
 // set the default file location for wifi browser api
 // requires: filepath of configuration file
-// returns: 1 if success, 0 if fail
-int conf_setDefault(char *conf_file)
+// returns: 0 if success, -1 if fail
+int conf_setDefault(const char *conf_file)
 {
-  return 0;
+  return -1;
 }
 
 // set the focused configuration file for wifi browser api
 // requires: filepath of configuration file
-// returns: 1 if success, 0 if fail
-int conf_setCurrent(char *conf_file)
+// returns: 0 if success, -1 if fail
+int conf_setCurrent(const char *filepath)
 {
-  // create new file if non-existent
-  return 0;
+  int fd;
+
+  fd = open(filepath, O_RDWR | O_CREATE | O_REGULAR, S_IRUSR | S_IWUSR);
+  if (fd == -1) {
+    perror("open");
+    fprintf(stderr, "wifi browser api: unable to open %s", filepath);
+    return -1;
+  }
+  return -1;
 }
 
 // adds a new network entry to the focused configuration file
 // and automatically supplies the additional info for
 // wpa_supplicant connection
 // requires: string of ssid, string of passkey for ssid
-// returns: 1 if success, 0 if fail
+// returns: 0 if success, -1 if fail
 int conf_configAuto(char *ssid, char *psk)
 {
-  return 0;
+  return -1;
 }
 
 // adds a new eap network entry to the focused configuration file
@@ -54,41 +78,39 @@ int conf_configAuto(char *ssid, char *psk)
 // wpa_supplicant connection
 // requires: string of ssid, string of username for network,
 //           string of password for user for network
-// returns: 1 if success, 0 if fail
+// returns: 0 if success, -1 if fail
 int conf_configAutoEAP(char *ssid, char *user, char *pwd)
 {
-  return 0;
+  return -1;
 }
 
 // adds a new network configuration using the information
 // from the provided configuration struct to the focused
 // configuration file
 // requires: wifi_conf struct
-// returns: 1 if success, 0 if fail
+// returns: 0 if success, -1 if fail
 int conf_configManual(struct wifi_conf conf)
 {
-  return 0;
+  return -1;
 }
 
 // edits the specified network config (based on ssid) using
 // the information from the provided configuration struct
 // requires: string of ssid to be edited, wifi_conf struct
-// returns: 1 on success, 0 on fail
+// returns: 0 on success, -1 on fail
 int conf_editNetwork(char *ssid, struct wifi_conf conf)
 {
-  return 0;
+  return -1;
 }
 
 // deletes the specified network (by ssid) from the focused
 // configuration file
 // requires: string of ssid to be deleted
-// returns: 1 if success, 0 if fail
+// returns: 0 if success, -1 if fail
 int conf_deleteNetwork(char *ssid)
 {
-  return 0;
+  return -1;
 }
-
-
 
 /**************************
  *
@@ -140,10 +162,10 @@ void getKeyMgmt(char *ssid, struct wifi_conf *conf)
  *************************/
 
 // restarts wpa_supplicant()
-// returns: 1 if successful, 0 if fail
+// returns: 0 if successful, -1 if fail
 int wpa_restart()
 {
-  return 0;
+  return -1;
 }
 
 // check if wpa_supplicant is running
@@ -157,9 +179,9 @@ int wpa_running()
 // option enabled
 // requires: string of first interface, string of filepath to first conf file
 //           string of second interface, string of filepath to second conf file
-// returns: 1 if success, 0 if fail
+// returns: 0 if success, -1 if fail
 int wpa_multiInterface(char *inf1, char *conf_file1, 
     char *inf2, char *conf_file2)
 {
-  return 0;
+  return -1;
 }
