@@ -20,8 +20,10 @@ int currFile;
 // returns: 0 if successful, -1 if fail
 int init()
 {
-  if (conf_setCurrent("wpa.conf") == -1) {
+  if (conf_setCurrent("wpa.conf") == -1){ 
+
     return -1;
+  }
 
   return 0;
 }
