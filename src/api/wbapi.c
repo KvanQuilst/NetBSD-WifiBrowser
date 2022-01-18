@@ -8,6 +8,8 @@
  * Central point for processing requests made against Wifi Browser API
  */
 
+#include "wbapi.h"
+
 /**************************
 
   Global Variables
@@ -15,15 +17,15 @@
 **************************/
 
 int currFile;
+struct wpa_ctrl *wpa;
 
 // initialize wifi browser api
 // returns: 0 if successful, -1 if fail
 int init()
 {
-  if (conf_setCurrent("wpa.conf") == -1){ 
-
+  wpa = wpa_ctrl_open(NULL);
+  if (wpa == NULL)
     return -1;
-  }
 
   return 0;
 }
@@ -56,7 +58,7 @@ int conf_setCurrent(const char *filepath)
 {
   int fd;
 
-  fd = open(filepath, O_RDWR | O_CREATE | O_REGULAR, S_IRUSR | S_IWUSR);
+  fd = open(filepath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
   if (fd == -1) {
     perror("open");
     fprintf(stderr, "wifi browser api: unable to open %s", filepath);
@@ -122,8 +124,17 @@ int conf_deleteNetwork(char *ssid)
 
 // list available visible networks
 // returns: array of ssids as strings
-char **listAvailable()
+char *listAvailable()
 {
+  char *buf;
+  size_t len;
+
+  if (wpa_ctrl_request(wpa, "SCAN", 4, NULL, NULL, NULL) < 0)
+    return NULL;
+
+  if (wpa_ctrl_request(wpa, "SCAN_RESULTS", strlen("SCAN_RESULTS"), buf, &len, NULL) < 0) 
+    return NULL;
+  
   return NULL;
 }
 
