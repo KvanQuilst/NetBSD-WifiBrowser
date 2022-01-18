@@ -53,16 +53,17 @@ void user_interface() {
     * Idea for installation: Check if files are located. Should we write a file to our directory that contains the file paths? 
     * When a user downloads our api from terminal, it should install in their current directory. 
     * Upon loading our api, we will check for a file in our directory called filepaths.txt
-    * If the filePaths.txt doc does not exist, we will create one upon starting our program, and ask the user to enter default file locations 
+    * If the filePaths.txt does not exist, we will create one upon starting our program, and ask the user to enter default file locations 
     * We will copy the files to the directories entered by the user. We will place filePaths.txt in the same directory as our api 
-    * 
     */
 
     printf("1. Use Default Connection (Parse data already stored in wpa_supplicant config)\n");
     printf("2. List Available Connections (List available wifi-connections, user selects, parses info to wpa_supplicant config)\n");
     printf("3. Setup New Connection (Manually enter new data to wpa_supplicant config)\n");
     printf("4. Make changes to existing connection (Allow user to change password / other info stored in already existing wpa_supplicant config connection)\n");
-    printf("> ");
+    printf("> "); 
+
+    
     
 }
 
