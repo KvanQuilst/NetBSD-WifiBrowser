@@ -9,6 +9,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "wpa_ctrl.h"
 
 struct wifi_conf {
@@ -41,7 +42,7 @@ int conf_editNetwork(char *ssid, struct wifi_conf conf);
 int conf_deleteNetwork(char *ssid);
 
 /* Wifi Network Information Gathering */
-char **listAvailable();
+char *listAvailable();
 char *hashPsk(char *ssid, char *psk);
 char *hashPwd(char *pwd);
 void getKeyMgmt(char *ssid, struct wifi_conf *conf);
