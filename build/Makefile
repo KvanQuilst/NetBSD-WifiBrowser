@@ -10,10 +10,9 @@ tui.o: . ../src/tui/tui.c
 	$(CC) $(CFLAGS) -c . ../src/tui/tui.c
 
 #CLI Compilation
-cli: cli
 cli: cli.o
 	$(CC) -o cli cli.o $(LDFLAGS)
-cli.o: . ../src/cli/cli.c
+cli.o: . ../src/cli/cli.c ../src/cli/cli.h
 	$(CC) $(CFLAGS) -c . ../src/cli/cli.c
 
 #Compile and Build
