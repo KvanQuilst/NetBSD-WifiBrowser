@@ -27,8 +27,6 @@ int api_init()
   if (wpa == NULL)
     return -1;
 
-  printf("Here\n");
-
   return 0;
 }
 
