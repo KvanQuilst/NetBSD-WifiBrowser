@@ -15,29 +15,17 @@ int main(int argc, char *argv[]) {
     
     buffer = malloc(sizeof(char) * BUFFER_SIZE);
     int data = read_stdin(buffer, BUFFER_SIZE);
-    int numCommands = num_commands(buffer);
-    printf("%d\n", numCommands);
-    char **string_input = parse_stdin(buffer, numCommands);
+    char *copy = malloc(sizeof(char) * strlen(buffer));
+    memcpy(copy, buffer, strlen(buffer));
+    int commands = num_commands(buffer);
+    printf("%d\n", commands);
 
-    for(int i = 0; i < numCommands; i++){
-    
-       printf("%s\n", string_input[i]);
-    }
+
 
     if(buffer){
 
         free(buffer);
     }   
-
-    if(string_input){
-
-        for(int i = 0; i < numCommands; i++){
-
-            free(string_input[i]);
-        }
-
-        free(string_input);
-    }
 }
 
 
@@ -55,16 +43,16 @@ int read_stdin(char *buffer, int buffer_len) {
 //token the string, count the number of tokens 
 int num_commands(char *buffer){
 
-    int commands = 0;
-    for(int i = 0; buffer[i] != '\0'; i++){
+    int count = 0;
+    char *token = strtok(buffer, " ");
 
-        if(buffer[i] == ' ' && buffer[i + 1] != ' ' && buffer[i + 1] != '\0'){
+    while(token != NULL){
 
-            commands++;
-        }
+        printf("%s\n", token);
+        token = strtok(NULL, s);
     }
-
-    return commands;
+    
+    return count;
 }
 
 //Will fix using strtok
