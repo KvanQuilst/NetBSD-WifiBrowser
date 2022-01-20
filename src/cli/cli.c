@@ -8,6 +8,7 @@
  */
 
 #include "cli.h"
+#include "commands.h"
 
 char *buffer;
 
@@ -126,7 +127,8 @@ void process_commands(char **string_input, int *commands){
         command = malloc(sizeof(char) * strlen(string_input[0]));
     }
 
-    shift_left(string_input, commands);
+    shift_left(string_input, commands); 
+
     
 }
 
