@@ -23,10 +23,6 @@ int main(int argc, char *argv[]) {
     print_array(string_input, commands);
     process_commands(string_input, &commands); 
     print_array(string_input, commands);
-
-    
-
-
     free_data(buffer, copy, string_input, commands);
 }
 
@@ -96,20 +92,6 @@ void free_data(char *buffer, char *copy, char **string_input, int tokens){
     }
 }
 
-/* Shift array to the left to process next command */
-int shift_left(char **string_input, int *commands){
-    
-    for(int idx = 0; idx < (*commands - 1); idx++){
-
-        memset(string_input[idx], '\0', strlen(string_input[idx]));
-        string_input[idx] = realloc(string_input[idx], strlen(string_input[idx + 1]));
-        memcpy(string_input[idx], string_input[idx + 1], strlen(string_input[idx + 1]));
-    }
-
-    *commands -= 1;
-    return 0;
-}
-
 void print_array(char **string_input, int size){
 
     printf("Print array: \n");
@@ -117,19 +99,6 @@ void print_array(char **string_input, int size){
 
         printf("idx: %d    s: %s \n", i, string_input[i]);
     }
-}
-
-void process_commands(char **string_input, int *commands){
-
-    char *command; 
-    if(*commands != 0){
-        
-        command = malloc(sizeof(char) * strlen(string_input[0]));
-    }
-
-    shift_left(string_input, commands); 
-
-    
 }
 
 /*
