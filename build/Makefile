@@ -1,9 +1,8 @@
 CC=gcc
-CFLAGS=-Wall -g
+CFLAGS=-Wall -Wextra -g
 LDFLAGS=
 
 #TUI Compilation
-tui: tui
 tui: tui.o
 	$(CC) -o tui tui.o $(LDFLAGS)
 tui.o: . ../src/tui/tui.c
@@ -14,12 +13,6 @@ cli: cli.o
 	$(CC) -o cli cli.o $(LDFLAGS)
 cli.o: . ../src/cli/cli.c ../src/cli/cli.h
 	$(CC) $(CFLAGS) -c . ../src/cli/cli.c
-
-#Compile and Build
-#$(BINARY): $(OBJECTS)
-#	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS)
-#$(OBJECTS): $(CFILES)
-#	$(CC) $(CFLAGS) -c $(CFILES)
 
 #Clean Files
 clean:

@@ -17,70 +17,117 @@ int main(int argc, char *argv[]) {
     int data = read_stdin(buffer, BUFFER_SIZE);
     char *copy = malloc(sizeof(char) * strlen(buffer));
     memcpy(copy, buffer, strlen(buffer));
-    int commands = num_commands(buffer);
-    printf("%d\n", commands);
+    int commands = num_tokens(buffer);
+    char **string_input = parse_stdin(copy, commands);
+    print_array(string_input, commands);
+    process_commands(string_input, &commands); 
+    print_array(string_input, commands);
+
+    
 
 
-
-    if(buffer){
-
-        free(buffer);
-    }   
+    free_data(buffer, copy, string_input, commands);
 }
 
-
+/* Return true if number of characters is greater than zero */
 int read_stdin(char *buffer, int buffer_len) {
 
     bzero(buffer, buffer_len);
     if (fgets(buffer, buffer_len, stdin) != NULL) {
 
-        return strlen(buffer) > 0; //Return true if num characters > 0 
+        return strlen(buffer) > 0; 
     }
 
     return 0;
 }
 
-//token the string, count the number of tokens 
-int num_commands(char *buffer){
+/* Count the number of commands from user input */
+int num_tokens(char *buffer){
 
     int count = 0;
     char *token = strtok(buffer, " ");
 
     while(token != NULL){
 
-        printf("%s\n", token);
-        token = strtok(NULL, s);
+        token = strtok(NULL, " ");
+        count++;
     }
     
     return count;
 }
 
-//Will fix using strtok
-char **parse_stdin(char *buffer, int numCommands){
+/* Parse user input and return an array of strings */
+char **parse_stdin(char *buffer, int commands){
 
-    char **string_input = malloc(sizeof(char *) * numCommands);
-    bzero(string_input, sizeof(char *) * numCommands);
-    
-    int stringIndex = 0; int commandLength = 0; 
-    char save[BUFFER_SIZE]; bzero(save, BUFFER_SIZE);
-    for(int idx = 0; buffer[idx] != '\0'; idx++){
+    char **string_input = malloc(sizeof(char *) * commands);
+    char *token = strtok(buffer, " ");
+    int idx = 0;
 
-        if(buffer[idx] == ' ' && buffer[idx + 1] != ' '){
+    while(token != NULL){
 
-            string_input[stringIndex] = malloc(sizeof(char) * commandLength); 
-            bzero(string_input[stringIndex], strlen(string_input[stringIndex]));
-            strncpy(string_input[stringIndex], save, strlen(save));
-            stringIndex++; commandLength = 0; bzero(save, strlen(save));
-        }
-
-        else if(buffer[idx] != ' '){
-
-            save[commandLength] = buffer[idx];
-            commandLength++;
-        }
+        string_input[idx] = malloc(sizeof(char) * strlen(token));
+        memcpy(string_input[idx], token, strlen(token));
+        token = strtok(NULL, " "); idx++;
     }
     
+    /* Trim newline character of last token */
+    string_input[commands - 1][strlen(string_input[commands - 1]) - 1] = '\0';
     return string_input;
+}
+
+/* Free all memory */
+void free_data(char *buffer, char *copy, char **string_input, int tokens){
+
+    if(buffer)
+        free(buffer);
+
+    if(copy)
+        free(copy);
+
+    if(string_input){
+
+        for(int i = 0; i < tokens; i++){
+
+            free(string_input[i]);
+        }
+
+        free(string_input);
+    }
+}
+
+/* Shift array to the left to process next command */
+int shift_left(char **string_input, int *commands){
+    
+    for(int idx = 0; idx < (*commands - 1); idx++){
+
+        memset(string_input[idx], '\0', strlen(string_input[idx]));
+        string_input[idx] = realloc(string_input[idx], strlen(string_input[idx + 1]));
+        memcpy(string_input[idx], string_input[idx + 1], strlen(string_input[idx + 1]));
+    }
+
+    *commands -= 1;
+    return 0;
+}
+
+void print_array(char **string_input, int size){
+
+    printf("Print array: \n");
+    for(int i = 0; i < size; i++){
+
+        printf("idx: %d    s: %s \n", i, string_input[i]);
+    }
+}
+
+void process_commands(char **string_input, int *commands){
+
+    char *command; 
+    if(*commands != 0){
+        
+        command = malloc(sizeof(char) * strlen(string_input[0]));
+    }
+
+    shift_left(string_input, commands);
+    
 }
 
 /*

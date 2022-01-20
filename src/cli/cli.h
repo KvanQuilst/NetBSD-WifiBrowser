@@ -7,8 +7,11 @@
 
 int read_stdin(char *buffer, int buf_len);
 char **parse_stdin(char *buffer, int numCommands);
-int num_commands(char *buffer);
-void freeData(char *buffer, char **string_input);
+void free_data(char *buffer, char *copy, char **string_input, int tokens);
+int num_tokens(char *buffer);
+int shift_left(char **string_input, int *commands);
+void print_array(char **string_input, int size);
+void process_commands(char **string_input, int *commands);
 void user_interface();
 
 
