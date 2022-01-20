@@ -14,4 +14,4 @@ os_unix.o: os_unix.c
 
 .PHONY clean:
 clean:
-	@rm -rf *.o
+	@rm -rf *.o *.d
