@@ -6,6 +6,7 @@
  * See README for more details.
  */
 
+#include <dirent.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -29,25 +30,133 @@ struct wifi_conf {
   char *phase2;
 };
 
+/**************************
+
+  Global Variables
+
+**************************/
+
+/* Network configuration */
+int currFile;
+
+/* wpa_supplicant related */
+#define CTRL_IFACE_DIR "/var/run/wpa_supplcant"
+static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
+static const char *ifname = NULL;
+struct wpa_ctrl *wpa;
+
+
+/* 
+ * api_init - initialize wifi browser api
+ * returns: 0 if successful, -1 if fail 
+ */
 int api_init();
 
-/* Configuration File Manipulation */
+/**************************
+ *
+ * Configuration File Manipulation
+ *
+ *************************/
+
+/* 
+ * conf_list - list configured networks in configuration file
+ * returns: array of ssids as strings
+ */
 char **conf_list();
+
+/*
+ * conf_setDefault - set the default file location for wifi browser api
+ * requires: filepath of configuration file
+ * returns: 0 if success, -1 if fail
+ */
 int conf_setDefault(const char *filepath);
+
+/*
+ * conf_setCurrent - set the focused configuration file for wifi browser api
+ * requires: filepath of configuration file
+ * returns: 0 if success, -1 if fail
+ */
 int conf_setCurrent(const char *filepath);
+
+/*
+ * conf_connectAuto - adds a new network entry to the focused configuration file
+ * and automatically supplies the additional info for
+ * wpa_supplicant connection
+ * requires: string of ssid, string of passkey for ssid
+ * returns: 0 if success, -1 if fail
+ */
 int conf_connectAuto(char *ssid, char *psk);
+
+/*
+ * conf_connectAutoEAP - adds a new eap network entry to the focused configuration file
+ * and automatically supplies the additional data needed for
+ * wpa_supplicant connection
+ * requires: string of ssid, string of username for network,
+ *           string of password for user for network
+ * returns: 0 if success, -1 if fail
+ */
 int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
+
+/*
+ * conf_connectManual - adds a new network configuration using the information
+ * from the provided configuration struct to the focused
+ * configuration file
+ * requires: wifi_conf struct
+ * returns: 0 if success, -1 if fail
+ */
 int conf_connectManual(struct wifi_conf conf);
+
+/*
+ * conf_editNetwork - edits the specified network config (based on ssid) using
+ * the information from the provided configuration struct
+ * requires: string of ssid to be edited, wifi_conf struct
+ * returns: 0 on success, -1 on fail
+ */
 int conf_editNetwork(char *ssid, struct wifi_conf conf);
+
+/*
+ * conf_deleteNetwork - deletes the specified network (by ssid) from the focused
+ * configuration file
+ * requires: string of ssid to be deleted
+ * returns: 0 if success, -1 if fail
+ */
 int conf_deleteNetwork(char *ssid);
 
-/* Wifi Network Information Gathering */
-char *listAvailable();
-char *hashPsk(char *ssid, char *psk);
-char *hashPwd(char *pwd);
-void getKeyMgmt(char *ssid, struct wifi_conf *conf);
+/**************************
+ *
+ * Wifi Network Information Gathering
+ *
+ *************************/
 
-/* wpa_supplicant Communication */
+/*
+ * listAvailable - list available visible networks
+ * returns: array of ssids as strings
+ */
+char *listAvailable();
+
+/**************************
+ *
+ * wpa_supplicant Communication
+ *
+ *************************/
+
+/*
+ * wpa_restart - restarts wpa_supplicant()
+ * returns: 0 if successful, -1 if fail
+ */
 int wpa_restart();
+
+/*
+ * wpa_running - check if wpa_supplicant is running
+ * 1 if wpa_supplicant is running, 0 if not
+ */
 int wpa_running();
+
+/*
+ * wpa_multiInterface - start/restart wpa_supplicant with the multi-interface
+ * option enabled
+ * requires: string of first interface, string of filepath to first conf file
+ *           string of second interface, string of filepath to second conf file
+ * returns: 0 if success, -1 if fail
+ */
 int wpa_multiInterface(char *inf1, char *conf_file1, char *inf2, char *conf_file2);

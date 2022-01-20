@@ -10,50 +10,50 @@
 
 #include "wbapi.h"
 
-/**************************
+static char *hashPsk(char *ssid, char *psk);
+static char *hashPwd(char *pwd);
+static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
 
-  Global Variables
-
-**************************/
-
-int currFile;
-struct wpa_ctrl *wpa;
-
-// initialize wifi browser api
-// returns: 0 if successful, -1 if fail
 int api_init()
 {
-  wpa = wpa_ctrl_open("/var/run/wpa_supplicant/wlp1s0");
-  if (wpa == NULL)
+  /* Open default interface directory; look for interface */
+  struct dirent *dent;
+  DIR *dir = opendir(ctrl_iface_dir);
+  if (dir == NULL) {
+    fprintf(stderr, "wbapi: Default interface location does not exist!\n");
     return -1;
+  }
+
+  while ((dent = readdir(dir))) {
+    if (strcmp(dent->d_name, ".") && strcmp(dent->d_name, "..") &&
+            strncmp(dent->d_name, "p2p-dev-", 8)) {
+      ifname = strdup(dent->d_name);
+      printf("Current interface: %s\n", ifname ? ifname : "n/a");
+    }
+  }
+
+  /* Attempt to connect wpa_supplicant instance */
+  wpa = wpa_ctrl_open(ifname);
+  if (wpa == NULL) {
+    fprintf(stderr, "wbapi: Unable to connect to wpa_supplicant on this interface!\n");
+    return -1;
+  }
+
+  /* Grab wbapi config */
 
   return 0;
 }
 
-/**************************
- *
- * Configuration File Manipulation
- *
- *************************/
-
-// list configured networks in configuration file
-// returns: array of ssids as strings
 char **conf_list()
 {
   return NULL;
 }
 
-// set the default file location for wifi browser api
-// requires: filepath of configuration file
-// returns: 0 if success, -1 if fail
 int conf_setDefault(const char *conf_file)
 {
   return -1;
 }
 
-// set the focused configuration file for wifi browser api
-// requires: filepath of configuration file
-// returns: 0 if success, -1 if fail
 int conf_setCurrent(const char *filepath)
 {
 /*  int fd;
@@ -67,63 +67,31 @@ int conf_setCurrent(const char *filepath)
   return -1;
 }
 
-// adds a new network entry to the focused configuration file
-// and automatically supplies the additional info for
-// wpa_supplicant connection
-// requires: string of ssid, string of passkey for ssid
-// returns: 0 if success, -1 if fail
 int conf_configAuto(char *ssid, char *psk)
 {
   return -1;
 }
 
-// adds a new eap network entry to the focused configuration file
-// and automatically supplies the additional data needed for
-// wpa_supplicant connection
-// requires: string of ssid, string of username for network,
-//           string of password for user for network
-// returns: 0 if success, -1 if fail
 int conf_configAutoEAP(char *ssid, char *user, char *pwd)
 {
   return -1;
 }
 
-// adds a new network configuration using the information
-// from the provided configuration struct to the focused
-// configuration file
-// requires: wifi_conf struct
-// returns: 0 if success, -1 if fail
 int conf_configManual(struct wifi_conf conf)
 {
   return -1;
 }
 
-// edits the specified network config (based on ssid) using
-// the information from the provided configuration struct
-// requires: string of ssid to be edited, wifi_conf struct
-// returns: 0 on success, -1 on fail
 int conf_editNetwork(char *ssid, struct wifi_conf conf)
 {
   return -1;
 }
 
-// deletes the specified network (by ssid) from the focused
-// configuration file
-// requires: string of ssid to be deleted
-// returns: 0 if success, -1 if fail
 int conf_deleteNetwork(char *ssid)
 {
   return -1;
 }
 
-/**************************
- *
- * Wifi Network Information Gathering
- *
- *************************/
-
-// list available visible networks
-// returns: array of ssids as strings
 char *listAvailable()
 {
   char *buf;
@@ -143,7 +111,7 @@ char *listAvailable()
 // DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of ssid, string of passkey
 // returns: string of hashed passkey
-char *hashPsk(char *ssid, char *psk)
+static char *hashPsk(char *ssid, char *psk)
 {
   return NULL;
 }
@@ -153,7 +121,7 @@ char *hashPsk(char *ssid, char *psk)
 // DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of password
 // returns: string of hashed password
-char *haskPwd(char *pwd)
+static char *hashPwd(char *pwd)
 {
   return NULL;
 }
@@ -162,7 +130,7 @@ char *haskPwd(char *pwd)
 // specified ssid and updates it in the configuration
 // struct
 // requires: string of ssid, reference to wifi_conf struct of interest
-void getKeyMgmt(char *ssid, struct wifi_conf *conf)
+static void getKeyMgmt(char *ssid, struct wifi_conf *conf)
 {
   return;
 }
