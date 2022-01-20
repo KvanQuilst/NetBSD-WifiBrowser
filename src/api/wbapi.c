@@ -21,11 +21,13 @@ struct wpa_ctrl *wpa;
 
 // initialize wifi browser api
 // returns: 0 if successful, -1 if fail
-int init()
+int api_init()
 {
   wpa = wpa_ctrl_open(NULL);
   if (wpa == NULL)
     return -1;
+
+  printf("Here\n");
 
   return 0;
 }
@@ -56,14 +58,14 @@ int conf_setDefault(const char *conf_file)
 // returns: 0 if success, -1 if fail
 int conf_setCurrent(const char *filepath)
 {
-  int fd;
+/*  int fd;
 
   fd = open(filepath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
   if (fd == -1) {
     perror("open");
     fprintf(stderr, "wifi browser api: unable to open %s", filepath);
     return -1;
-  }
+  }*/
   return -1;
 }
 

@@ -29,7 +29,7 @@ struct wifi_conf {
   char *phase2;
 };
 
-int init();
+int api_init();
 
 /* Configuration File Manipulation */
 char **conf_list();
