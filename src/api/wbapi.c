@@ -23,7 +23,7 @@ struct wpa_ctrl *wpa;
 // returns: 0 if successful, -1 if fail
 int api_init()
 {
-  wpa = wpa_ctrl_open(NULL);
+  wpa = wpa_ctrl_open("/var/run/wpa_supplicant/wlp1s0");
   if (wpa == NULL)
     return -1;
 

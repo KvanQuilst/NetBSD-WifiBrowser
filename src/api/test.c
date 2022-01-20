@@ -3,7 +3,11 @@
 int main(int argc, char **argv)
 {
 
-  api_init();
+  if (api_init() == 0) {
+    printf("Connected to wpa_supplicant!\n");
+  } else {
+    printf("Failed to connect to wpa_supplicant...\n");
+  }
   
   return 0;
 }
