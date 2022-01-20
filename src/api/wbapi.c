@@ -10,9 +10,26 @@
 
 #include "wbapi.h"
 
+/**************************
+  Global Variables
+**************************/
+
+/* Network configuration */
+static FILE *curr_conf;
+
+/* wpa_supplicant related */
+static struct wpa_ctrl *wpa;
+#define CTRL_IFACE_DIR "/var/run/wpa_supplcant"
+static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
+static char *ifname = NULL;
+
+
+/**************************
+  Static Prototypes
+**************************/
+static FILE *conf_createFile(const char *filepath);
 static char *hashPsk(char *ssid, char *psk);
-static char *hashPwd(char *pwd);
-static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
+static char *hashPwd(char *pwd); static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
 
 int api_init()
 {
@@ -49,6 +66,26 @@ char **conf_list()
   return NULL;
 }
 
+static FILE *conf_createFile(const char *filepath)
+{
+  FILE *fp;
+  time_t t = time(NULL);
+
+  if (fp = fopen(filepath, "r")) {
+    fprintf(stderr, "wbapi: Config file already exists - cannot initialize!\n");
+    return NULL;
+  }
+
+  if ((fp = fopen(filepath, "w+x")) == NULL) {
+    fprintf(stderr, "wbapi: Error creating config file\n");
+    return NULL;
+  }
+
+  fprintf(fp, "# wpa_supplicant configuration file - auto-created by wbapi at %s\n", ctime(&t));
+  
+  return fp;
+}
+
 int conf_setDefault(const char *conf_file)
 {
   return -1;
@@ -56,14 +93,6 @@ int conf_setDefault(const char *conf_file)
 
 int conf_setCurrent(const char *filepath)
 {
-/*  int fd;
-
-  fd = open(filepath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
-  if (fd == -1) {
-    perror("open");
-    fprintf(stderr, "wifi browser api: unable to open %s", filepath);
-    return -1;
-  }*/
   return -1;
 }
 
@@ -92,18 +121,17 @@ int conf_deleteNetwork(char *ssid)
   return -1;
 }
 
-char *listAvailable()
+size_t listAvailable(char *buf)
 {
-  char *buf;
   size_t len;
 
   if (wpa_ctrl_request(wpa, "SCAN", 4, NULL, NULL, NULL) < 0)
-    return NULL;
+    return -1;
 
   if (wpa_ctrl_request(wpa, "SCAN_RESULTS", strlen("SCAN_RESULTS"), buf, &len, NULL) < 0) 
-    return NULL;
+    return -1;
   
-  return NULL;
+  return len;
 }
 
 // hash a passkey against the associated ssid for 
@@ -136,31 +164,16 @@ static void getKeyMgmt(char *ssid, struct wifi_conf *conf)
 }
 
 
-/**************************
- *
- * wpa_supplicant Communication
- *
- *************************/
-
-// restarts wpa_supplicant()
-// returns: 0 if successful, -1 if fail
 int wpa_restart()
 {
   return -1;
 }
 
-// check if wpa_supplicant is running
-// 1 if wpa_supplicant is running, 0 if not
 int wpa_running()
 {
   return 0;
 }
 
-// start/restart wpa_supplicant with the multi-interface
-// option enabled
-// requires: string of first interface, string of filepath to first conf file
-//           string of second interface, string of filepath to second conf file
-// returns: 0 if success, -1 if fail
 int wpa_multiInterface(char *inf1, char *conf_file1, 
     char *inf2, char *conf_file2)
 {

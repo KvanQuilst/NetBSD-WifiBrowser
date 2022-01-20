@@ -5,12 +5,14 @@
  * This software is under the terms of the BSD license.
  * See README for more details.
  */
+#pragma once
 
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 #include "wpa_ctrl.h"
 
 struct wifi_conf {
@@ -29,22 +31,6 @@ struct wifi_conf {
   char *eap;
   char *phase2;
 };
-
-/**************************
-
-  Global Variables
-
-**************************/
-
-/* Network configuration */
-int currFile;
-
-/* wpa_supplicant related */
-#define CTRL_IFACE_DIR "/var/run/wpa_supplcant"
-static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
-static const char *ifname = NULL;
-struct wpa_ctrl *wpa;
-
 
 /* 
  * api_init - initialize wifi browser api
@@ -66,6 +52,7 @@ char **conf_list();
 
 /*
  * conf_setDefault - set the default file location for wifi browser api
+ * creates the file if the file doesn't exist
  * requires: filepath of configuration file
  * returns: 0 if success, -1 if fail
  */
@@ -73,6 +60,7 @@ int conf_setDefault(const char *filepath);
 
 /*
  * conf_setCurrent - set the focused configuration file for wifi browser api
+ * creates the file if the file doesn't exist
  * requires: filepath of configuration file
  * returns: 0 if success, -1 if fail
  */
@@ -130,9 +118,9 @@ int conf_deleteNetwork(char *ssid);
 
 /*
  * listAvailable - list available visible networks
- * returns: array of ssids as strings
+ * returns: length of scan results, 0 - no networks, -1 - failed
  */
-char *listAvailable();
+size_t listAvailable(char *buf);
 
 /**************************
  *
