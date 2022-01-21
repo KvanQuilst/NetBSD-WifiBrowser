@@ -5,8 +5,8 @@
 #define STATUS "status"
 #define NEW_NETWORK "new_network"
 #define SET "set"
-
-
+#define SELECT "select"
+#define LIST_CONFIG "list_configured"
 
 
 

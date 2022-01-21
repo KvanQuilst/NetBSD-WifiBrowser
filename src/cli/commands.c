@@ -6,26 +6,59 @@ void process_commands(char **string_input, int *commands){
     while(*commands != 0){
         
         command = malloc(sizeof(char) * strlen(string_input[0]));
-        strncpy(command, string_input[0], strlen(string_input[0]));
-        shift_left(string_input, commands); 
-        run_commands(command);
+        strncpy(command, string_input[0], strlen(string_input[0])); 
+        run_commands(string_input, &commands, command);
+        shift_left(string_input, commands);
     }
 }
 
+void run_commands(char **string_input, int *commands, char *command){
 
-void run_commands(char *string_input_idx){
+    if(strcmp(WBCLI, command) == 0){
 
-    if(strcmp(WBCLI, string_input_idx) == 0){
-
-        printf("Wbcli command\n");
+        
     }
 
-    else if(strcmp(LIST, string_input_idx) == 0){
+    else if(strcmp(STATUS, command) == 0){
 
-        printf("List command\n");        
+
     }
-}
 
+    else if(strcmp(LIST, command) == 0){
+
+
+    }
+
+    else if(strcmp(CONNECT, command) == 0){
+
+        
+    }
+
+    else if(strcmp(NEW_NETWORK, command) == 0){
+
+
+    }
+
+    else if(strcmp(SET, command) == 0){
+
+        
+    }
+
+    else if(strcmp(SELECT, command) == 0){
+
+
+    }
+
+    else if(strcmp(LIST_CONFIG, command) == 0){
+
+        
+    }
+    
+    else{
+
+        printf("Command not recognized.\n");
+    }
+} 
 
 /* Shift array to the left to process next command */
 int shift_left(char **string_input, int *commands){
@@ -38,6 +71,6 @@ int shift_left(char **string_input, int *commands){
     }
 
     *commands -= 1;
-    return 0;
+    return 0; 
 }
 

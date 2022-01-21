@@ -13,7 +13,7 @@
 char *buffer;
 
 int main(int argc, char *argv[]) {
-    
+
     buffer = malloc(sizeof(char) * BUFFER_SIZE);
     int data = read_stdin(buffer, BUFFER_SIZE);
     char *copy = malloc(sizeof(char) * strlen(buffer));
@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
     char **string_input = parse_stdin(copy, commands);
     process_commands(string_input, &commands);
 
-    free_data(buffer, copy, string_input, commands);
+    free_data(buffer, copy, string_input, commands); 
 }
 
 /* Return true if number of characters is greater than zero */
@@ -92,6 +92,7 @@ void free_data(char *buffer, char *copy, char **string_input, int tokens){
     }
 }
 
+/* Print array for testing */
 void print_array(char **string_input, int size){
 
     printf("Print array: \n");
@@ -101,20 +102,4 @@ void print_array(char **string_input, int size){
     }
 }
 
-/*
-* 1. Use Default Connection (Parse data already stored in wpa_supplicant config)
-* 2. List Available Connections (List available wifi-connections, user selects, parses info to wpa_supplicant config)
-* 3. Setup New Connection (Manually enter new data to wpa_supplicant config)
-* 4. Make changes to existing connection (Allow user to change password / other info stored in already existing wpa_supplicant config connection) 
-* (We can make a man page and some commands later. Only using a number system for simplicity)
-*/
-
-void user_interface() { 
-
-    printf("NetBSD Wi-Fi Connection Setup... \n");
-    printf("> "); 
-
-    
-    
-}
 
