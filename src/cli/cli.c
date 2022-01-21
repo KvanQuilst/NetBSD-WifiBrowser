@@ -20,9 +20,8 @@ int main(int argc, char *argv[]) {
     memcpy(copy, buffer, strlen(buffer));
     int commands = num_tokens(buffer);
     char **string_input = parse_stdin(copy, commands);
-    print_array(string_input, commands);
-    process_commands(string_input, &commands); 
-    print_array(string_input, commands);
+    process_commands(string_input, &commands);
+
     free_data(buffer, copy, string_input, commands);
 }
 
@@ -85,7 +84,8 @@ void free_data(char *buffer, char *copy, char **string_input, int tokens){
 
         for(int i = 0; i < tokens; i++){
 
-            free(string_input[i]);
+            if(string_input[i])
+                free(string_input[i]);
         }
 
         free(string_input);

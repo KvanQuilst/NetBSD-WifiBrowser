@@ -1,6 +1,6 @@
 
 #define LIST "list"
-#define WPCLI "wbcli"
+#define WBCLI "wbcli"
 #define CONNECT "connect"
 #define STATUS "status"
 #define NEW_NETWORK "new_network"

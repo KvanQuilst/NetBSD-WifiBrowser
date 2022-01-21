@@ -6,4 +6,5 @@
 
 void setPassword();
 void process_commands(char **string_input, int *commands);
+void run_commands(char *string_input);
 int shift_left(char **string_input, int *commands);

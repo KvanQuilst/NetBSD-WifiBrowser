@@ -3,13 +3,29 @@
 void process_commands(char **string_input, int *commands){
 
     char *command; 
-    if(*commands != 0){
+    while(*commands != 0){
         
         command = malloc(sizeof(char) * strlen(string_input[0]));
+        strncpy(command, string_input[0], strlen(string_input[0]));
+        shift_left(string_input, commands); 
+        run_commands(command);
+    }
+}
+
+
+void run_commands(char *string_input_idx){
+
+    if(strcmp(WBCLI, string_input_idx) == 0){
+
+        printf("Wbcli command\n");
     }
 
-    shift_left(string_input, commands); 
+    else if(strcmp(LIST, string_input_idx) == 0){
+
+        printf("List command\n");        
+    }
 }
+
 
 /* Shift array to the left to process next command */
 int shift_left(char **string_input, int *commands){
