@@ -75,9 +75,9 @@ int run_commands(char **string_input, int *commands){
 
 /* Shift array to the left to process next command */
 int shift_left(char **string_input, int *commands){
-    
-    for(int idx = 0; idx < (*commands - 1); idx++){
 
+    for(int idx = 0; idx < (*commands - 1); idx++){
+        
         bzero(string_input[idx], strlen(string_input[idx]));
         string_input[idx] = realloc(string_input[idx], strlen(string_input[idx + 1]));
         strcpy(string_input[idx], string_input[idx + 1]);
@@ -85,6 +85,16 @@ int shift_left(char **string_input, int *commands){
 
     *commands -= 1;
     return 0; 
+}
+
+/* Print array for testing */
+void print_array_c(char **string_input, int size){
+
+    printf("Print array: \n");
+    for(int i = 0; i < size; i++){
+
+        printf("idx: %d  size: %ld  string: %s \n", i, strlen(string_input[i]), string_input[i]);
+    }
 }
 
 

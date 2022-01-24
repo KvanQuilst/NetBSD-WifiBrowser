@@ -13,12 +13,11 @@
 char *buffer;
 
 int main(int argc, char *argv[]) {
-
-    buffer = malloc(sizeof(char) * BUFFER_SIZE);
     
     while(1){
 
         printf("> "); 
+        buffer = malloc(sizeof(char) * BUFFER_SIZE);
         int data = read_stdin(buffer, BUFFER_SIZE);
 
         if(!data) {
@@ -57,8 +56,8 @@ int num_tokens(char *buffer){
 
     while(token != NULL){
 
-        token = strtok(NULL, " ");
         count++;
+        token = strtok(NULL, " ");
     }
     
     return count;
@@ -74,11 +73,15 @@ char **parse_stdin(char *buffer, int *commands){
 
     while(token != NULL){
 
-        string_input[idx] = malloc(sizeof(token));
-        bzero(string_input[idx], sizeof(token));
-        strcpy(string_input[idx], token); 
+        if(!(strlen(token) < 1)){
+
+            string_input[idx] = malloc(sizeof(token));
+            bzero(string_input[idx], strlen(token));
+            strcpy(string_input[idx], token); 
+            idx++; 
+        }
+
         token = strtok(NULL, " ");
-        idx++; 
     }
 
     /* Trim newline character of last token */
