@@ -7,6 +7,7 @@
 #define SET "set"
 #define SELECT "select"
 #define LIST_CONFIG "list_configured"
+#define EXIT "exit"
 
 
 
