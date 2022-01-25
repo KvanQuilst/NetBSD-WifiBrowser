@@ -124,13 +124,17 @@ int conf_deleteNetwork(char *ssid)
   return -1;
 }
 
-size_t listAvailable(char *buf)
+size_t listAvailable(char *buf, size_t len)
 {
   int retval;
-  size_t len;
-  char *rep;
+  size_t l;
 
-  retval = wpa_ctrl_request(wpa, "SCAN", 4, rep, &len, NULL) < 0)
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  retval = wpa_ctrl_request(wpa, "SCAN", 4, buf, &l, NULL);
 
   if (retval == -2) {
     fprintf(stderr, "Connection timed out\n");
@@ -140,7 +144,9 @@ size_t listAvailable(char *buf)
     return -1;
   }
 
-  retval = wpa_ctrl_request(wpa, "SCAN_RESULTS", strlen("SCAN_RESULTS"), buf, &len, NULL) < 0) 
+  l = len-1;
+
+  retval = wpa_ctrl_request(wpa, "SCAN_RESULTS", 12, buf, &l, NULL);
 
   if (retval == -2) {
     fprintf(stderr, "Connection timed out\n");
@@ -150,9 +156,9 @@ size_t listAvailable(char *buf)
     return -1;
   }
 
-  buf[len] = 0;
-  
-  return len;
+  buf[l] = 0;
+
+  return l;
 }
 
 // hash a passkey against the associated ssid for 
