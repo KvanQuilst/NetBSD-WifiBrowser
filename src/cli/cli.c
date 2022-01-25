@@ -16,13 +16,13 @@ int main(int argc, char *argv[]) {
     
     while(1){
 
-        printf("> "); 
+        PRINT_COMMAND_PROMPT("");
         buffer = malloc(sizeof(char) * BUFFER_SIZE);
         int data = read_stdin(buffer, BUFFER_SIZE);
 
         if(!data) {
 
-            printf("No data entered.\n");
+            PRINT_COMMAND_RESPONSE("No data entered.\n");
             continue;
         }
 
@@ -56,7 +56,11 @@ int num_tokens(char *buffer){
 
     while(token != NULL){
 
-        count++;
+        if(!(strlen(token) < 1) && (strcmp(token, "\n") != 0)){
+
+            count++;
+        }
+
         token = strtok(NULL, " ");
     }
     
@@ -73,7 +77,7 @@ char **parse_stdin(char *buffer, int *commands){
 
     while(token != NULL){
 
-        if(!(strlen(token) < 1)){
+        if(!(strlen(token) < 1) && (strcmp(token, "\n") != 0)){
 
             string_input[idx] = malloc(sizeof(token));
             bzero(string_input[idx], strlen(token));
@@ -85,7 +89,9 @@ char **parse_stdin(char *buffer, int *commands){
     }
 
     /* Trim newline character of last token */
-    string_input[*commands - 1][strlen(string_input[*commands - 1]) - 1] = '\0';
+    if(string_input[*commands - 1][strlen(string_input[*commands - 1]) - 1] == '\n')
+        string_input[*commands - 1][strlen(string_input[*commands - 1]) - 1] = '\0';
+
     return string_input;
 }
 
