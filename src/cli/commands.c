@@ -60,6 +60,12 @@ int run_commands(char **string_input, int *commands){
 
         return 1;
     }
+
+    else if(strcmp(CLEAR, string_input[0]) == 0){
+
+        system("clear");
+        return 1;
+    }
     
     else if(strcmp(EXIT, string_input[0]) == 0){
 
@@ -68,7 +74,7 @@ int run_commands(char **string_input, int *commands){
 
     else{
 
-        printf("Command not recognized.\n");
+        PRINT_COMMAND_RESPONSE("Command not recognized.\n");
         return 0;
     }
 } 
@@ -77,7 +83,7 @@ int run_commands(char **string_input, int *commands){
 int shift_left(char **string_input, int *commands){
 
     for(int idx = 0; idx < (*commands - 1); idx++){
-        
+
         bzero(string_input[idx], strlen(string_input[idx]));
         string_input[idx] = realloc(string_input[idx], strlen(string_input[idx + 1]));
         strcpy(string_input[idx], string_input[idx + 1]);

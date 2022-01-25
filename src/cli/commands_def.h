@@ -8,6 +8,12 @@
 #define SELECT "select"
 #define LIST_CONFIG "list_configured"
 #define EXIT "exit"
+#define PASSKEY "psk"
+#define PASSWORD "pswd"
+#define CLEAR "clear"
+
+#define PRINT_COMMAND_PROMPT(msg) printf("> %s", msg);
+#define PRINT_COMMAND_RESPONSE(msg) printf("%% %s", msg);
 
 
 
