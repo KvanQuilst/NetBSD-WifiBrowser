@@ -7,6 +7,7 @@
  */
 #pragma once
 
+#include <assert.h>
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdlib.h>
@@ -119,9 +120,10 @@ int conf_deleteNetwork(char *ssid);
 
 /*
  * listAvailable - list available visible networks
+ * requires: char * buffer pointer, size of buffer
  * returns: length of scan results, 0 - no networks, -1 - failed
  */
-size_t listAvailable(char *buf);
+size_t listAvailable(char *buf, size_t len);
 
 /**************************
  *

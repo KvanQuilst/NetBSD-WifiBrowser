@@ -4,6 +4,7 @@ int main(int argc, char **argv)
 {
   char buf[4096];
   size_t len;
+  int retval;
 
   if (api_init() == 0) {
     printf("Connected to wpa_supplicant!\n");
@@ -12,9 +13,16 @@ int main(int argc, char **argv)
     exit(1);
   }
 
-  len = listAvailable(buf);
+  printf("\n");
+
+  len = listAvailable(buf, 4096);
+
+  if (len < 0) {
+    return 0;
+  }
+
   printf("List of available networks:\n%s\n", buf);
-  printf("Len of networks: %ld\n", len);
+  printf("Length of networks: %ld\n", len);
 
   return 0;
 }
