@@ -46,12 +46,6 @@ int api_init();
  *
  *************************/
 
-/* 
- * conf_list - list configured networks in configuration file
- * returns: array of ssids as strings
- */
-char **conf_list();
-
 /*
  * conf_setDefault - set the default file location for wifi browser api
  * creates the file if the file doesn't exist
@@ -72,10 +66,10 @@ int conf_setCurrent(const char *filepath);
  * conf_connectAuto - adds a new network entry to the focused configuration file
  * and automatically supplies the additional info for
  * wpa_supplicant connection
- * requires: string of ssid, string of passkey for ssid
+ * requires: string of ssid, length of ssid, string of passkey for ssid, length of psk
  * returns: 0 if success, -1 if fail
  */
-int conf_connectAuto(char *ssid, char *psk);
+int conf_connectAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len);
 
 /*
  * conf_connectAutoEAP - adds a new eap network entry to the focused configuration file
@@ -118,9 +112,16 @@ int conf_deleteNetwork(char *ssid);
  *
  *************************/
 
+/* 
+ * listConfigured - list configured networks in configuration file
+ * requires: buffer pointer, buffer size
+ * returns: size of returned buffer
+ */
+size_t listConfigured(char *buf, size_t len);
+
 /*
  * listAvailable - list available visible networks
- * requires: char * buffer pointer, size of buffer
+ * requires: buffer pointer, buffer size
  * returns: length of scan results, 0 - no networks, -1 - failed
  */
 size_t listAvailable(char *buf, size_t len);

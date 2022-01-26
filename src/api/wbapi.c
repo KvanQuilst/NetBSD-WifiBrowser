@@ -28,8 +28,10 @@ static char *ifname = NULL;
   Static Prototypes
 **************************/
 static FILE *conf_createFile(const char *filepath);
+static int wpaReq(const char *cmd, size_t cmd_len, char *repl, size_t repl_len);
 static char *hashPsk(char *ssid, char *psk);
-static char *hashPwd(char *pwd); static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
+static char *hashPwd(char *pwd); 
+static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
 
 int api_init()
 {
@@ -64,11 +66,6 @@ int api_init()
   return 0;
 }
 
-char **conf_list()
-{
-  return NULL;
-}
-
 static FILE *conf_createFile(const char *filepath)
 {
   FILE *fp;
@@ -99,9 +96,82 @@ int conf_setCurrent(const char *filepath)
   return -1;
 }
 
-int conf_configAuto(char *ssid, char *psk)
+static int wpaReq(const char *cmd, size_t cmd_len, 
+    char *repl, size_t repl_len)
 {
-  return -1;
+  int retval;
+  size_t l = repl_len-1;
+
+  retval = wpa_ctrl_request(wpa, cmd, cmd_len, repl, &l, NULL);
+  if (retval == -2) {
+    fprintf(stderr, "Connection timed out; command dropped: %s\n", cmd);
+    return -1;
+  } else if (retval < 0) {
+    fprintf(stderr, "Command failed: %s\n", cmd);
+    return -1;
+  } else {
+    repl[l] = 0;
+    return l;
+  }
+}
+
+static int removeNetworkId(int netId)
+{
+  char cmd[128];
+  char repl[1];
+  sprintf(cmd, "REMOVE_NETWORK %d", netId);
+  return wpaReq(cmd, sizeof(cmd)-1, repl, 1) < 0 ? -1 : 0;
+}
+
+int conf_configAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len)
+{
+  char repl[128];
+  char *cmd[128];
+  int netId;
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  /* check ssid validity */
+  
+  if (wpaReq("ADD_NETWORK", 11, repl, 128) < 0) return -1;
+  if (!strncmp(repl, "FAIL", 4)) {
+    fprintf(stderr, "Network configuration creation failed!\n");
+    return -1;
+  }
+
+  netId = atoi(repl);
+  sprintf(cmd, "SET_NETWORK %d ssid %s", netId, ssid);
+  if (wpaReq(cmd, strlen(cmd)-1, repl, 128) < 0) {
+    removeNetworkId(netId);
+    return -1;
+  }
+  
+  sprintf(cmd, "SET_NETWORK %d psk %s", netId, psk);
+  if (wpaReq(cmd, strlen(cmd)-1, repl, 128) < 0) {
+    removeNetworkId(netId);
+    return -1;
+  }
+
+  sprintf(cmd, "ENABLE_NETWORK %d", netId);
+  if (wpaReq(cmd, strlen(cmd)-1, repl, 128) < 0) {
+    removeNetworkId(netId);
+    return -1;
+  }
+
+  if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
+    removeNetworkId(netId);
+    return -1;
+  }
+
+  if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
+    removeNetworkId(netId);
+    return -1;
+  }
+
+  return 0;
 }
 
 int conf_configAutoEAP(char *ssid, char *user, char *pwd)
@@ -124,6 +194,18 @@ int conf_deleteNetwork(char *ssid)
   return -1;
 }
 
+size_t listConfigured(char *buf, size_t len)
+{
+  size_t l;
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  return wpaReq("LIST_NETWORKS", 13, buf, len);
+}
+
 size_t listAvailable(char *buf, size_t len)
 {
   int retval;
@@ -134,31 +216,8 @@ size_t listAvailable(char *buf, size_t len)
     return -1;
   }
 
-  retval = wpa_ctrl_request(wpa, "SCAN", 4, buf, &l, NULL);
-
-  if (retval == -2) {
-    fprintf(stderr, "Connection timed out\n");
-    return -1;
-  } else if (retval < 0) {
-    fprintf(stderr, "Scan for networks failed\n");
-    return -1;
-  }
-
-  l = len-1;
-
-  retval = wpa_ctrl_request(wpa, "SCAN_RESULTS", 12, buf, &l, NULL);
-
-  if (retval == -2) {
-    fprintf(stderr, "Connection timed out\n");
-    return -1;
-  } else if (retval < 0) {
-    fprintf(stderr, "Scan for networks failed\n");
-    return -1;
-  }
-
-  buf[l] = 0;
-
-  return l;
+  if (wpaReq("SCAN", 4, buf, len) < 0) return -1;
+  return wpaReq("SCAN_RESULTS", 12, buf, len);
 }
 
 // hash a passkey against the associated ssid for 
