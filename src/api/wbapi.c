@@ -127,10 +127,14 @@ int conf_deleteNetwork(char *ssid)
 size_t listAvailable(char *buf)
 {
   int retval;
-  size_t len;
-  char *rep;
+  size_t len = sizeof(buf)-1;
 
-  retval = wpa_ctrl_request(wpa, "SCAN", 4, rep, &len, NULL) < 0)
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  retval = wpa_ctrl_request(wpa, "SCAN", 4, buf, &len, NULL);
 
   if (retval == -2) {
     fprintf(stderr, "Connection timed out\n");
@@ -140,7 +144,7 @@ size_t listAvailable(char *buf)
     return -1;
   }
 
-  retval = wpa_ctrl_request(wpa, "SCAN_RESULTS", strlen("SCAN_RESULTS"), buf, &len, NULL) < 0) 
+  retval = wpa_ctrl_request(wpa, "SCAN_RESULTS", 12, buf, &len, NULL);
 
   if (retval == -2) {
     fprintf(stderr, "Connection timed out\n");
