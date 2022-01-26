@@ -19,7 +19,7 @@ static FILE *curr_conf;
 
 /* wpa_supplicant related */
 static struct wpa_ctrl *wpa;
-#define CTRL_IFACE_DIR "/var/run/wpa_supplcant"
+#define CTRL_IFACE_DIR "/var/run/wpa_supplicant/"
 static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
 static char *ifname = NULL;
 
@@ -34,6 +34,7 @@ static char *hashPwd(char *pwd); static void getKeyMgmt(char *ssid, struct wifi_
 int api_init()
 {
   /* Open default interface directory; look for interface */
+  char *iface_dir;
   struct dirent *dent;
   DIR *dir = opendir(ctrl_iface_dir);
   if (dir == NULL) {
@@ -42,15 +43,17 @@ int api_init()
   }
 
   while ((dent = readdir(dir))) {
-    if (strcmp(dent->d_name, ".") && strcmp(dent->d_name, "..") &&
-            strncmp(dent->d_name, "p2p-dev-", 8)) {
+    if (strcmp(dent->d_name, ".") != 0 && strcmp(dent->d_name, "..") != 0) {
       ifname = strdup(dent->d_name);
       printf("Current interface: %s\n", ifname ? ifname : "n/a");
     }
   }
 
+  iface_dir = strdup(ctrl_iface_dir);
+  strcat(iface_dir, ifname);
+
   /* Attempt to connect wpa_supplicant instance */
-  wpa = wpa_ctrl_open(ifname);
+  wpa = wpa_ctrl_open(iface_dir);
   if (wpa == NULL) {
     fprintf(stderr, "wbapi: Unable to connect to wpa_supplicant on this interface!\n");
     return -1;
@@ -123,13 +126,31 @@ int conf_deleteNetwork(char *ssid)
 
 size_t listAvailable(char *buf)
 {
+  int retval;
   size_t len;
+  char *rep;
 
-  if (wpa_ctrl_request(wpa, "SCAN", 4, NULL, NULL, NULL) < 0)
-    return -1;
+  retval = wpa_ctrl_request(wpa, "SCAN", 4, rep, &len, NULL) < 0)
 
-  if (wpa_ctrl_request(wpa, "SCAN_RESULTS", strlen("SCAN_RESULTS"), buf, &len, NULL) < 0) 
+  if (retval == -2) {
+    fprintf(stderr, "Connection timed out\n");
     return -1;
+  } else if (retval < 0) {
+    fprintf(stderr, "Scan for networks failed\n");
+    return -1;
+  }
+
+  retval = wpa_ctrl_request(wpa, "SCAN_RESULTS", strlen("SCAN_RESULTS"), buf, &len, NULL) < 0) 
+
+  if (retval == -2) {
+    fprintf(stderr, "Connection timed out\n");
+    return -1;
+  } else if (retval < 0) {
+    fprintf(stderr, "Scan for networks failed\n");
+    return -1;
+  }
+
+  buf[len] = 0;
   
   return len;
 }
