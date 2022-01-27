@@ -46,12 +46,6 @@ int api_init();
  *
  *************************/
 
-/* 
- * conf_list - list configured networks in configuration file
- * returns: array of ssids as strings
- */
-char **conf_list();
-
 /*
  * conf_setDefault - set the default file location for wifi browser api
  * creates the file if the file doesn't exist
@@ -118,9 +112,16 @@ int conf_deleteNetwork(char *ssid);
  *
  *************************/
 
+/* 
+ * listConfigured - list configured networks in configuration file
+ * requires: buffer pointer, buffer size
+ * returns: size of returned buffer
+ */
+size_t listConfigured(char *buf, size_t len);
+
 /*
  * listAvailable - list available visible networks
- * requires: char * buffer pointer, size of buffer
+ * requires: buffer pointer, buffer size
  * returns: length of scan results, 0 - no networks, -1 - failed
  */
 size_t listAvailable(char *buf, size_t len);
