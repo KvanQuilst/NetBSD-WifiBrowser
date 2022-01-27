@@ -9,18 +9,38 @@
   Dylan Roy, Stephen Loudiana, Kevin McGrane
 \end{center}
 
+
 \section{General Progress Report}
+Progress has been significant for the duration of Milestone 2, but not necessarily in the ways outlined
+in the development plan. Instead of all members focusing on the API to start out, we split the work into
+the three main components our projects encompasses: Dylan on the API, Stephen on the CLI, and Kevin on the TUI.
+The API's progress had many road blocks in its development due to the numerous undocumented quirks of interfacing
+with \texttt{wpa\_supplicant}, though, as the roadblocks are overcome, progress on the API should speed up
+as the implementation beyond the quirks is rather trivial. In the development plan document, the next milestone
+might look a bit more ambitious, but the majority of the API implementation planned is closely related to each
+other and \textit{should} have trivial implementation once the configuration file saving issue is solved.
+Making up for the unexpected delays in the API, Stephen has put a significant amount of work into the CLI, saving 
+us time that was allocated for later in the quarter originally, negating (hopefully) the API slow downs.
 
 \textbf{Accomplishments}
 \begin{itemize}
+  \item API can communicate with a running instance of \texttt{wpa\_supplicant}
+  \item Projects can use the API in its current state and use some functionality
 \end{itemize}
 
 \textbf{Targets Not Met:}
 \begin{itemize}
+  \item API has not independently facilitated \texttt{wpa\_supplicant} connecting to a wifi source of any kind
+  \item API is not hashing passwords yet
+  \item API can remove networks from configuration, but not externally yet
+  \item API testing is not really a suite yet, but still being built out
 \end{itemize}
 
 
 \section{Git Branch Report}
+All work has been performed on \texttt{master} against best practice. It might actually behoove us to
+work on separate branches due to the experienced difficulties with people working on master at the same
+time.
 
 
 \section{Individual Progress}
@@ -39,7 +59,18 @@
 
 \textbf{Dylan:}
 \begin{itemize}
-
+  \item Set up remote connection to lab machine
+  \item Built API scaffolding and function prototypes
+  \item Extensive additional into interfacing with \texttt{wpa\_supplicant}
+  \item Linked \texttt{wpa\_ctrl} - the \texttt{wpa\_supplicant} interface - to the API
+  \item API can compile with \texttt{wpa\_ctrl} files and a program file
+  \item Connected the API to \texttt{wpa\_supplicant}
+  \item API can list available networks in proximity to the wifi interface
+  \item API can list configured networks in the configuration file \texttt{wpa\_supplicant} is currently using
+  \item API can temporarily create new network configurations and write to them, but they don't save when 
+    \texttt{wpa\_supplicant} is asked to re-read the configuration file
+  \item API can create a local configuration file, but \texttt{wpa\_supplicant} terminate when trying to use it mysteriously
+  \item Building out a document of interfacing with \texttt{wpa\_supplicant}
 \end{itemize}
 
 
