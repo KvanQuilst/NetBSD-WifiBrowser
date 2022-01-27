@@ -66,10 +66,10 @@ int conf_setCurrent(const char *filepath);
  * conf_connectAuto - adds a new network entry to the focused configuration file
  * and automatically supplies the additional info for
  * wpa_supplicant connection
- * requires: string of ssid, string of passkey for ssid
+ * requires: string of ssid, length of ssid, string of passkey for ssid, length of psk
  * returns: 0 if success, -1 if fail
  */
-int conf_connectAuto(char *ssid, char *psk);
+int conf_connectAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len);
 
 /*
  * conf_connectAutoEAP - adds a new eap network entry to the focused configuration file
