@@ -143,20 +143,22 @@ int conf_configAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len)
   }
 
   netId = atoi(repl);
-  sprintf(cmd, "SET_NETWORK %d ssid %s", netId, ssid);
-  if (wpaReq(cmd, strlen(cmd)-1, repl, 128) < 0) {
+  sprintf(cmd, "netId: %d\nSET_NETWORK %d ssid '\"%s\"'", netId, netId, ssid);
+  printf("%s\n", cmd);
+  if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
     removeNetworkId(netId);
     return -1;
   }
   
-  sprintf(cmd, "SET_NETWORK %d psk %s", netId, psk);
-  if (wpaReq(cmd, strlen(cmd)-1, repl, 128) < 0) {
+  sprintf(cmd, "SET_NETWORK %d psk '\"%s\"'", netId, psk);
+  printf("%s\n", cmd);
+  if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
     removeNetworkId(netId);
     return -1;
   }
 
   sprintf(cmd, "ENABLE_NETWORK %d", netId);
-  if (wpaReq(cmd, strlen(cmd)-1, repl, 128) < 0) {
+  if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
     removeNetworkId(netId);
     return -1;
   }
@@ -166,10 +168,10 @@ int conf_configAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len)
     return -1;
   }
 
-  if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
+  /*if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
     removeNetworkId(netId);
     return -1;
-  }
+  }*/
 
   return 0;
 }
