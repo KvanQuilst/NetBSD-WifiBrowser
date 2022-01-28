@@ -22,6 +22,14 @@ other and \textit{should} have trivial implementation once the configuration fil
 Making up for the unexpected delays in the API, Stephen has put a significant amount of work into the CLI, saving 
 us time that was allocated for later in the quarter originally, negating (hopefully) the API slow downs.
 
+The progress on the TUI has been slow to get started due to the fact that it has mostly been filled with research 
+and comparing with other TUIs to see the best plan of action when trying to implement it. It seems that Ncurses 
+is going to be our best bet when trying to efficiently implement a TUI that works with the API, thus a large majority 
+of the our time during milestone has been used on researching Ncurses and how to use it when implementing the TUI. 
+There was also some confusion at the start of our implementation on how the TUI will interact and work with the API, 
+but after a few group discussion those gray areas were cleared up and have really set us up for success moving into 
+the future.
+
 \textbf{Accomplishments}
 \begin{itemize}
   \item API can communicate with a running instance of \texttt{wpa\_supplicant}
@@ -53,7 +61,11 @@ time.
 
 \textbf{Kevin:} <time>
 \begin{itemize}
-
+  \item Research on best way to implement TUI by comparing with other examples and working TUI systems
+  \item Research on Ncurses and how it will be implemented 
+  \item Began some sample testing with Ncurses 
+  \item Review of API .h file and how it is going to interact with the TUI
+  \item Research and problem solving on already existing issues with Ncurses when implementing a TUI
 \end{itemize}
 
 
