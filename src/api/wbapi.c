@@ -18,7 +18,7 @@
 static FILE *curr_conf;
 /* wpa_supplicant related */
 static struct wpa_ctrl *wpa;
-#define CTRL_IFACE_DIR "/var/run/wpa_supplicant"
+#define CTRL_IFACE_DIR "/var/run/wpa_supplicant/"
 static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
 static char *ifname = NULL;
 

@@ -3,10 +3,6 @@
 
 int main(int argc, char **argv)
 {
-  if(argc == 2){
-
-    
-  }
   
   char buf[BUF_SIZE];
   size_t len;
