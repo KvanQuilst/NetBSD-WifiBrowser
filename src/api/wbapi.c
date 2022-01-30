@@ -16,10 +16,10 @@
 
 /* Network configuration */
 static FILE *curr_conf;
-
+//   /var/run/wpa_supplicant
 /* wpa_supplicant related */
 static struct wpa_ctrl *wpa;
-#define CTRL_IFACE_DIR "/var/run/wpa_supplicant/"
+#define CTRL_IFACE_DIR "/etc/wpa_supplicant/"
 static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
 static char *ifname = NULL;
 
