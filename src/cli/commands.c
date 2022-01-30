@@ -74,7 +74,7 @@ int run_commands(char **string_input, int *commands){
 
     else{
 
-        PRINT_COMMAND_RESPONSE("Command not recognized.\n");
+        PRINT_COMMAND_RESPONSE("Invalid command: .\n");
         return 0;
     }
 } 

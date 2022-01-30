@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     
     while(1){
 
-        PRINT_COMMAND_PROMPT("");
+        PRINT_COMMAND_PROMPT;
         buffer = malloc(sizeof(char) * BUFFER_SIZE);
         int data = read_stdin(buffer, BUFFER_SIZE);
 
