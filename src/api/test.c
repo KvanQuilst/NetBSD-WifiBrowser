@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   printf("\n");
   
   /* Create a new network configuration */
-  retval = conf_configAuto("test", 4, "passkey", 7);
+  retval = conf_configAuto("test", NULL);
   if (retval < 0) {
     printf("Auto-configuration failed!\n");
   }

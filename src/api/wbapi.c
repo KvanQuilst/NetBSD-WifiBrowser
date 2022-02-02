@@ -34,6 +34,20 @@ static char *hashPsk(char *ssid, char *psk);
 static char *hashPwd(char *pwd); 
 static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
 
+/**************************
+  Helper Functions
+**************************/
+static int conf_write(const char *dat)
+{
+  fwrite(dat, sizeof(char), strlen(dat), curr_conf);
+  if (ferror(curr_conf)) {
+    fprintf(stderr, "wbapi: error writing to configuration file!\n");
+    return -1;
+  } else {
+    return 0;
+  }
+}
+
 static void api_exit(const char *msg)
 {
   fprintf(stderr, "wbapi error: %s\n", msg);
@@ -139,7 +153,7 @@ static int removeNetworkId(int netId)
   return wpaReq(cmd, sizeof(cmd)-1, repl, 1) < 0 ? -1 : 0;
 }
 
-int conf_configAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len)
+int conf_configAuto(char *ssid, char *psk)
 {
   char *line;
   char repl[128];
@@ -151,69 +165,33 @@ int conf_configAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len)
 
   /* check ssid validity */
   
-  /*if (wpaReq("ADD_NETWORK", 11, repl, 128) < 0) return -1;
-  if (!strncmp(repl, "FAIL", 4)) {
-    fprintf(stderr, "Network configuration creation failed!\n");
-    return -1;
-  }
-
-  netId = atoi(repl);
-  sprintf(cmd, "netId: %d\nSET_NETWORK %d ssid '\"%s\"'", netId, netId, ssid);
-  //printf("%s\n", cmd);
-  if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
-    removeNetworkId(netId);
-    return -1;
-  }
-  
-  sprintf(cmd, "SET_NETWORK %d psk '\"%s\"'", netId, psk);
-  //printf("%s\n", cmd);
-  if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
-    removeNetworkId(netId);
-    return -1;
-  }
-
-  sprintf(cmd, "ENABLE_NETWORK %d", netId);
-  if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
-    removeNetworkId(netId);
-    return -1;
-  }
-
-  if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
-    removeNetworkId(netId);
-    return -1;
-  }*/
-
   if (fseek(curr_conf, 0, SEEK_END) < 0) {
     fprintf(stderr, "wbapi: error seeking in configuration file!\n");
     return -1;
   }
 
-  line = "\n";
-  fwrite(line, sizeof(char), 1, curr_conf);
-  if (ferror(curr_conf)) {
-    fprintf(stderr, "wbapi: error writing to configuration file!\n");
-    return -1;
+  conf_write("\nnetwork={\n");
+
+  sprintf(line, "\tssid=\"%s\"\n", ssid);
+  conf_write(line);
+
+  if (psk == NULL) {
+    conf_write("\tkey_mgmt=NONE\n");
+  } else {
+    conf_write("\tkey_mgmt=WPA_PSK\n");
   }
 
-  line = "network={\n";
-  fwrite(line, sizeof(char), 10, curr_conf);
-  if (ferror(curr_conf)) {
-    fprintf(stderr, "wbapi: error writing to configuration file!\n");
-  }
+  // psk is having issues?
+  /*sprintf(line, "\tpsk=\"%s\"\n", psk);
+  conf_write(line);*/
 
-  line = "\tssid=\"test\"\n";
-  fwrite(line, sizeof(char), strlen(line), curr_conf);
-  if (ferror(curr_conf)) {
-    fprintf(stderr, "wbapi: error writing to configuration file!\n");
-  }
-
-  line = "}";
-  fwrite(line, sizeof(char), 1, curr_conf);
-  if (ferror(curr_conf)) {
-    fprintf(stderr, "wbapi: error writing to configuration file!\n");
-  }
+  conf_write("}");
 
   if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
+    return -1;
+  }
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in re-reading configuration file!\n");
     return -1;
   }
 
@@ -283,6 +261,7 @@ static char *hashPsk(char *ssid, char *psk)
 // returns: string of hashed password
 static char *hashPwd(char *pwd)
 {
+  
   return NULL;
 }
 
