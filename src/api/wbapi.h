@@ -102,9 +102,15 @@ int conf_editNetwork(char *ssid, struct wifi_conf conf);
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused
  * configuration file
  * requires: string of ssid to be deleted
- * returns: 0 if success, -1 if fail
+ * returns: 0 on success, -1 on fail
  */
 int conf_deleteNetwork(char *ssid);
+
+/*
+ * conf_cleanNetworks - remove all networks from the selected configuration file
+ * returns: 0 on success, -1 on fail
+ */
+int conf_cleanNetworks(void);
 
 /**************************
  *

@@ -322,6 +322,17 @@ int conf_deleteNetwork(char *ssid)
   return -1;
 }
 
+int conf_cleanNetworks(void)
+{
+  char c;
+  int i = 0;
+  rewind(curr_conf);
+
+  /* figure out how to remove networks */
+
+  return -1;
+}
+
 size_t listConfigured(char *buf, size_t len)
 {
   size_t l;
