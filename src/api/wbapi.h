@@ -25,7 +25,7 @@ struct wifi_conf {
   int priority;
 
   // eap specific
-  char *user;
+  char *identity;
   char *password;
   char *proto;
   char *pairwise;
@@ -69,7 +69,7 @@ int conf_setCurrent(const char *filepath);
  * requires: string of ssid, length of ssid, string of passkey for ssid, length of psk
  * returns: 0 if success, -1 if fail
  */
-int conf_connectAuto(char *ssid, char *psk);
+int conf_configAuto(char *ssid, char *psk);
 
 /*
  * conf_connectAutoEAP - adds a new eap network entry to the focused configuration file
@@ -79,7 +79,7 @@ int conf_connectAuto(char *ssid, char *psk);
  *           string of password for user for network
  * returns: 0 if success, -1 if fail
  */
-int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
+int conf_configAutoEAP(char *ssid, char *user, char *pwd);
 
 /*
  * conf_connectManual - adds a new network configuration using the information
@@ -88,7 +88,7 @@ int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
  * requires: wifi_conf struct
  * returns: 0 if success, -1 if fail
  */
-int conf_connectManual(struct wifi_conf conf);
+int conf_configManual(struct wifi_conf conf);
 
 /*
  * conf_editNetwork - edits the specified network config (based on ssid) using
@@ -124,7 +124,7 @@ size_t listConfigured(char *buf, size_t len);
  * requires: buffer pointer, buffer size
  * returns: length of scan results, 0 - no networks, -1 - failed
  */
-size_t listAvailable(char *buf, size_t len);
+int listAvailable(char *buf, size_t len);
 
 /**************************
  *
@@ -143,12 +143,3 @@ int wpa_restart();
  * 1 if wpa_supplicant is running, 0 if not
  */
 int wpa_running();
-
-/*
- * wpa_multiInterface - start/restart wpa_supplicant with the multi-interface
- * option enabled
- * requires: string of first interface, string of filepath to first conf file
- *           string of second interface, string of filepath to second conf file
- * returns: 0 if success, -1 if fail
- */
-int wpa_multiInterface(char *inf1, char *conf_file1, char *inf2, char *conf_file2);

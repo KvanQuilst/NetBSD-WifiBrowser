@@ -43,6 +43,9 @@ static int conf_write(const char *dat)
   if (ferror(curr_conf)) {
     fprintf(stderr, "wbapi: error writing to configuration file!\n");
     return -1;
+  } else if (feof(curr_conf)) {
+    fprintf(stderr, "wbapi: end of configuration file reached!\n");
+    return -1;
   } else {
     return 0;
   }
@@ -56,6 +59,10 @@ static void api_exit(const char *msg)
     fclose(curr_conf);
   }
 }
+
+/************************
+  API Functions
+************************/
 
 int api_init()
 {
@@ -87,7 +94,7 @@ int api_init()
   }
 
   /* Grab config file */
-  if ((curr_conf = fopen(conf_filepath, "r+")) == NULL) {
+  if ((curr_conf = fopen(conf_filepath, "r+x")) == NULL) {
     api_exit("Error opening configuration file");
     return -1;
   }
@@ -185,7 +192,7 @@ int conf_configAuto(char *ssid, char *psk)
   /*sprintf(line, "\tpsk=\"%s\"\n", psk);
   conf_write(line);*/
 
-  conf_write("}");
+  conf_write("}\n");
 
   if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
     return -1;
@@ -205,7 +212,104 @@ int conf_configAutoEAP(char *ssid, char *user, char *pwd)
 
 int conf_configManual(struct wifi_conf conf)
 {
-  return -1;
+  char *line;
+  char repl[128];
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  if (conf.ssid == NULL) {
+    fprintf(stderr, "Cannot create network without ssid!\n");
+    return -1;
+  }
+  /* check ssid validity */
+
+  if (fseek(curr_conf, 0, SEEK_END) < 0) {
+    fprintf(stderr, "wbapi: error seeking in configuration file!\n");
+    return -1;
+  }
+
+  conf_write("\nnetwork={\n");
+
+  /* ssid */
+  sprintf(line, "\tssid=\"%s\"\n", conf.ssid);
+  conf_write(line);
+
+  /* key_mgmt */
+  if (conf.key_mgmt) {
+    sprintf(line, "\tkey_mgmt=%s\n", conf.key_mgmt);
+    conf_write(line);
+  }
+
+  /* psk */
+  if (conf.psk) {
+    sprintf(line, "\tpsk=\"%s\"\n", conf.psk);
+    conf_write(line);
+  }
+
+  /* priority */
+  if (conf.priority > 0) {
+    sprintf(line, "\tpriority=%d\n", conf.priority);
+    conf_write(line);
+  }
+
+  /* EAP Specific */
+
+  /* identity */
+  if (conf.identity) {
+    sprintf(line, "\tidentity=\"%s\"\n", conf.identity);
+    conf_write(line);
+  }
+
+  /* password */
+  if (conf.password) {
+    sprintf(line, "\tpassword=\"%s\"\n", conf.password);
+    conf_write(line);
+  }
+
+  /* proto */
+  if (conf.proto) {
+    sprintf(line, "\tproto=%s\n", conf.proto);
+    conf_write(line);
+  }
+
+  /* pairwise */
+  if (conf.pairwise) {
+    sprintf(line, "\tpairwise=%s\n", conf.pairwise);
+    conf_write(line);
+  }
+
+  /* group */
+  if (conf.group) {
+    sprintf(line, "\tgroup=%s\n", conf.group);
+    conf_write(line);
+  }
+
+  /* eap */
+  if (conf.eap) {
+    sprintf(line, "\teap=%s\n", conf.eap);
+    conf_write(line);
+  }
+
+  /* phase2 */
+  if (conf.phase2) {
+    sprintf(line, "\tphase2=\"%s\"\n", conf.phase2);
+    conf_write(line);
+  }
+
+  conf_write("}\n");
+
+  if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
+    return -1;
+  }
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in re-reading configuration file!\n");
+    return -1;
+  }
+
+  return 0;
 }
 
 int conf_editNetwork(char *ssid, struct wifi_conf conf)
@@ -230,10 +334,9 @@ size_t listConfigured(char *buf, size_t len)
   return wpaReq("LIST_NETWORKS", 13, buf, len);
 }
 
-size_t listAvailable(char *buf, size_t len)
+int listAvailable(char *buf, size_t len)
 {
   int retval;
-  size_t l;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -283,10 +386,4 @@ int wpa_restart()
 int wpa_running()
 {
   return 0;
-}
-
-int wpa_multiInterface(char *inf1, char *conf_file1, 
-    char *inf2, char *conf_file2)
-{
-  return -1;
 }
