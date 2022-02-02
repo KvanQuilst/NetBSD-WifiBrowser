@@ -51,6 +51,20 @@ static int conf_write(const char *dat)
   }
 }
 
+static int reconfigure()
+{
+  char repl[128];
+  
+  if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
+    return -1;
+  }
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in re-reading configuration file!\n");
+    return -1;
+  }
+  return 0;
+}
+
 static void api_exit(const char *msg)
 {
   fprintf(stderr, "wbapi error: %s\n", msg);
@@ -108,7 +122,7 @@ static FILE *conf_createFile(const char *filepath)
   FILE *fp;
   time_t t = time(NULL);
 
-  if (fp = fopen(filepath, "r")) {
+  if ((fp = fopen(filepath, "r")) != NULL) {
     fprintf(stderr, "wbapi: Config file already exists - cannot initialize!\n");
     return NULL;
   }
@@ -163,7 +177,6 @@ static int removeNetworkId(int netId)
 int conf_configAuto(char *ssid, char *psk)
 {
   char *line;
-  char repl[128];
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -185,7 +198,8 @@ int conf_configAuto(char *ssid, char *psk)
   if (psk == NULL) {
     conf_write("\tkey_mgmt=NONE\n");
   } else {
-    conf_write("\tkey_mgmt=WPA_PSK\n");
+    //conf_write("\tkey_mgmt=WPA_PSK\n");
+    //hashPsk(ssid, psk);
   }
 
   // psk is having issues?
@@ -194,15 +208,9 @@ int conf_configAuto(char *ssid, char *psk)
 
   conf_write("}\n");
 
-  if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
-    return -1;
-  }
-  if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "wbapi: error in re-reading configuration file!\n");
-    return -1;
-  }
+  fflush(curr_conf);
 
-  return 0;
+  return reconfigure();
 }
 
 int conf_configAutoEAP(char *ssid, char *user, char *pwd)
@@ -213,7 +221,6 @@ int conf_configAutoEAP(char *ssid, char *user, char *pwd)
 int conf_configManual(struct wifi_conf conf)
 {
   char *line;
-  char repl[128];
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -301,15 +308,9 @@ int conf_configManual(struct wifi_conf conf)
 
   conf_write("}\n");
 
-  if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
-    return -1;
-  }
-  if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "wbapi: error in re-reading configuration file!\n");
-    return -1;
-  }
+  fflush(curr_conf);
 
-  return 0;
+  return reconfigure();
 }
 
 int conf_editNetwork(char *ssid, struct wifi_conf conf)
@@ -324,13 +325,31 @@ int conf_deleteNetwork(char *ssid)
 
 int conf_cleanNetworks(void)
 {
-  char c;
   int i = 0;
-  rewind(curr_conf);
+  char cmd[32] = {0};
+  char repl[128] = {0};
 
-  /* figure out how to remove networks */
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
 
-  return -1;
+  while (strncmp("FAIL", repl, 4)) {
+    snprintf(cmd, 32, "REMOVE_NETWORK %d", i);
+    if(wpaReq(cmd, 32, repl, 128) < 0) {
+      return -1;
+    }
+    i++;
+  }
+
+  if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
+    return -1;
+  }
+  if (strncmp("OK", repl, 2)) {
+    return -1;
+  }
+
+  return reconfigure();
 }
 
 size_t listConfigured(char *buf, size_t len)
@@ -365,6 +384,10 @@ int listAvailable(char *buf, size_t len)
 // returns: string of hashed passkey
 static char *hashPsk(char *ssid, char *psk)
 {
+  char *line;
+  char repl[128];
+  sprintf(line, "WPA_CTRL_RSP-PASSPHRASE-%s:%s", ssid, psk);
+  if (wpaReq(line, strlen(line), repl, 128) < 0) return -1;
   return NULL;
 }
 
