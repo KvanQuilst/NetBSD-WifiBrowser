@@ -1,7 +1,7 @@
 #include "wbapi.h"
 #define BUF_SIZE 4096
 
-int main(int argc, char **argv)
+int main()
 {
   
   char buf[BUF_SIZE];
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   
   /* Create a new network configuration */
   printf("/* Auto configure network w/ ssid */\n");
-  retval = conf_configAuto("Auto-SSID", NULL);
+  retval = conf_configAuto("Auto-SSID", "Pass");
   if (retval < 0) {
     printf("Auto-configuration failed!\n");
   }
