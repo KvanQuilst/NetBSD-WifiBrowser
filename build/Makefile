@@ -14,11 +14,12 @@ cli: cli.o commands.o
 cli.o: . ../src/cli/cli.c ../src/cli/cli.h
 	$(CC) $(CFLAGS) -c . ../src/cli/cli.c
 commands.o: . ../src/cli/commands.c ../src/cli/commands.h ../src/cli/commands_def.h
-	$(CC) $(CFLAGS) -c . ../src/cli/commands.c
+	$(CC) $(CFLAGS) -c . ../src/cli/commands.c 
+
 
 #Clean Files
 clean:
-	rm -rf $(BINARY) $(OBJECTS)
+	rm -rf *.o
 
 
 
