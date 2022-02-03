@@ -18,6 +18,15 @@ int main()
   }
   printf("\n");
 
+  /* Clean configuration file for testing */
+  printf("/* Clean configuration file for testing */\n");
+  if (conf_cleanNetworks() < 0) {
+    printf("Failed to clean all networks from config file!\n");
+  } else {
+    printf("Configuration file cleaning successful!\n");
+  }
+  printf("\n");
+
   /* List available networks to interface */
   printf("/* List available networks */\n");
   len = listAvailable(buf, BUF_SIZE);
@@ -31,7 +40,7 @@ int main()
   printf("\n");
   
   /* List configured networks visible to wpa_supplicant */
-  printf("/* List configured networks */");
+  printf("/* List configured networks */\n");
   len = listConfigured(buf, BUF_SIZE);
 
   printf("List of configured networks:\n%s\n", buf);

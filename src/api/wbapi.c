@@ -325,13 +325,31 @@ int conf_deleteNetwork(char *ssid)
 
 int conf_cleanNetworks(void)
 {
-  char c;
   int i = 0;
-  rewind(curr_conf);
+  char cmd[32] = {0};
+  char repl[128] = {0};
 
-  /* figure out how to remove networks */
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
 
-  return -1;
+  while (strncmp("FAIL", repl, 4)) {
+    snprintf(cmd, 32, "REMOVE_NETWORK %d", i);
+    if(wpaReq(cmd, 32, repl, 128) < 0) {
+      return -1;
+    }
+    i++;
+  }
+
+  if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
+    return -1;
+  }
+  if (strncmp("OK", repl, 2)) {
+    return -1;
+  }
+
+  return reconfigure();
 }
 
 size_t listConfigured(char *buf, size_t len)
