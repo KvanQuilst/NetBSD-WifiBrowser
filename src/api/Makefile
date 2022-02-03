@@ -10,8 +10,6 @@ wpa_ctrl.o: wpa_ctrl.c
 os_unix.o: os_unix.c
 	$(CC) $(CFLAGS) -I ./ -MMD -c -o os_unix.o os_unix.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
 
-
-
 .PHONY clean:
 clean:
 	@rm -rf *.o *.d
