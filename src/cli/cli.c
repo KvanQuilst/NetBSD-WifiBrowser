@@ -9,6 +9,7 @@
 
 #include "cli.h"
 #include "commands.h"
+#include "../api/wbapi.h"
 
 char *buffer;
 
