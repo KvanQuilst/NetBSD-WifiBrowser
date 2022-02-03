@@ -16,7 +16,6 @@ cli.o: . ../src/cli/cli.c ../src/cli/cli.h
 	$(CC) $(CFLAGS) -c . ../src/cli/cli.c
 commands.o: . ../src/cli/commands.c ../src/cli/commands.h ../src/cli/commands_def.h
 	$(CC) $(CFLAGS) -c . ../src/cli/commands.c 
-
 wbapi.o: ../src/api/wbapi.c os_unix.o wpa_ctrl.o
 	$(CC) $(CFLAGS) -Wall -Wextra -c -o wbapi.o ../src/api/wbapi.c os_unix.o wpa_ctrl.o 
 wpa_ctrl.o: ../src/api/wpa_ctrl.c
