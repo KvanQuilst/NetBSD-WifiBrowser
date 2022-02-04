@@ -26,6 +26,7 @@ int run_commands(char **string_input, char *bufferResult, int *commands){
 
     if(strcmp(WBCLI, string_input[0]) == 0){
 
+        api_init();
         return 1;
     }
 
