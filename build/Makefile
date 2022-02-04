@@ -9,8 +9,8 @@ tui.o: . ../src/tui/tui.c
 	$(CC) $(CFLAGS) -c . ../src/tui/tui.c
 
 #CLI Compilation 
-cli: cli.o commands.o wbapi.o
-	$(CC) -o cli cli.o commands.o wbapi.o $(LDFLAGS)
+cli: cli.o commands.o wbapi.o wpa_ctrl.o os_unix.o 
+	$(CC) -o cli cli.o commands.o wbapi.o wpa_ctrl.o os_unix.o $(LDFLAGS)
 cli.o: . ../src/cli/cli.c ../src/cli/cli.h
 	$(CC) $(CFLAGS) -c . ../src/cli/cli.c
 commands.o: . ../src/cli/commands.c ../src/cli/commands.h ../src/cli/commands_def.h
@@ -32,7 +32,7 @@ os_unix.o: ../src/api/os_unix.c
 
 #Clean Files
 clean:
-	rm -rf *.o
+	rm -rf *.o *.d
 
 
 
