@@ -1,6 +1,9 @@
 #include "commands.h"
+#include "cli.h"
 
 void process_commands(char **string_input, int *commands){
+
+    char *bufferResult = malloc(sizeof(char) * BUFFER_SIZE);
 
     while(*commands != 0){
 
@@ -10,7 +13,7 @@ void process_commands(char **string_input, int *commands){
             continue;
         }
 
-        else if(!run_commands(string_input, commands)){
+        else if(!run_commands(string_input, bufferResult, commands)){
 
             break;
         }        
@@ -19,7 +22,7 @@ void process_commands(char **string_input, int *commands){
     }
 }
 
-int run_commands(char **string_input, int *commands){
+int run_commands(char **string_input, char *bufferResult, int *commands){
 
     if(strcmp(WBCLI, string_input[0]) == 0){
 
@@ -33,6 +36,7 @@ int run_commands(char **string_input, int *commands){
 
     else if(strcmp(LIST, string_input[0]) == 0){
 
+        listAvailable(bufferResult, BUFFER_SIZE);
         return 1;
     }
 
