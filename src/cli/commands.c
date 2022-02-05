@@ -1,9 +1,6 @@
 #include "commands.h"
-#include "cli.h"
 
 void process_commands(char **string_input, int *commands){
-
-    char *bufferResult = malloc(sizeof(char) * BUFFER_SIZE);
 
     while(*commands != 0){
 
@@ -13,7 +10,7 @@ void process_commands(char **string_input, int *commands){
             continue;
         }
 
-        else if(!run_commands(string_input, bufferResult, commands)){
+        else if(!run_commands(string_input, commands)){
 
             break;
         }        
@@ -22,11 +19,12 @@ void process_commands(char **string_input, int *commands){
     }
 }
 
-int run_commands(char **string_input, char *bufferResult, int *commands){
+int run_commands(char **string_input, char *result, int *commands){
 
+    char *result = malloc(sizeof(char) * BUFFER_SIZE);
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        api_init();
+        //api_init();
         return 1;
     }
 
@@ -37,22 +35,23 @@ int run_commands(char **string_input, char *bufferResult, int *commands){
 
     else if(strcmp(LIST, string_input[0]) == 0){
 
-        listAvailable(bufferResult, BUFFER_SIZE);
+        //listAvailable(result, BUFFER_SIZE);
         return 1;
     }
-
+    
     else if(strcmp(CONNECT, string_input[0]) == 0){
 
+        
         return 1;
     }
 
     else if(strcmp(NEW_NETWORK, string_input[0]) == 0){
-
+        
         return 1;
     }
 
     else if(strcmp(SET, string_input[0]) == 0){
-
+        
         return 1;
     }
 
@@ -61,8 +60,15 @@ int run_commands(char **string_input, char *bufferResult, int *commands){
         return 1;
     }
 
+    else if(strcmp(DELETE, string_input[0]) == 0){
+
+        //handle_delete(string_input);
+        return 1;
+    }
+
     else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
 
+        //listConfigured(result, BUFFER_SIZE);
         return 1;
     }
 
@@ -82,6 +88,8 @@ int run_commands(char **string_input, char *bufferResult, int *commands){
         PRINT_COMMAND_RESPONSE("Invalid command: .\n");
         return 0;
     }
+
+    handle_result(result);
 } 
 
 /* Shift array to the left to process next command */
@@ -96,6 +104,15 @@ int shift_left(char **string_input, int *commands){
 
     *commands -= 1;
     return 0; 
+}
+
+void handle_result(char *result){
+
+    if(result){
+
+        printf("%s\n", result);
+        free(result);
+    }
 }
 
 /* Print array for testing */

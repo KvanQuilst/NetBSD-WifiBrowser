@@ -10,6 +10,7 @@
 #define EXIT "exit"
 #define PASSKEY "psk"
 #define PASSWORD "pswd"
+#define DELETE "delete"
 #define CLEAR "clear"
 
 #define PRINT_COMMAND_PROMPT printf("> ");

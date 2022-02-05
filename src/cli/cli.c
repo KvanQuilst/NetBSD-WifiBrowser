@@ -28,8 +28,7 @@ int main(int argc, char *argv[]) {
         }
 
         char *copy = malloc(sizeof(char) * strlen(buffer));
-        bzero(copy, strlen(buffer));
-        strcpy(copy, buffer);
+        bzero(copy, strlen(buffer)); strcpy(copy, buffer);
         int commands = num_tokens(copy);
         char **string_input = parse_stdin(buffer, &commands); 
         process_commands(string_input, &commands); 
