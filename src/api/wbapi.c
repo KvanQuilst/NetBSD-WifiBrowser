@@ -81,7 +81,7 @@ static void api_exit(const char *msg)
 int api_init()
 {
   /* Open default interface directory; look for interface */
-  char *iface_dir = malloc(sizeof(char) * 100);
+  char *iface_dir;
   struct dirent *dent;
   DIR *dir = opendir(ctrl_iface_dir);
 
