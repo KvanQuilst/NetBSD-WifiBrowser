@@ -62,7 +62,7 @@ int run_commands(char **string_input, char *result, int *commands){
 
     else if(strcmp(DELETE, string_input[0]) == 0){
 
-        //handle_delete(string_input);
+        handle_delete(string_input);
         return 1;
     }
 

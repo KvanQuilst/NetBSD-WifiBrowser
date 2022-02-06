@@ -1,8 +1,8 @@
+#include "commands.h"
 
+void handle_delete(char **string_input){
 
-void handle_delete(char *ssid){
-
-
+    
 
 }
 
