@@ -6,8 +6,17 @@ int handle_delete(char *result){
     return 1;
 }
 
+/*
+int handle_conf_manual(struct wifi_conf conf){
+
+    char *ssid = malloc(sizeof(char) * 20);
+    scanf("ssid: %s", ssid);
+    
+}
+
 int handle_list_configured(char *result){
 
+    bzero(result, sizeof(result));
     if(listConfigured(result, BUFFER_SIZE) == 0){
 
         printf("No configured networks.\n");
@@ -16,7 +25,7 @@ int handle_list_configured(char *result){
 
     else if(strlen(result) > 0){
 
-        printf("%s\n", result);
+        printf("%s\n", result); 
         return 1;
     }
 
@@ -28,6 +37,7 @@ int handle_list_configured(char *result){
 
 int handle_list_available(char *result){
 
+    bzero(result, sizeof(result));
     if(listAvailable(result, BUFFER_SIZE) == 0){
 
         printf("No networks available.\n");
@@ -36,7 +46,7 @@ int handle_list_available(char *result){
 
     else if(strlen(result) > 0){
 
-        printf("%s\n", result);
+        printf("%s\n", result); 
         return 1;
     }
 
@@ -55,7 +65,7 @@ int handle_api_init(){
 
 
 
-
+*/
 
 
 

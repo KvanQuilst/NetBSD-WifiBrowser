@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         PRINT_COMMAND_PROMPT;
         buffer = malloc(sizeof(char) * BUFFER_SIZE);
         int data = read_stdin(buffer, BUFFER_SIZE);
-
+        
         if(!data) {
 
             PRINT_COMMAND_RESPONSE("No data entered.\n");
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         char *copy = malloc(sizeof(char) * strlen(buffer));
         bzero(copy, strlen(buffer)); strcpy(copy, buffer);
         int commands = num_tokens(copy);
-        char **string_input = parse_stdin(buffer, &commands); 
+        char **string_input = parse_stdin(buffer, commands); 
         process_commands(string_input, &commands); 
         free_data(buffer, copy, string_input, commands); 
     }
@@ -67,10 +67,10 @@ int num_tokens(char *buffer){
 }
 
 /* Parse user input and return an array of strings */
-char **parse_stdin(char *buffer, int *commands){
+char **parse_stdin(char *buffer, int commands){
 
-    char **string_input = malloc(sizeof(char *) * *commands);
-    bzero(string_input, sizeof(char *) * *commands);
+    char **string_input = malloc(sizeof(char *) * commands);
+    bzero(string_input, sizeof(char *) * commands);
     char *token = strtok(buffer, " "); 
     int idx = 0;
 
@@ -88,8 +88,8 @@ char **parse_stdin(char *buffer, int *commands){
     }
 
     /* Trim newline character of last token */
-    if(string_input[*commands - 1][strlen(string_input[*commands - 1]) - 1] == '\n')
-        string_input[*commands - 1][strlen(string_input[*commands - 1]) - 1] = '\0';
+    if((commands != 0) && (string_input[commands - 1][strlen(string_input[commands - 1]) - 1] == '\n'))
+        string_input[commands - 1][strlen(string_input[commands - 1]) - 1] = '\0';
 
     return string_input;
 }

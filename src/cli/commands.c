@@ -2,6 +2,7 @@
 
 void process_commands(char **string_input, int *commands){
 
+    char *result = malloc(sizeof(char) * BUFFER_SIZE);
     while(*commands != 0){
 
         if(strlen(string_input[0]) == 0){
@@ -10,21 +11,24 @@ void process_commands(char **string_input, int *commands){
             continue;
         }
 
-        else if(!run_commands(string_input, commands)){
+        else if(!run_commands(string_input, result)){
 
             break;
         }        
 
         shift_left(string_input, commands);
     }
+
+    if(result)
+        free(result);
 }
 
-int run_commands(char **string_input, int *commands){
+int run_commands(char **string_input, char *result){
 
-    char *result = malloc(sizeof(char) * BUFFER_SIZE);
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        return handle_api_init();
+        //return handle_api_init();
+        return 1;
     }
 
     else if(strcmp(STATUS, string_input[0]) == 0){
@@ -49,6 +53,7 @@ int run_commands(char **string_input, int *commands){
     }
 
     else if(strcmp(SET, string_input[0]) == 0){
+        
         
         return 1;
     }
