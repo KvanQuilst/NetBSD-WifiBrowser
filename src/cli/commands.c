@@ -19,12 +19,12 @@ void process_commands(char **string_input, int *commands){
     }
 }
 
-int run_commands(char **string_input, char *result, int *commands){
+int run_commands(char **string_input, int *commands){
 
     char *result = malloc(sizeof(char) * BUFFER_SIZE);
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        //api_init();
+        //return handle_api_init();
         return 1;
     }
 
@@ -35,12 +35,11 @@ int run_commands(char **string_input, char *result, int *commands){
 
     else if(strcmp(LIST, string_input[0]) == 0){
 
-        //listAvailable(result, BUFFER_SIZE);
+        //return handle_list_available(result);
         return 1;
     }
     
     else if(strcmp(CONNECT, string_input[0]) == 0){
-
         
         return 1;
     }
@@ -62,13 +61,13 @@ int run_commands(char **string_input, char *result, int *commands){
 
     else if(strcmp(DELETE, string_input[0]) == 0){
 
-        handle_delete(string_input);
+        //return handle_delete(result);
         return 1;
     }
 
     else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
 
-        //listConfigured(result, BUFFER_SIZE);
+        //return handle_list_configured(result);
         return 1;
     }
 
@@ -85,11 +84,11 @@ int run_commands(char **string_input, char *result, int *commands){
 
     else{
 
-        PRINT_COMMAND_RESPONSE("Invalid command: .\n");
+        PRINT_COMMAND_RESPONSE("Invalid command: \n");
         return 0;
     }
 
-    handle_result(result);
+    free(result);
 } 
 
 /* Shift array to the left to process next command */
@@ -104,15 +103,6 @@ int shift_left(char **string_input, int *commands){
 
     *commands -= 1;
     return 0; 
-}
-
-void handle_result(char *result){
-
-    if(result){
-
-        printf("%s\n", result);
-        free(result);
-    }
 }
 
 /* Print array for testing */

@@ -9,7 +9,7 @@ cli.o: cli.c cli.h
 	$(CC) $(CFLAGS) -c cli.c
 commands.o: commands.c commands.h commands_def.h
 	$(CC) $(CFLAGS) -c commands.c 
-handle_commands.o: handle_commands.c handle_commands.h
+handle_commands.o: handle_commands.c
 	$(CC) $(CFLAGS) -c handle_commands.c
 
 #Clean Files
