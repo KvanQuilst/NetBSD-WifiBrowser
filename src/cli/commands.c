@@ -24,8 +24,7 @@ int run_commands(char **string_input, int *commands){
     char *result = malloc(sizeof(char) * BUFFER_SIZE);
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        //return handle_api_init();
-        return 1;
+        return handle_api_init();
     }
 
     else if(strcmp(STATUS, string_input[0]) == 0){
@@ -87,8 +86,6 @@ int run_commands(char **string_input, int *commands){
         PRINT_COMMAND_RESPONSE("Invalid command: \n");
         return 0;
     }
-
-    free(result);
 } 
 
 /* Shift array to the left to process next command */

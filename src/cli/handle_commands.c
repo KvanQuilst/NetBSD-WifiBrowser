@@ -14,7 +14,7 @@ int handle_list_configured(char *result){
         return 1;
     }
 
-    else if(strlen(result) >= 0){
+    else if(strlen(result) > 0){
 
         printf("%s\n", result);
         return 1;
@@ -34,7 +34,7 @@ int handle_list_available(char *result){
         return 1;
     }
 
-    else if(strlen(result) >= 0){
+    else if(strlen(result) > 0){
 
         printf("%s\n", result);
         return 1;
@@ -52,6 +52,7 @@ int handle_api_init(){
 
     return 0;
 }
+
 
 
 

@@ -13,7 +13,6 @@ void print_array_c(char **string_input, int size);
 void handle_result(char *result);
 
 int handle_delete(char *result);
-//int handle_conf_manual(struct wifi_conf conf);
 int handle_list_available(char *result);
 int handle_list_configured(char *result);
 int handle_api_init();
