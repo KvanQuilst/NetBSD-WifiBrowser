@@ -27,52 +27,27 @@ int run_commands(char **string_input, char *result){
 
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        //return handle_api_init();
-        return 1;
-    }
-
-    else if(strcmp(STATUS, string_input[0]) == 0){
-
-        return 1;
+        return handle_api_init();
     }
 
     else if(strcmp(LIST, string_input[0]) == 0){
 
-        //return handle_list_available(result);
-        return 1;
-    }
-    
-    else if(strcmp(CONNECT, string_input[0]) == 0){
-        
-        return 1;
+        return handle_list_available(result);
     }
 
-    else if(strcmp(NEW_NETWORK, string_input[0]) == 0){
-        
-        return 1;
+    else if(strcmp(CONF_MANUAL, string_input[0]) == 0){
+
+        return handle_conf_manual();
     }
 
-    else if(strcmp(SET, string_input[0]) == 0){
-        
-        
-        return 1;
-    }
+    else if(strcmp(CONF_AUTO, string_input[0]) == 0){
 
-    else if(strcmp(SELECT, string_input[0]) == 0){
-
-        return 1;
-    }
-
-    else if(strcmp(DELETE, string_input[0]) == 0){
-
-        //return handle_delete(result);
-        return 1;
+        return handle_conf_auto();
     }
 
     else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
 
-        //return handle_list_configured(result);
-        return 1;
+        return handle_list_configured(result);
     }
 
     else if(strcmp(CLEAR, string_input[0]) == 0){

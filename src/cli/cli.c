@@ -13,7 +13,7 @@
 char *buffer;
 
 int main(int argc, char *argv[]) {
-    
+
     while(1){
 
         PRINT_COMMAND_PROMPT;
