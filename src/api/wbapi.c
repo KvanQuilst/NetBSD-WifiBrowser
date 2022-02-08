@@ -371,7 +371,9 @@ size_t listConfigured(char *buf, size_t len)
 
 int listAvailable(char *buf, size_t len)
 {
-  int retval;
+  int retval, i = 0;
+  char list[512] = {0};
+  char currSSID[34];
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -379,7 +381,27 @@ int listAvailable(char *buf, size_t len)
   }
 
   if (wpaReq("SCAN", 4, buf, len) < 0) return -1;
-  return wpaReq("SCAN_RESULTS", 12, buf, len);
+  retval = wpaReq("SCAN_RESULTS", 12, buf, len);
+
+  sscanf(buf, "bssid / frequency / signal level / flags / ssid\n%[^\0]", buf); 
+  //printf("\nscan:\n%s\n", buf);
+
+  /* isolate ssid for list */
+  /*do {
+    sscanf(buf, "%*s\t%*s\t%*s\t%*s\t%32[^\n]\n", currSSID);
+    printf("currSSID: %s\n", currSSID);
+    strncpy(&list[i], currSSID, 32);
+    i += strnlen(currSSID, 32);
+    list[i] = '\n';
+    i++;
+    sscanf(buf, "%*[^\n]\n%[^\0]", buf);
+  } while (strncmp("", currSSID, 1));
+
+  printf("list: %s\n", list);
+
+  buf = strndup(list, 512);*/
+
+  return 0;
 }
 
 // hash a passkey against the associated ssid for 
