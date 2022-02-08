@@ -28,7 +28,7 @@ static char *ifname = NULL;
 /**************************
   Static Prototypes
 **************************/
-static FILE *conf_createFile(const char *filepath);
+static FILE *conf_create(const char *filepath);
 static int wpaReq(const char *cmd, size_t cmd_len, char *repl, size_t repl_len);
 static char *hashPsk(char *ssid, char *psk);
 static char *hashPwd(char *pwd); 
@@ -78,6 +78,22 @@ static void api_exit(const char *msg)
   API Functions
 ************************/
 
+wifi_conf wc_init() {
+  wifi_conf w;
+  w.ssid = NULL;
+  w.psk = NULL;
+  w.key_mgmt = NULL;
+  w.priority = 0;
+  w.identity = NULL;
+  w.password = NULL;
+  w.proto = NULL;
+  w.pairwise = NULL;
+  w.group = NULL;
+  w.eap = NULL;
+  w.phase2 = NULL;
+  return w;
+}
+
 int api_init()
 {
   /* Open default interface directory; look for interface */
@@ -93,7 +109,7 @@ int api_init()
   while ((dent = readdir(dir))) {
     if (strcmp(dent->d_name, ".") != 0 && strcmp(dent->d_name, "..") != 0) {
       ifname = strdup(dent->d_name);
-      printf("Current interface: %s\n", ifname ? ifname : "n/a");
+      fprintf(stderr, "Current interface: %s\n", ifname ? ifname : "n/a");
     }
   }
 
@@ -122,23 +138,7 @@ int api_init()
   return 0;
 }
 
-wifi_conf wc_init() {
-  wifi_conf w;
-  w.ssid = NULL;
-  w.psk = NULL;
-  w.key_mgmt = NULL;
-  w.priority = 0;
-  w.identity = NULL;
-  w.password = NULL;
-  w.proto = NULL;
-  w.pairwise = NULL;
-  w.group = NULL;
-  w.eap = NULL;
-  w.phase2 = NULL;
-  return w;
-}
-
-static FILE *conf_createFile(const char *filepath)
+static FILE *conf_create(const char *filepath)
 {
   FILE *fp;
   time_t t = time(NULL);
@@ -153,8 +153,10 @@ static FILE *conf_createFile(const char *filepath)
     return NULL;
   }
 
-  fprintf(fp, "# wpa_supplicant configuration file - auto-created by wbapi at %s\n", ctime(&t));
-  
+  fprintf(fp, "# wpa_supplicant configuration file - auto-created by wbapi at %s", ctime(&t));
+  fprintf(fp, "ctrl_interface=DIR=%s GROUP=wheel\n", ctrl_iface_dir);
+  fprintf(fp, "update_config=1\n");
+
   return fp;
 }
 
@@ -347,7 +349,7 @@ int conf_deleteNetwork(char *ssid)
 int conf_cleanNetworks(void)
 {
   int i = 0;
-  char cmd[32] = {0};
+  /*char cmd[32] = {0};
   char repl[128] = {0};
 
   if (!wpa) {
@@ -368,7 +370,11 @@ int conf_cleanNetworks(void)
   }
   if (strncmp("OK", repl, 2)) {
     return -1;
-  }
+  }*/
+
+  fclose(curr_conf);
+  remove(conf_filepath);
+  curr_conf = conf_create(conf_filepath);
 
   return reconfigure();
 }
@@ -389,7 +395,7 @@ int listAvailable(char *buf, size_t len)
 {
   int retval, i = 0;
   char list[512] = {0};
-  char currSSID[34];
+  char currSSID[34] = {0};
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
