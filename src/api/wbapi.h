@@ -17,7 +17,9 @@
 #include <unistd.h>
 #include "wpa_ctrl.h"
 
-struct wifi_conf {
+typedef struct _wifi_conf wifi_conf;
+
+struct _wifi_conf {
   // general
   char *ssid;
   char *psk;
@@ -39,6 +41,12 @@ struct wifi_conf {
  * returns: 0 if successful, -1 if fail 
  */
 int api_init();
+
+/*
+ * wc_init - initialize a wifi_conf struct
+ * returns: initialized wifi_conf struct
+ */
+wifi_conf wc_init();
 
 /**************************
  *
@@ -88,7 +96,7 @@ int conf_configAutoEAP(char *ssid, char *user, char *pwd);
  * requires: wifi_conf struct
  * returns: 0 if success, -1 if fail
  */
-int conf_configManual(struct wifi_conf conf);
+int conf_configManual(wifi_conf conf);
 
 /*
  * conf_editNetwork - edits the specified network config (based on ssid) using
@@ -96,7 +104,7 @@ int conf_configManual(struct wifi_conf conf);
  * requires: string of ssid to be edited, wifi_conf struct
  * returns: 0 on success, -1 on fail
  */
-int conf_editNetwork(char *ssid, struct wifi_conf conf);
+int conf_editNetwork(char *ssid, wifi_conf conf);
 
 /*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused

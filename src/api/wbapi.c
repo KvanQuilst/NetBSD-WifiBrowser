@@ -32,7 +32,7 @@ static FILE *conf_createFile(const char *filepath);
 static int wpaReq(const char *cmd, size_t cmd_len, char *repl, size_t repl_len);
 static char *hashPsk(char *ssid, char *psk);
 static char *hashPwd(char *pwd); 
-static void getKeyMgmt(char *ssid, struct wifi_conf *conf);
+static void getKeyMgmt(char *ssid, wifi_conf *conf);
 
 /**************************
   Helper Functions
@@ -120,6 +120,22 @@ int api_init()
   fprintf(stderr, "Current configuration file: %s\n", conf_filepath);
 
   return 0;
+}
+
+wifi_conf wc_init() {
+  wifi_conf w;
+  w.ssid = NULL;
+  w.psk = NULL;
+  w.key_mgmt = NULL;
+  w.priority = 0;
+  w.identity = NULL;
+  w.password = NULL;
+  w.proto = NULL;
+  w.pairwise = NULL;
+  w.group = NULL;
+  w.eap = NULL;
+  w.phase2 = NULL;
+  return w;
 }
 
 static FILE *conf_createFile(const char *filepath)
@@ -223,7 +239,7 @@ int conf_configAutoEAP(char *ssid, char *user, char *pwd)
   return -1;
 }
 
-int conf_configManual(struct wifi_conf conf)
+int conf_configManual(wifi_conf conf)
 {
   char *line;
 
@@ -318,7 +334,7 @@ int conf_configManual(struct wifi_conf conf)
   return reconfigure();
 }
 
-int conf_editNetwork(char *ssid, struct wifi_conf conf)
+int conf_editNetwork(char *ssid, wifi_conf conf)
 {
   return -1;
 }
@@ -430,10 +446,9 @@ static char *hashPwd(char *pwd)
 }
 
 // determines the key management protocol of the
-// specified ssid and updates it in the configuration
-// struct
+// specified ssid and updates it in the configuration struct
 // requires: string of ssid, reference to wifi_conf struct of interest
-static void getKeyMgmt(char *ssid, struct wifi_conf *conf)
+static void getKeyMgmt(char *ssid, wifi_conf *conf)
 {
   return;
 }
