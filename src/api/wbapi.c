@@ -97,6 +97,11 @@ int api_init()
     }
   }
 
+  if (ifname == NULL) {
+    api_exit("Default interface location does not exist!\n");
+    return -1;
+  }
+
   iface_dir = strdup(ctrl_iface_dir);
   strcat(iface_dir, ifname);
 
