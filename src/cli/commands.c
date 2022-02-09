@@ -2,6 +2,7 @@
 
 void process_commands(char **string_input, int *commands){
 
+    char *result = malloc(sizeof(char) * BUFFER_SIZE);
     while(*commands != 0){
 
         if(strlen(string_input[0]) == 0){
@@ -10,55 +11,43 @@ void process_commands(char **string_input, int *commands){
             continue;
         }
 
-        else if(!run_commands(string_input, commands)){
+        else if(!run_commands(string_input, result)){
 
             break;
         }        
 
         shift_left(string_input, commands);
     }
+
+    if(result)
+        free(result);
 }
 
-int run_commands(char **string_input, int *commands){
+int run_commands(char **string_input, char *result){
 
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        return 1;
-    }
-
-    else if(strcmp(STATUS, string_input[0]) == 0){
-
-        return 1;
+        return handle_api_init();
     }
 
     else if(strcmp(LIST, string_input[0]) == 0){
 
-        return 1;
+        return handle_list_available(result);
     }
 
-    else if(strcmp(CONNECT, string_input[0]) == 0){
+    else if(strcmp(CONF_MANUAL, string_input[0]) == 0){
 
-        return 1;
+        return handle_conf_manual();
     }
 
-    else if(strcmp(NEW_NETWORK, string_input[0]) == 0){
+    else if(strcmp(CONF_AUTO, string_input[0]) == 0){
 
-        return 1;
-    }
-
-    else if(strcmp(SET, string_input[0]) == 0){
-
-        return 1;
-    }
-
-    else if(strcmp(SELECT, string_input[0]) == 0){
-
-        return 1;
+        return handle_conf_auto();
     }
 
     else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
 
-        return 1;
+        return handle_list_configured(result);
     }
 
     else if(strcmp(CLEAR, string_input[0]) == 0){
@@ -74,7 +63,7 @@ int run_commands(char **string_input, int *commands){
 
     else{
 
-        PRINT_COMMAND_RESPONSE("Command not recognized.\n");
+        PRINT_COMMAND_RESPONSE("Invalid command: \n");
         return 0;
     }
 } 

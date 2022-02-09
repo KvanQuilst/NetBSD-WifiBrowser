@@ -17,21 +17,23 @@
 #include <unistd.h>
 #include "wpa_ctrl.h"
 
-struct wifi_conf {
+typedef struct _wifi_conf wifi_conf;
+
+struct _wifi_conf {
   // general
-  char *ssid;
-  char *psk;
-  char *key_mgmt;
+  const char *ssid;
+  const char *psk;
+  const char *key_mgmt;
   int priority;
 
   // eap specific
-  char *user;
-  char *password;
-  char *proto;
-  char *pairwise;
-  char *group;
-  char *eap;
-  char *phase2;
+  const char *identity;
+  const char *password;
+  const char *proto;
+  const char *pairwise;
+  const char *group;
+  const char *eap;
+  const char *phase2;
 };
 
 /* 
@@ -39,6 +41,12 @@ struct wifi_conf {
  * returns: 0 if successful, -1 if fail 
  */
 int api_init();
+
+/*
+ * wc_init - initialize a wifi_conf struct
+ * returns: initialized wifi_conf struct
+ */
+wifi_conf wc_init();
 
 /**************************
  *
@@ -52,7 +60,8 @@ int api_init();
  * requires: filepath of configuration file
  * returns: 0 if success, -1 if fail
  */
-int conf_setDefault(const char *filepath);
+// NOT AVAILABLE
+//int conf_setDefault(const char *filepath);
 
 /*
  * conf_setCurrent - set the focused configuration file for wifi browser api
@@ -64,12 +73,12 @@ int conf_setCurrent(const char *filepath);
 
 /*
  * conf_connectAuto - adds a new network entry to the focused configuration file
- * and automatically supplies the additional info for
- * wpa_supplicant connection
+ * and automatically supplies the additional info for wpa_supplicant connection
+ * Set PSK to NULL if no passkey for network
  * requires: string of ssid, length of ssid, string of passkey for ssid, length of psk
  * returns: 0 if success, -1 if fail
  */
-int conf_connectAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len);
+int conf_configAuto(const char *ssid, const char *psk);
 
 /*
  * conf_connectAutoEAP - adds a new eap network entry to the focused configuration file
@@ -79,7 +88,7 @@ int conf_connectAuto(char *ssid, size_t ssid_len, char *psk, size_t psk_len);
  *           string of password for user for network
  * returns: 0 if success, -1 if fail
  */
-int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
+int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
 
 /*
  * conf_connectManual - adds a new network configuration using the information
@@ -88,7 +97,7 @@ int conf_connectAutoEAP(char *ssid, char *user, char *pwd);
  * requires: wifi_conf struct
  * returns: 0 if success, -1 if fail
  */
-int conf_connectManual(struct wifi_conf conf);
+int conf_configManual(wifi_conf conf);
 
 /*
  * conf_editNetwork - edits the specified network config (based on ssid) using
@@ -96,15 +105,21 @@ int conf_connectManual(struct wifi_conf conf);
  * requires: string of ssid to be edited, wifi_conf struct
  * returns: 0 on success, -1 on fail
  */
-int conf_editNetwork(char *ssid, struct wifi_conf conf);
+int conf_editNetwork(const char *ssid, wifi_conf conf);
 
 /*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused
  * configuration file
  * requires: string of ssid to be deleted
- * returns: 0 if success, -1 if fail
+ * returns: 0 on success, -1 on fail
  */
-int conf_deleteNetwork(char *ssid);
+int conf_deleteNetwork(const char *ssid);
+
+/*
+ * conf_cleanNetworks - remove all networks from the selected configuration file
+ * returns: 0 on success, -1 on fail
+ */
+int conf_cleanNetworks(void);
 
 /**************************
  *
@@ -124,7 +139,7 @@ size_t listConfigured(char *buf, size_t len);
  * requires: buffer pointer, buffer size
  * returns: length of scan results, 0 - no networks, -1 - failed
  */
-size_t listAvailable(char *buf, size_t len);
+int listAvailable(char *buf, size_t len);
 
 /**************************
  *
@@ -143,12 +158,3 @@ int wpa_restart();
  * 1 if wpa_supplicant is running, 0 if not
  */
 int wpa_running();
-
-/*
- * wpa_multiInterface - start/restart wpa_supplicant with the multi-interface
- * option enabled
- * requires: string of first interface, string of filepath to first conf file
- *           string of second interface, string of filepath to second conf file
- * returns: 0 if success, -1 if fail
- */
-int wpa_multiInterface(char *inf1, char *conf_file1, char *inf2, char *conf_file2);
