@@ -58,7 +58,7 @@ void test_autoConf()
   char buf[BUF_SIZE];
 
   printf("/* Auto configure network w/ ssid */\n");
-  retval = conf_configAuto("Auto-SSID", "Pass");
+  retval = conf_configAuto("Auto-SSID", "Password");
   if (retval < 0) {
     printf("Auto-configuration failed!\n");
   }
@@ -76,7 +76,8 @@ void test_manualConf()
 
   printf("/* Manually configure network w/ ssid */\n");
   w.ssid = "Manual-PSK";
-  w.key_mgmt = "NONE";
+  w.key_mgmt = "WPA-PSK";
+  w.psk = "Password2";
   w.priority = 1;
 
   retval = conf_configManual(w);

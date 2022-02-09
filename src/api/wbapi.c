@@ -200,6 +200,7 @@ static int removeNetworkId(int netId)
 int conf_configAuto(char *ssid, char *psk)
 {
   char *line;
+  int len;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -221,13 +222,17 @@ int conf_configAuto(char *ssid, char *psk)
   if (psk == NULL) {
     conf_write("\tkey_mgmt=NONE\n");
   } else {
-    //conf_write("\tkey_mgmt=WPA_PSK\n");
+    len = strnlen(psk, 64);
+    if (len < 8 || len > 63) {
+      fprintf(stderr, "wbapi: provided passkey is invalid. passkey length: 8-63 characters\n");
+      return -1;
+    }
+
+    conf_write("\tkey_mgmt=WPA-PSK\n");
+    sprintf(line, "\tpsk=\"%s\"\n", psk);
+    conf_write(line);
     //hashPsk(ssid, psk);
   }
-
-  // psk is having issues?
-  /*sprintf(line, "\tpsk=\"%s\"\n", psk);
-  conf_write(line);*/
 
   conf_write("}\n");
 
