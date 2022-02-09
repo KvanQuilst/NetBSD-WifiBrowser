@@ -24,6 +24,8 @@ static struct wpa_ctrl *wpa;
 static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
 static char *ifname = NULL;
 
+#define MAX_SSID_LEN 32
+
 
 /**************************
   Static Prototypes
@@ -54,6 +56,11 @@ static int conf_write(const char *dat)
 static int reconfigure()
 {
   char repl[128];
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
   
   if (wpaReq("RECONFIGURE", 11, repl, 128) < 0) {
     return -1;
@@ -63,6 +70,42 @@ static int reconfigure()
     return -1;
   }
   return 0;
+}
+
+static int save()
+{
+  char repl[128];
+
+  if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
+    return -1;
+  }
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in saving configuration!\n");
+    return -1;
+  }
+  return 0;
+}
+
+static int getNetworkID(const char *ssid)
+{
+  int id = 0;
+  char *cmd;
+  char repl[128] = {0};
+
+  while(strncmp(repl, "FAIL", 4)) {
+    sprintf(cmd, "GET_NETWORK %d ssid", id);
+    if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
+      fprintf(stderr, "wbapi: error in obtaining network id\n");
+      return -1;
+    }
+    sscanf(repl, "\"%s\"", repl);
+    if (!strcmp(ssid, repl)) {
+      return id;
+    }
+    id++;
+  }
+
+  return -1;
 }
 
 static void api_exit(const char *msg)
@@ -162,11 +205,6 @@ static FILE *conf_create(const char *filepath)
   return fp;
 }
 
-int conf_setDefault(const char *conf_file)
-{
-  return -1;
-}
-
 int conf_setCurrent(const char *filepath)
 {
   return -1;
@@ -199,7 +237,7 @@ static int removeNetworkId(int netId)
   return wpaReq(cmd, sizeof(cmd)-1, repl, 1) < 0 ? -1 : 0;
 }
 
-int conf_configAuto(char *ssid, char *psk)
+int conf_configAuto(const char *ssid, const char *psk)
 {
   char *line;
   int len;
@@ -243,7 +281,7 @@ int conf_configAuto(char *ssid, char *psk)
   return reconfigure();
 }
 
-int conf_configAutoEAP(char *ssid, char *user, char *pwd)
+int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
 {
   return -1;
 }
@@ -343,42 +381,40 @@ int conf_configManual(wifi_conf conf)
   return reconfigure();
 }
 
-int conf_editNetwork(char *ssid, wifi_conf conf)
+int conf_editNetwork(const char *ssid, wifi_conf conf)
 {
   return -1;
 }
 
-int conf_deleteNetwork(char *ssid)
+int conf_deleteNetwork(const char *ssid)
 {
-  return -1;
+  char repl[128];
+  char *cmd;
+  int id = getNetworkID(ssid);
+
+  if (id < 0) {
+    return -1;
+  }
+
+  sprintf(cmd, "REMOVE_NETWORK %d", id);
+  if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
+    return -1;
+  }
+
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in removing network: %s\n", ssid);
+    return -1;
+  }
+
+  if (save() < 0) {
+    return -1;
+  }
+
+  return reconfigure();
 }
 
 int conf_cleanNetworks(void)
 {
-  int i = 0;
-  /*char cmd[32] = {0};
-  char repl[128] = {0};
-
-  if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
-    return -1;
-  }
-
-  while (strncmp("FAIL", repl, 4)) {
-    snprintf(cmd, 32, "REMOVE_NETWORK %d", i);
-    if(wpaReq(cmd, 32, repl, 128) < 0) {
-      return -1;
-    }
-    i++;
-  }
-
-  if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
-    return -1;
-  }
-  if (strncmp("OK", repl, 2)) {
-    return -1;
-  }*/
-
   fclose(curr_conf);
   remove(conf_filepath);
   curr_conf = conf_create(conf_filepath);
@@ -388,8 +424,6 @@ int conf_cleanNetworks(void)
 
 size_t listConfigured(char *buf, size_t len)
 {
-  size_t l;
-
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
     return -1;
@@ -440,11 +474,13 @@ int listAvailable(char *buf, size_t len)
 // returns: string of hashed passkey
 static char *hashPsk(char *ssid, char *psk)
 {
-  char *line;
-  char repl[128];
-  sprintf(line, "WPA_CTRL_RSP-PASSPHRASE-%s:%s", ssid, psk);
-  if (wpaReq(line, strlen(line), repl, 128) < 0) return -1;
-  return NULL;
+  char hash[64];
+  int len = strnlen(psk, 64);
+
+  if (len < 8 || len > 63) {
+    fprintf(stderr, "wbapi: passkey is invalid. passkey length: 8 - 63 characters\n");
+  }
+
 }
 
 // hash a password using openssl for use in

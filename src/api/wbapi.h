@@ -21,19 +21,19 @@ typedef struct _wifi_conf wifi_conf;
 
 struct _wifi_conf {
   // general
-  char *ssid;
-  char *psk;
-  char *key_mgmt;
+  const char *ssid;
+  const char *psk;
+  const char *key_mgmt;
   int priority;
 
   // eap specific
-  char *identity;
-  char *password;
-  char *proto;
-  char *pairwise;
-  char *group;
-  char *eap;
-  char *phase2;
+  const char *identity;
+  const char *password;
+  const char *proto;
+  const char *pairwise;
+  const char *group;
+  const char *eap;
+  const char *phase2;
 };
 
 /* 
@@ -60,7 +60,8 @@ wifi_conf wc_init();
  * requires: filepath of configuration file
  * returns: 0 if success, -1 if fail
  */
-int conf_setDefault(const char *filepath);
+// NOT AVAILABLE
+//int conf_setDefault(const char *filepath);
 
 /*
  * conf_setCurrent - set the focused configuration file for wifi browser api
@@ -77,7 +78,7 @@ int conf_setCurrent(const char *filepath);
  * requires: string of ssid, length of ssid, string of passkey for ssid, length of psk
  * returns: 0 if success, -1 if fail
  */
-int conf_configAuto(char *ssid, char *psk);
+int conf_configAuto(const char *ssid, const char *psk);
 
 /*
  * conf_connectAutoEAP - adds a new eap network entry to the focused configuration file
@@ -87,7 +88,7 @@ int conf_configAuto(char *ssid, char *psk);
  *           string of password for user for network
  * returns: 0 if success, -1 if fail
  */
-int conf_configAutoEAP(char *ssid, char *user, char *pwd);
+int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
 
 /*
  * conf_connectManual - adds a new network configuration using the information
@@ -104,7 +105,7 @@ int conf_configManual(wifi_conf conf);
  * requires: string of ssid to be edited, wifi_conf struct
  * returns: 0 on success, -1 on fail
  */
-int conf_editNetwork(char *ssid, wifi_conf conf);
+int conf_editNetwork(const char *ssid, wifi_conf conf);
 
 /*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused
@@ -112,7 +113,7 @@ int conf_editNetwork(char *ssid, wifi_conf conf);
  * requires: string of ssid to be deleted
  * returns: 0 on success, -1 on fail
  */
-int conf_deleteNetwork(char *ssid);
+int conf_deleteNetwork(const char *ssid);
 
 /*
  * conf_cleanNetworks - remove all networks from the selected configuration file

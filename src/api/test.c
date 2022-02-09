@@ -1,6 +1,10 @@
 #include "wbapi.h"
 #define BUF_SIZE 4096
 
+const char *net1 = "Auto-SSID";
+const char *net2 = "Manual-PSK";
+const char *net3 = "Manual-EAP";
+
 void test_connect()
 {
   printf("/* Connect to wpa_supplicant */\n");
@@ -33,7 +37,7 @@ void test_listAvailable()
   len = listAvailable(buf, BUF_SIZE);
 
   if (len < 0) {
-    return 0;
+    return;
   }
 
   printf("List of available networks:\n%s\n", buf);
@@ -47,6 +51,9 @@ void test_listConfigured()
 
   printf("/* List configured networks */\n");
   len = listConfigured(buf, BUF_SIZE);
+  if (len < 0) {
+    return;
+  }
 
   printf("List of configured networks:\n%s\n", buf);
   printf("\n");
@@ -58,9 +65,10 @@ void test_autoConf()
   char buf[BUF_SIZE];
 
   printf("/* Auto configure network w/ ssid */\n");
-  retval = conf_configAuto("Auto-SSID", "Password");
+  retval = conf_configAuto(net1, "Password");
   if (retval < 0) {
     printf("Auto-configuration failed!\n");
+    return;
   }
 
   len = listConfigured(buf, BUF_SIZE);
@@ -75,7 +83,7 @@ void test_manualConf()
   char buf[BUF_SIZE];
 
   printf("/* Manually configure network w/ ssid */\n");
-  w.ssid = "Manual-PSK";
+  w.ssid = net2;
   w.key_mgmt = "WPA-PSK";
   w.psk = "Password2";
   w.priority = 1;
@@ -83,6 +91,7 @@ void test_manualConf()
   retval = conf_configManual(w);
   if (retval < 0) {
     printf("Manual configuration failed!\n");
+    return;
   }
 
   len = listConfigured(buf, BUF_SIZE);
@@ -97,7 +106,7 @@ void test_manualEAP()
   char buf[BUF_SIZE];
 
   printf("/* Manually configure network with WPA-EAP data */\n");
-  e.ssid = "Manual-EAP";
+  e.ssid = net3;
   e.key_mgmt = "WPA-EAP";
   e.proto = "RSN";
   e.pairwise = "CCMP";
@@ -110,6 +119,22 @@ void test_manualEAP()
   retval = conf_configManual(e);
   if (retval < 0) {
     printf("Manual EAP configuration failed!\n");
+    return;
+  }
+
+  len = listConfigured(buf, BUF_SIZE);
+  printf("List of configured networks:\n%s\n", buf);
+  printf("\n");
+}
+
+void test_deletion() {
+  int retval, len;
+  char buf[BUF_SIZE];
+
+  printf("/* Delete network %s*/\n", net1);
+  retval = conf_deleteNetwork(net1);
+  if (retval < 0) {
+    printf("Deletion failed!\n");
   }
 
   len = listConfigured(buf, BUF_SIZE);
@@ -139,6 +164,9 @@ int main()
 
   /* Manual configuratino WPA-EAP network */
   test_manualEAP();
+
+  /* Deletion of a network */
+  test_deletion();
 
   return 0;
 }
