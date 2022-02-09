@@ -123,7 +123,7 @@ int main()
   test_connect();
 
   /* Clean configuration file for testing */
-  //test_cleanConfig();
+  test_cleanConfig();
 
   /* List available networks to interface */
   test_listAvailable();

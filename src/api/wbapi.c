@@ -157,6 +157,8 @@ static FILE *conf_create(const char *filepath)
   fprintf(fp, "ctrl_interface=DIR=%s GROUP=wheel\n", ctrl_iface_dir);
   fprintf(fp, "update_config=1\n");
 
+  fflush(fp);
+
   return fp;
 }
 
