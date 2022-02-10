@@ -1,0 +1,73 @@
+\documentclass[11pt]{article}
+\setlength{\parindent}{0em}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+  \textbf{\Large Milestone \#3}\\\large NetBSD Wifi Browser Project 2022\\
+  Dylan Roy, Stephen Loudiana, Kevin McGrane
+\end{center}
+
+
+\section{General Progress Report}
+Progress on the API for WifiBrowser was still slower than anticipated, but still yielded a lot of success
+during the last two weeks. The delays experienced for the goals of the milestone that were not met
+(passkey hashing and network configuration deletion), there was successes in other areas that counteract
+the failure. As a result of changing strategies from leaning heavily on \texttt{wpa\_ctrl} for interfacing
+with \texttt{wpa\_supplicant} to using File I/O and directly manipulating the configuration file has
+simplified many things and fixed many of the issues experienced with the prior strategy. Moving forward,
+progress should be more consistent and \textit{ideally} more substantial as the work required for the goals
+missed and the upcoming goals for milestone 4 share many similarities in implementation and strategy.
+
+\textbf{Accomplishments}
+\begin{itemize}
+  \item API can basically connect to any kind of network (some network configurations might require more
+    fields than what's currently supported, but the change to support it is extremely minimal)
+  \item API actually saves the configuration file
+  \item API testing has been expanded and refactored for easier expansion in the future
+\end{itemize}
+
+\textbf{Targets Not Met:}
+\begin{itemize}
+  \item API does not support passkey/password hashing yet $rightarrow$ solution isn't as trivial as previously
+    thought
+  \item API does not support individual deletion of networks due to a larger delay on isolation of specific information
+    with C string scanning. However, there is support for deleting all of the network configurations
+\end{itemize}
+
+
+\section{Git Branch Report}
+All work has been performed on \texttt{master} against best practice. It might actually behoove us to
+work on separate branches due to the experienced difficulties with people working on master at the same
+time.
+
+
+\section{Individual Progress}
+
+\textbf{Kevin:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\textbf{Dylan:}
+\begin{itemize}
+  \item API now has to run with \texttt{sudo} due to \texttt{wpa\_supplicant} not behaving as expected
+  \item API Fixed PSK issue $\rightarrow$ \texttt{wpa\_supplicant} doesn't throw a fit anymore
+  \item API Added a \texttt{cleanConfig()} function for easier testing results checking
+  \item API Refactored tests to be more abstracted; will be refactored more after API is mostly complete
+  \item API Started individual deletion and editing of networks; have to determine best strategy for string scanning.
+  \item API Started modifying list functions to output the ssid's isolated instead of all of the extra \texttt{wpa\_supplicant}
+    information $\rightarrow$ this is another case of solving the C string scanning problem
+  \item API Configurations actually save now
+  \item API Supports auto connect to WPA-PSK networks, and manual connection to most networks $\rightarrow$ the only thing
+    preventing wider support is adding more fields to our configuration struct
+  \item Initialized Milestone 3
+\end{itemize}
+
+\textbf{Stephen:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\end{document}
