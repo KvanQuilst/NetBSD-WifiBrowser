@@ -19,6 +19,8 @@ with \texttt{wpa\_supplicant} to using File I/O and directly manipulating the co
 simplified many things and fixed many of the issues experienced with the prior strategy. Moving forward,
 progress should be more consistent and \textit{ideally} more substantial as the work required for the goals
 missed and the upcoming goals for milestone 4 share many similarities in implementation and strategy.
+Progress on CLI component has been steady with little to no blocks during development. CLI can interact 
+with API component. 
 
 \textbf{Accomplishments}
 \begin{itemize}
@@ -26,6 +28,7 @@ missed and the upcoming goals for milestone 4 share many similarities in impleme
     fields than what's currently supported, but the change to support it is extremely minimal)
   \item API actually saves the configuration file
   \item API testing has been expanded and refactored for easier expansion in the future
+  \item API and CLI components can interact and streamline connection processes for NetBSD
 \end{itemize}
 
 \textbf{Targets Not Met:}
@@ -34,6 +37,8 @@ missed and the upcoming goals for milestone 4 share many similarities in impleme
     thought
   \item API does not support individual deletion of networks due to a larger delay on isolation of specific information
     with C string scanning. However, there is support for deleting all of the network configurations
+  \item Targets for CLI component has been met for this milestone. Cleaner organization of CLI will need to be implemented 
+    before deployment. 
 \end{itemize}
 
 
@@ -67,7 +72,18 @@ time.
 
 \textbf{Stephen:}
 \begin{itemize}
-  \item
+  \item Makefile to combine CLI and API components developed 
+  \item Additional CLI file to process commands has been added
+  \item API methods are now implemented in CLI component
+  \item CLI has the ability to connect to wpa_supplicant 
+  \item CLI has the ability to establish manual configuraiton of a network
+  \item CLI has the ability to establish auto configuration of a network 
+  \item CLI has the ability to list available networks 
+  \item CLI has the ability to list configured networks 
 \end{itemize}
 
 \end{document}
+
+
+
+
