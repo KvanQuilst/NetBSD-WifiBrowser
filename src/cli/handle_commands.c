@@ -84,7 +84,7 @@ int handle_list_configured(char *result){
 
     else if(strlen(result) > 0){
 
-        printf("%s\n", result);
+        printf("%s\n", result); 
         return 1;
     }
 

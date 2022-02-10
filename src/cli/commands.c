@@ -30,7 +30,7 @@ int run_commands(char **string_input, char *result){
         return handle_api_init();
     }
 
-    else if(strcmp(LIST, string_input[0]) == 0){
+    else if(strcmp(LIST_AVAILABLE, string_input[0]) == 0){
 
         return handle_list_available(result);
     }

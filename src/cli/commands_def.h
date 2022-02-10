@@ -1,6 +1,6 @@
 
 #define WBCLI "wbcli"
-#define LIST "list_available"
+#define LIST_AVAILABLE "list_available"
 #define CONF_MANUAL "conf_manual"
 #define CONF_AUTO "conf_auto"
 #define LIST_CONFIG "list_configured"
