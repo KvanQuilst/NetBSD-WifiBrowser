@@ -20,7 +20,11 @@ simplified many things and fixed many of the issues experienced with the prior s
 progress should be more consistent and \textit{ideally} more substantial as the work required for the goals
 missed and the upcoming goals for milestone 4 share many similarities in implementation and strategy.
 Progress on CLI component has been steady with little to no blocks during development. CLI can interact 
-with API component. 
+with API component. The implementation of the TUI is well on its way now, the last couple weeks has been 
+spent on doing some final research on ncurses and possible roadblocks or issues that may arise in the coming
+weeks of implementation. The rest of the time has been used to create a test program to get a working example
+of how to use ncurses and what we need to know to properly implement the needed requirements to get a 
+working TUI.
 
 \textbf{Accomplishments}
 \begin{itemize}
@@ -29,6 +33,7 @@ with API component.
   \item API actually saves the configuration file
   \item API testing has been expanded and refactored for easier expansion in the future
   \item API and CLI components can interact and streamline connection processes for NetBSD
+  \item TUI Scaffolding and Design
 \end{itemize}
 
 \textbf{Targets Not Met:}
@@ -39,6 +44,8 @@ with API component.
     with C string scanning. However, there is support for deleting all of the network configurations
   \item Targets for CLI component has been met for this milestone. Cleaner organization of CLI will need to be implemented 
     before deployment. 
+  \item TUI devised testing strategy was not completed due to the majority of the efforts being put towards the
+    implementation and testing of ncurses code in general 
 \end{itemize}
 
 
@@ -50,9 +57,12 @@ time.
 
 \section{Individual Progress}
 
-\textbf{Kevin:}
+\textbf{Kevin: 5 hours}
 \begin{itemize}
-  \item
+  \item Reformated and cleaned up time log
+  \item worked more on implementation of ncurses in test program
+  \item researched more possible roadblock when implementing the TUI with the API
+  \item Completed a working ncurses test program printing to a screen and tasking input from users
 \end{itemize}
 
 \textbf{Dylan:}
