@@ -31,7 +31,6 @@ static char *ifname = NULL;
   Static Prototypes
 **************************/
 static FILE *conf_create(const char *filepath);
-static int wpaReq(const char *cmd, size_t cmd_len, char *repl, size_t repl_len);
 static char *hashPsk(char *ssid, char *psk);
 static char *hashPwd(char *pwd); 
 static void getKeyMgmt(char *ssid, wifi_conf *conf);
@@ -50,6 +49,25 @@ static int conf_write(const char *dat)
     return -1;
   } else {
     return 0;
+  }
+}
+
+static int wpaReq(const char *cmd, size_t cmd_len, 
+    char *repl, size_t repl_len)
+{
+  int retval;
+  size_t l = repl_len-1;
+
+  retval = wpa_ctrl_request(wpa, cmd, cmd_len, repl, &l, NULL);
+  if (retval == -2) {
+    fprintf(stderr, "Connection timed out; command dropped: %s\n", cmd);
+    return -1;
+  } else if (retval < 0) {
+    fprintf(stderr, "Command failed: %s\n", cmd);
+    return -1;
+  } else {
+    repl[l] = 0;
+    return l;
   }
 }
 
@@ -92,14 +110,14 @@ static int getNetworkID(const char *ssid)
   char *cmd;
   char repl[128] = {0};
 
-  while(strncmp(repl, "FAIL", 4)) {
+  while(strncmp(repl, "FAIL", 4) && id < 4) {
     sprintf(cmd, "GET_NETWORK %d ssid", id);
-    if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
+    if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
       fprintf(stderr, "wbapi: error in obtaining network id\n");
       return -1;
     }
-    sscanf(repl, "\"%s\"", repl);
-    if (!strcmp(ssid, repl)) {
+    sscanf(repl, "\"%[^\",]\"", repl);
+    if (!strncmp(ssid, repl, MAX_SSID_LEN)) {
       return id;
     }
     id++;
@@ -208,25 +226,6 @@ static FILE *conf_create(const char *filepath)
 int conf_setCurrent(const char *filepath)
 {
   return -1;
-}
-
-static int wpaReq(const char *cmd, size_t cmd_len, 
-    char *repl, size_t repl_len)
-{
-  int retval;
-  size_t l = repl_len-1;
-
-  retval = wpa_ctrl_request(wpa, cmd, cmd_len, repl, &l, NULL);
-  if (retval == -2) {
-    fprintf(stderr, "Connection timed out; command dropped: %s\n", cmd);
-    return -1;
-  } else if (retval < 0) {
-    fprintf(stderr, "Command failed: %s\n", cmd);
-    return -1;
-  } else {
-    repl[l] = 0;
-    return l;
-  }
 }
 
 static int removeNetworkId(int netId)
@@ -389,7 +388,7 @@ int conf_editNetwork(const char *ssid, wifi_conf conf)
 int conf_deleteNetwork(const char *ssid)
 {
   char repl[128];
-  char *cmd;
+  char cmd[32];
   int id = getNetworkID(ssid);
 
   if (id < 0) {
