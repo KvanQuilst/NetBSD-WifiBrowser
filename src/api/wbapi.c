@@ -123,6 +123,7 @@ static int getNetworkID(const char *ssid)
     id++;
   }
 
+  fprintf(stderr, "wbapi: network ssid does not exist!\n");
   return -1;
 }
 
@@ -382,32 +383,36 @@ int conf_configManual(wifi_conf conf)
 
 int conf_editNetwork(const char *ssid, wifi_conf conf)
 {
+  char repl[128] = {0};
+  char cmd[32] = {0};
+  int id = getNetworkID(ssid);
+
+  if (id < 0)
+    return -1;
+
   return -1;
 }
 
 int conf_deleteNetwork(const char *ssid)
 {
-  char repl[128];
-  char cmd[32];
+  char repl[128] = {0};
+  char cmd[32] = {0};
   int id = getNetworkID(ssid);
 
-  if (id < 0) {
+  if (id < 0)
     return -1;
-  }
 
   sprintf(cmd, "REMOVE_NETWORK %d", id);
-  if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
+  if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0)
     return -1;
-  }
 
   if (strncmp("OK", repl, 2)) {
     fprintf(stderr, "wbapi: error in removing network: %s\n", ssid);
     return -1;
   }
 
-  if (save() < 0) {
+  if (save() < 0)
     return -1;
-  }
 
   return reconfigure();
 }
