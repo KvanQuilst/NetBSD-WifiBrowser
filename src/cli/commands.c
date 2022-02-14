@@ -2,7 +2,6 @@
 
 void process_commands(char **string_input, int *commands){
 
-    char *result = malloc(sizeof(char) * BUFFER_SIZE);
     while(*commands != 0){
 
         if(strlen(string_input[0]) == 0){
@@ -11,43 +10,45 @@ void process_commands(char **string_input, int *commands){
             continue;
         }
 
-        else if(!run_commands(string_input, result)){
+        else if(!run_commands(string_input)){
 
             break;
         }        
 
         shift_left(string_input, commands);
     }
-
-    if(result)
-        free(result);
 }
 
-int run_commands(char **string_input, char *result){
+int run_commands(char **string_input){
 
     if(strcmp(WBCLI, string_input[0]) == 0){
 
-        return handle_api_init();
+        handle_api_init();
+        return 1;
     }
 
     else if(strcmp(LIST_AVAILABLE, string_input[0]) == 0){
 
-        return handle_list_available(result);
+        handle_list_available();
+        return 1;
     }
 
     else if(strcmp(CONF_MANUAL, string_input[0]) == 0){
 
-        return handle_conf_manual();
+        handle_conf_manual();
+        return 1;
     }
 
     else if(strcmp(CONF_AUTO, string_input[0]) == 0){
 
-        return handle_conf_auto();
+        handle_conf_auto();
+        return 1;
     }
 
     else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
 
-        return handle_list_configured(result);
+        handle_list_configured();
+        return 1;
     }
 
     else if(strcmp(CLEAR, string_input[0]) == 0){
