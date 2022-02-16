@@ -31,9 +31,9 @@ static char *ifname = NULL;
   Static Prototypes
 **************************/
 static FILE *conf_create(const char *filepath);
-static char *hashPsk(char *ssid, char *psk);
-static char *hashPwd(char *pwd); 
-static void getKeyMgmt(char *ssid, wifi_conf *conf);
+//static char *hashPsk(char *ssid, char *psk);
+//static char *hashPwd(char *pwd); 
+//static void getKeyMgmt(char *ssid, wifi_conf *conf);
 
 /**************************
   Helper Functions
@@ -73,7 +73,7 @@ static int wpaReq(const char *cmd, size_t cmd_len,
 
 static int reconfigure()
 {
-  char repl[128];
+  char repl[128] = {0};
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -92,7 +92,7 @@ static int reconfigure()
 
 static int save()
 {
-  char repl[128];
+  char repl[128] = {0};
 
   if (wpaReq("SAVE_CONFIG", 11, repl, 128) < 0) {
     return -1;
@@ -107,12 +107,12 @@ static int save()
 static int getNetworkID(const char *ssid)
 {
   int id = 0;
-  char *cmd;
+  char cmd[32] = {0};
   char repl[128] = {0};
 
   while(strncmp(repl, "FAIL", 4) && id < 4) {
     sprintf(cmd, "GET_NETWORK %d ssid", id);
-    if (wpaReq(cmd, strlen(cmd), repl, 128) < 0) {
+    if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
       fprintf(stderr, "wbapi: error in obtaining network id\n");
       return -1;
     }
@@ -224,22 +224,14 @@ static FILE *conf_create(const char *filepath)
   return fp;
 }
 
-int conf_setCurrent(const char *filepath)
+/*int conf_setCurrent(const char *filepath)
 {
   return -1;
-}
-
-static int removeNetworkId(int netId)
-{
-  char cmd[128];
-  char repl[1];
-  sprintf(cmd, "REMOVE_NETWORK %d", netId);
-  return wpaReq(cmd, sizeof(cmd)-1, repl, 1) < 0 ? -1 : 0;
-}
+}*/
 
 int conf_configAuto(const char *ssid, const char *psk)
 {
-  char *line;
+  char line[128] = {0};
   int len;
 
   if (!wpa) {
@@ -281,14 +273,14 @@ int conf_configAuto(const char *ssid, const char *psk)
   return reconfigure();
 }
 
-int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
+/*int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
 {
   return -1;
-}
+}*/
 
 int conf_configManual(wifi_conf conf)
 {
-  char *line;
+  char line[128] = {0};
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -381,7 +373,7 @@ int conf_configManual(wifi_conf conf)
   return reconfigure();
 }
 
-int conf_editNetwork(const char *ssid, wifi_conf conf)
+/*int conf_editNetwork(const char *ssid, wifi_conf conf)
 {
   char repl[128] = {0};
   char cmd[32] = {0};
@@ -391,7 +383,7 @@ int conf_editNetwork(const char *ssid, wifi_conf conf)
     return -1;
 
   return -1;
-}
+}*/
 
 int conf_deleteNetwork(const char *ssid)
 {
@@ -438,9 +430,9 @@ size_t listConfigured(char *buf, size_t len)
 
 int listAvailable(char *buf, size_t len)
 {
-  int retval, i = 0;
-  char list[512] = {0};
-  char currSSID[34] = {0};
+  int retval = 0;
+  //char list[512] = {0};
+  //char currSSID[34] = {0};
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -449,6 +441,7 @@ int listAvailable(char *buf, size_t len)
 
   if (wpaReq("SCAN", 4, buf, len) < 0) return -1;
   retval = wpaReq("SCAN_RESULTS", 12, buf, len);
+  if (retval < 0) return -1;
 
   sscanf(buf, "bssid / frequency / signal level / flags / ssid\n%[^\0]", buf); 
   //printf("\nscan:\n%s\n", buf);
@@ -476,43 +469,43 @@ int listAvailable(char *buf, size_t len)
 // DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of ssid, string of passkey
 // returns: string of hashed passkey
-static char *hashPsk(char *ssid, char *psk)
+/*static char *hashPsk(char *ssid, char *psk)
 {
-  char hash[64];
+  char hash[64] = {0};
   int len = strnlen(psk, 64);
 
   if (len < 8 || len > 63) {
     fprintf(stderr, "wbapi: passkey is invalid. passkey length: 8 - 63 characters\n");
   }
 
-}
+}*/
 
 // hash a password using openssl for use in
 // a configuration file
 // DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of password
 // returns: string of hashed password
-static char *hashPwd(char *pwd)
+/*static char *hashPwd(char *pwd)
 {
   
   return NULL;
-}
+}*/
 
 // determines the key management protocol of the
 // specified ssid and updates it in the configuration struct
 // requires: string of ssid, reference to wifi_conf struct of interest
-static void getKeyMgmt(char *ssid, wifi_conf *conf)
+/*static void getKeyMgmt(char *ssid, wifi_conf *conf)
 {
   return;
-}
+}*/
 
 
-int wpa_restart()
+/*int wpa_restart()
 {
   return -1;
-}
+}*/
 
-int wpa_running()
+/*int wpa_running()
 {
   return 0;
-}
+}*/

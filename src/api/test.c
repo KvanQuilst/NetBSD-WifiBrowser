@@ -67,7 +67,7 @@ void test_listConfigured()
 
 void test_autoConf()
 {
-  int retval, len;
+  int retval;
   char buf[BUF_SIZE];
 
   printf("/* Auto configure network w/ ssid */\n");
@@ -79,7 +79,7 @@ void test_autoConf()
     printf("OK\n");
   }
 
-  len = listConfigured(buf, BUF_SIZE);
+  listConfigured(buf, BUF_SIZE);
   //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
@@ -87,7 +87,7 @@ void test_autoConf()
 void test_manualConf()
 {
   wifi_conf w = wc_init();
-  int retval, len;
+  int retval;
   char buf[BUF_SIZE];
 
   printf("/* Manually configure network w/ ssid */\n");
@@ -104,7 +104,7 @@ void test_manualConf()
     printf("OK\n");
   }
 
-  len = listConfigured(buf, BUF_SIZE);
+  listConfigured(buf, BUF_SIZE);
   //printf("List of configure networks:\n%s\n", buf);
   printf("\n");
 }
@@ -112,7 +112,7 @@ void test_manualConf()
 void test_manualEAP()
 {
   wifi_conf e = wc_init();
-  int retval, len;
+  int retval;
   char buf[BUF_SIZE];
 
   printf("/* Manually configure network with WPA-EAP data */\n");
@@ -134,13 +134,13 @@ void test_manualEAP()
     printf("OK\n");
   }
 
-  len = listConfigured(buf, BUF_SIZE);
+  listConfigured(buf, BUF_SIZE);
   //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
 
 void test_deletion() {
-  int retval, len;
+  int retval;
   char buf[BUF_SIZE];
 
   printf("/* Delete network %s*/\n", net1);
@@ -151,7 +151,7 @@ void test_deletion() {
     printf("OK\n");
   }
 
-  len = listConfigured(buf, BUF_SIZE);
+  listConfigured(buf, BUF_SIZE);
   //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
