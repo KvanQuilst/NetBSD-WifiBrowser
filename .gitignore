@@ -2,3 +2,4 @@
 *.core
 *.aux
 *.log
+build/
