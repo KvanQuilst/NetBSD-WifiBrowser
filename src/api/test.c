@@ -43,7 +43,7 @@ void test_listAvailable()
     printf("OK\n");
   }
 
-  printf("List of available networks:\n%s\n", buf);
+  //printf("List of available networks:\n%s\n", buf);
   printf("\n");
 }
 
@@ -61,7 +61,7 @@ void test_listConfigured()
     printf("OK\n");
   }
 
-  printf("List of configured networks:\n%s\n", buf);
+  //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
 
@@ -80,7 +80,7 @@ void test_autoConf()
   }
 
   len = listConfigured(buf, BUF_SIZE);
-  printf("List of configured networks:\n%s\n", buf);
+  //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
 
@@ -105,7 +105,7 @@ void test_manualConf()
   }
 
   len = listConfigured(buf, BUF_SIZE);
-  printf("List of configure networks:\n%s\n", buf);
+  //printf("List of configure networks:\n%s\n", buf);
   printf("\n");
 }
 
@@ -135,7 +135,7 @@ void test_manualEAP()
   }
 
   len = listConfigured(buf, BUF_SIZE);
-  printf("List of configured networks:\n%s\n", buf);
+  //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
 
@@ -152,7 +152,7 @@ void test_deletion() {
   }
 
   len = listConfigured(buf, BUF_SIZE);
-  printf("List of configured networks:\n%s\n", buf);
+  //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
 }
 
