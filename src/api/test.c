@@ -1,13 +1,6 @@
-/*
- * Wifi Browser API / test.c
- * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
- * * This software is under the terms of the BSD license.  * See README for more details.
- *
- * Central file for testing wbapi
- */
-
 #include "wbapi.h"
 #define BUF_SIZE 4096
+//#define DEBUG 
 
 const char *net1 = "Auto-SSID";
 const char *net2 = "Manual-PSK";
