@@ -8,9 +8,9 @@ const char *net3 = "Manual-EAP";
 void test_connect()
 {
   printf("/* Connect to wpa_supplicant */\n");
-  if (api_init() == 0) {
+  if (api_init() == 0)
     printf("OK\n");
-  } else {
+  else {
     printf("Failed to connect to wpa_supplicant...\n");
     exit(1);
   }
@@ -20,11 +20,10 @@ void test_connect()
 void test_cleanConfig()
 {
   printf("/* Clean configuration file for testing */\n");
-  if (conf_cleanNetworks() < 0) {
+  if (conf_cleanNetworks() < 0)
     printf("Failed to clean all networks from config file!\n");
-  } else {
+  else
     printf("OK\n");
-  }
   printf("\n");
 }
 
@@ -36,12 +35,10 @@ void test_listAvailable()
   printf("/* List available networks */\n");
   len = listAvailable(buf, BUF_SIZE);
 
-  if (len < 0) {
+  if (len < 0)
     printf("List available failed!\n");
-    return;
-  } else {
+  else
     printf("OK\n");
-  }
 
   //printf("List of available networks:\n%s\n", buf);
   printf("\n");
@@ -54,12 +51,10 @@ void test_listConfigured()
 
   printf("/* List configured networks */\n");
   len = listConfigured(buf, BUF_SIZE);
-  if (len < 0) {
+  if (len < 0)
     printf("List configured failed!\n");
-    return;
-  } else {
+  else
     printf("OK\n");
-  }
 
   //printf("List of configured networks:\n%s\n", buf);
   printf("\n");
@@ -72,12 +67,10 @@ void test_autoConf()
 
   printf("/* Auto configure network w/ ssid */\n");
   retval = conf_configAuto(net1, "Password");
-  if (retval < 0) {
+  if (retval < 0)
     printf("Auto-configuration failed!\n");
-    return;
-  } else {
+  else
     printf("OK\n");
-  }
 
   listConfigured(buf, BUF_SIZE);
   //printf("List of configured networks:\n%s\n", buf);
@@ -97,12 +90,10 @@ void test_manualConf()
   w.priority = 1;
 
   retval = conf_configManual(w);
-  if (retval < 0) {
+  if (retval < 0)
     printf("Manual configuration failed!\n");
-    return;
-  } else {
+  else
     printf("OK\n");
-  }
 
   listConfigured(buf, BUF_SIZE);
   //printf("List of configure networks:\n%s\n", buf);
@@ -127,12 +118,10 @@ void test_manualEAP()
   e.phase2="auth=MSCHAPV2";
 
   retval = conf_configManual(e);
-  if (retval < 0) {
+  if (retval < 0)
     printf("Manual EAP configuration failed!\n");
-    return;
-  } else {
+  else
     printf("OK\n");
-  }
 
   listConfigured(buf, BUF_SIZE);
   //printf("List of configured networks:\n%s\n", buf);
@@ -145,11 +134,26 @@ void test_deletion() {
 
   printf("/* Delete network %s*/\n", net1);
   retval = conf_deleteNetwork(net1);
-  if (retval < 0) {
+  if (retval < 0)
     printf("Deletion failed!\n");
-  } else {
+  else
     printf("OK\n");
-  }
+
+  listConfigured(buf, BUF_SIZE);
+  //printf("List of configured networks:\n%s\n", buf);
+  printf("\n");
+}
+
+void test_edit() {
+  int retval;
+  char buf[BUF_SIZE];
+
+  printf("/* Edit network %s*/\n", net2);
+  retval = conf_editNetwork(net2, "ssid", "editNetwork");
+  if (retval < 0)
+    printf("Edit network failed\n");
+  else
+    printf("OK\n");
 
   listConfigured(buf, BUF_SIZE);
   //printf("List of configured networks:\n%s\n", buf);
@@ -176,11 +180,14 @@ int main()
   /* Manual configuration WPA-PSK network */
   test_manualConf();
 
-  /* Manual configuratino WPA-EAP network */
+  /* Manual configuration WPA-EAP network */
   test_manualEAP();
 
   /* Deletion of a network */
   test_deletion();
+
+  /* Editting of a network */
+  test_edit();
 
   return 0;
 }

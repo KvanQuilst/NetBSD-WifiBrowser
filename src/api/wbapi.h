@@ -102,10 +102,10 @@ int conf_configManual(wifi_conf conf);
 /*
  * conf_editNetwork - edits the specified network config (based on ssid) using
  * the information from the provided configuration struct
- * requires: string of ssid to be edited, wifi_conf struct
+ * requires: string of ssid name, string of field name, string of value
  * returns: 0 on success, -1 on fail
  */
-int conf_editNetwork(const char *ssid, wifi_conf conf);
+int conf_editNetwork(const char *ssid, const char *field, const char *value);
 
 /*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused

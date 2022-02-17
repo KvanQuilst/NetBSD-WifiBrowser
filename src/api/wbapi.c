@@ -1,9 +1,7 @@
 /*
  * Wifi Browser API / wbapi.c
  * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
- * 
- * This software is under the terms of the BSD license.
- * See README for more details.
+ * * This software is under the terms of the BSD license.  * See README for more details.
  *
  * Central point for processing requests made against Wifi Browser API
  */
@@ -373,24 +371,39 @@ int conf_configManual(wifi_conf conf)
   return reconfigure();
 }
 
-/*int conf_editNetwork(const char *ssid, wifi_conf conf)
+int conf_editNetwork(const char *ssid, const char *field, const char *value)
 {
   char repl[128] = {0};
-  char cmd[32] = {0};
-  int id = getNetworkID(ssid);
+  char cmd[128] = {0};
+  int id;
 
+  /* verify ssid */
+
+  id = getNetworkID(ssid);
   if (id < 0)
     return -1;
 
-  return -1;
-}*/
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s \"%s\"", id, field, value);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in setting network field: %s\n", field);
+    return -1;
+  }
+
+  return save() < 0 ? -1 : reconfigure();
+}
 
 int conf_deleteNetwork(const char *ssid)
 {
   char repl[128] = {0};
   char cmd[32] = {0};
-  int id = getNetworkID(ssid);
+  int id;
 
+  /* verify ssid */
+
+  id = getNetworkID(ssid);
   if (id < 0)
     return -1;
 
@@ -403,10 +416,7 @@ int conf_deleteNetwork(const char *ssid)
     return -1;
   }
 
-  if (save() < 0)
-    return -1;
-
-  return reconfigure();
+  return save() < 0 ? -1 : reconfigure();
 }
 
 int conf_cleanNetworks(void)
@@ -414,7 +424,6 @@ int conf_cleanNetworks(void)
   fclose(curr_conf);
   remove(conf_filepath);
   curr_conf = conf_create(conf_filepath);
-
   return reconfigure();
 }
 
