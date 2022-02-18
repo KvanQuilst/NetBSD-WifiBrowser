@@ -2,5 +2,7 @@
 *.core
 *.aux
 *.log
+*.d
+*.swp
 build/
 wbapi
