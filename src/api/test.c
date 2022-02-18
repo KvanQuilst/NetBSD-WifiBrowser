@@ -1,6 +1,5 @@
 #include "wbapi.h"
 #define BUF_SIZE 4096
-//#define DEBUG 
 
 const char *net1 = "Auto-SSID";
 const char *net2 = "Manual-PSK";
