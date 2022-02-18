@@ -132,7 +132,7 @@ int conf_cleanNetworks(void);
  * requires: buffer pointer, buffer size
  * returns: size of returned buffer
  */
-size_t listConfigured(char *buf, size_t len);
+int listConfigured(char *buf, size_t len);
 
 /*
  * listAvailable - list available visible networks

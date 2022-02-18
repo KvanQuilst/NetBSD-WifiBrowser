@@ -1,11 +1,22 @@
 #include "wbapi.h"
 #define BUF_SIZE 4096
+//#define DEBUG 
 
 const char *net1 = "Auto-SSID";
 const char *net2 = "Manual-PSK";
 const char *net3 = "Manual-EAP";
 
-void test_connect()
+#ifdef DEBUG
+static void printConfig()
+{
+  char buf[BUF_SIZE];
+
+  if (listConfigured(buf, BUF_SIZE) >= 0)
+    printf("List of configured networks:\n%s\n", buf);
+}
+#endif
+
+static void test_connect()
 {
   printf("/* Connect to wpa_supplicant */\n");
   if (api_init() == 0)
@@ -17,7 +28,7 @@ void test_connect()
   printf("\n");
 }
 
-void test_cleanConfig()
+static void test_cleanConfig()
 {
   printf("/* Clean configuration file for testing */\n");
   if (conf_cleanNetworks() < 0)
@@ -27,61 +38,55 @@ void test_cleanConfig()
   printf("\n");
 }
 
-void test_listAvailable()
+static void test_listAvailable()
 {
-  int len;
   char buf[BUF_SIZE];
 
   printf("/* List available networks */\n");
-  len = listAvailable(buf, BUF_SIZE);
 
-  if (len < 0)
+  if (listAvailable(buf, BUF_SIZE) < 0)
     printf("List available failed!\n");
   else
     printf("OK\n");
 
-  //printf("List of available networks:\n%s\n", buf);
+#ifdef DEBUG
+  printf("List of available networks:\n%s\n", buf);
+#endif
   printf("\n");
 }
 
-void test_listConfigured()
+static void test_listConfigured()
 {
-  int len;
   char buf[BUF_SIZE];
 
   printf("/* List configured networks */\n");
-  len = listConfigured(buf, BUF_SIZE);
-  if (len < 0)
+  if (listConfigured(buf,BUF_SIZE) < 0)
     printf("List configured failed!\n");
   else
     printf("OK\n");
 
-  //printf("List of configured networks:\n%s\n", buf);
+#ifdef DEBUG
+  printf("List of configured networks:\n%s\n", buf);
+#endif
   printf("\n");
 }
 
-void test_autoConf()
+static void test_autoConf()
 {
-  int retval;
-  char buf[BUF_SIZE];
-
   printf("/* Auto configure network w/ ssid */\n");
-  retval = conf_configAuto(net1, "Password");
-  if (retval < 0)
+  if (conf_configAuto(net1, "Password") < 0)
     printf("Auto-configuration failed!\n");
   else
     printf("OK\n");
-
-  listConfigured(buf, BUF_SIZE);
-  //printf("List of configured networks:\n%s\n", buf);
+#ifdef DEBUG
+  printConfig();
+#endif
   printf("\n");
 }
 
-void test_manualConf()
+static void test_manualConf()
 {
   wifi_conf w = wc_init();
-  int retval;
-  char buf[BUF_SIZE];
 
   printf("/* Manually configure network w/ ssid */\n");
   w.ssid = net2;
@@ -89,22 +94,20 @@ void test_manualConf()
   w.psk = "Password2";
   w.priority = 1;
 
-  retval = conf_configManual(w);
-  if (retval < 0)
+  if (conf_configManual(w) < 0)
     printf("Manual configuration failed!\n");
   else
     printf("OK\n");
 
-  listConfigured(buf, BUF_SIZE);
-  //printf("List of configure networks:\n%s\n", buf);
+#ifdef DEBUG
+  printConfig();
+#endif
   printf("\n");
 }
 
-void test_manualEAP()
+static void test_manualEAP()
 {
   wifi_conf e = wc_init();
-  int retval;
-  char buf[BUF_SIZE];
 
   printf("/* Manually configure network with WPA-EAP data */\n");
   e.ssid = net3;
@@ -117,20 +120,19 @@ void test_manualEAP()
   e.password = "pass";
   e.phase2="auth=MSCHAPV2";
 
-  retval = conf_configManual(e);
-  if (retval < 0)
+  if (conf_configManual(e) < 0)
     printf("Manual EAP configuration failed!\n");
   else
     printf("OK\n");
 
-  listConfigured(buf, BUF_SIZE);
-  //printf("List of configured networks:\n%s\n", buf);
+#ifdef DEBUG
+  printConfig();
+#endif
   printf("\n");
 }
 
-void test_deletion() {
+static void test_deletion() {
   int retval;
-  char buf[BUF_SIZE];
 
   printf("/* Delete network %s*/\n", net1);
   retval = conf_deleteNetwork(net1);
@@ -139,14 +141,14 @@ void test_deletion() {
   else
     printf("OK\n");
 
-  listConfigured(buf, BUF_SIZE);
-  //printf("List of configured networks:\n%s\n", buf);
+#ifdef DEBUG
+  printConfig();
+#endif
   printf("\n");
 }
 
-void test_edit() {
+static void test_edit() {
   int retval;
-  char buf[BUF_SIZE];
 
   printf("/* Edit network %s*/\n", net2);
   retval = conf_editNetwork(net2, "ssid", "editNetwork");
@@ -155,8 +157,9 @@ void test_edit() {
   else
     printf("OK\n");
 
-  listConfigured(buf, BUF_SIZE);
-  //printf("List of configured networks:\n%s\n", buf);
+#ifdef DEBUG
+  printConfig();
+#endif
   printf("\n");
 }
 

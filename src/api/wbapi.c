@@ -99,7 +99,7 @@ static int save()
     fprintf(stderr, "wbapi: error in saving configuration!\n");
     return -1;
   }
-  return 0;
+  return reconfigure();
 }
 
 static int getNetworkID(const char *ssid)
@@ -392,7 +392,7 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
     return -1;
   }
 
-  return save() < 0 ? -1 : reconfigure();
+  return save();
 }
 
 int conf_deleteNetwork(const char *ssid)
@@ -416,7 +416,7 @@ int conf_deleteNetwork(const char *ssid)
     return -1;
   }
 
-  return save() < 0 ? -1 : reconfigure();
+  return save();
 }
 
 int conf_cleanNetworks(void)
@@ -427,7 +427,7 @@ int conf_cleanNetworks(void)
   return reconfigure();
 }
 
-size_t listConfigured(char *buf, size_t len)
+int listConfigured(char *buf, size_t len)
 {
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -439,7 +439,6 @@ size_t listConfigured(char *buf, size_t len)
 
 int listAvailable(char *buf, size_t len)
 {
-  int retval = 0;
   //char list[512] = {0};
   //char currSSID[34] = {0};
 
@@ -449,8 +448,8 @@ int listAvailable(char *buf, size_t len)
   }
 
   if (wpaReq("SCAN", 4, buf, len) < 0) return -1;
-  retval = wpaReq("SCAN_RESULTS", 12, buf, len);
-  if (retval < 0) return -1;
+
+  if (wpaReq("SCAN_RESULTS", 12, buf, len) < 0) return -1;
 
   sscanf(buf, "bssid / frequency / signal level / flags / ssid\n%[^\0]", buf); 
   //printf("\nscan:\n%s\n", buf);
