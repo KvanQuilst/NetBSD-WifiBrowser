@@ -29,7 +29,7 @@ static char *ifname = NULL;
   Static Prototypes
 **************************/
 static FILE *conf_create(const char *filepath);
-//static char *hashPsk(char *ssid, char *psk);
+static void *hashPsk(unsigned char *ssid, unsigned char *psk);
 //static char *hashPwd(char *pwd); 
 //static void getKeyMgmt(char *ssid, wifi_conf *conf);
 
@@ -477,16 +477,23 @@ int listAvailable(char *buf, size_t len)
 // DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of ssid, string of passkey
 // returns: string of hashed passkey
-/*static char *hashPsk(char *ssid, char *psk)
+static void *hashPsk(unsigned char *ssid, unsigned char *psk)
 {
-  char hash[64] = {0};
-  int len = strnlen(psk, 64);
+  unsigned char hash[32] = {0};
+  char out[32] = {0};
+  int plen = strnlen(psk, 64);
+  int slen = strnlen(ssid, 32);
+  int i;
 
-  if (len < 8 || len > 63) {
+  if (plen < 8 || plen > 63) {
     fprintf(stderr, "wbapi: passkey is invalid. passkey length: 8 - 63 characters\n");
   }
 
-}*/
+  PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
+  for (i = 0; i < 32; i++)
+    snprintf(&out[i], 1, "%02x", hash[i]);
+  psk = out;
+}
 
 // hash a password using openssl for use in
 // a configuration file

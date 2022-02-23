@@ -5,11 +5,15 @@ CFILES=$(wildcard *.c)
 OBJS=$(patsubst %.c, $(ODIR)/%.o, $(CFILES))
 
 wbapi: $(ODIR) $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(ODIR)/*.o
+	@rm -rf $(ODIR)/testd.o
+	$(CC) $(CFLAGS) -o $@ $(ODIR)/*.o -lcrypto
 
 debug: $(ODIR) $(OBJS) $(ODIR)/testd.o
 	@rm -rf $(ODIR)/test.o
 	$(CC) $(CFLAGS) -Wall -Wextra -o wbapi $(ODIR)/*.o
+
+$(ODIR)/wbapi.o: wbapi.c
+	$(CC) -c -I ./ -MMD -c -g -o $@ $< -lcrypto
 
 $(ODIR)/testd.o: test.c
 	$(CC) -c -I ./ -MMD -c -g -o $@ $< -D DEBUG
@@ -22,9 +26,6 @@ $(ODIR)/os_unix.o: os_unix.c
 
 $(ODIR)/%.o: %.c
 	$(CC) $(CFLAGS) -I ./ -MMD -c $< -o $@
-
-$(ODIR)/%.o: crypto/%.c
-	$(CC) $(CFLAGS) -I ./ -I crypto/ -MMD -c $< -o $@
 
 $(ODIR):
 	@mkdir $@
