@@ -5,7 +5,7 @@ CFILES=$(wildcard *.c)
 OBJS=$(patsubst %.c, $(ODIR)/%.o, $(CFILES))
 
 wbapi: $(ODIR) $(OBJS)
-	$(CC) $(CFLAGS) -Wall -Wextra -o $@ $(ODIR)/*.o
+	$(CC) $(CFLAGS) -o $@ $(ODIR)/*.o
 
 debug: $(ODIR) $(OBJS) $(ODIR)/testd.o
 	@rm -rf $(ODIR)/test.o
@@ -31,4 +31,4 @@ $(ODIR):
 
 .PHONY clean:
 clean:
-	@rm -rf *.o *.d
+	@rm -rf $(ODIR)/*.o $(ODIR)/*.d
