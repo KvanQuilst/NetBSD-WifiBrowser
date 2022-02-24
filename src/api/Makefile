@@ -10,7 +10,7 @@ wbapi: $(ODIR) $(OBJS)
 
 debug: $(ODIR) $(OBJS) $(ODIR)/testd.o
 	@rm -rf $(ODIR)/test.o
-	$(CC) $(CFLAGS) -Wall -Wextra -o wbapi $(ODIR)/*.o
+	$(CC) $(CFLAGS) -o wbapi $(ODIR)/*.o -lcrypto
 
 $(ODIR)/wbapi.o: wbapi.c
 	$(CC) -c -I ./ -MMD -c -g -o $@ $< -lcrypto

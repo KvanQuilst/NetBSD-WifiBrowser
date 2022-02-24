@@ -29,7 +29,8 @@ static char *ifname = NULL;
   Static Prototypes
 **************************/
 static FILE *conf_create(const char *filepath);
-static void *hashPsk(unsigned char *ssid, unsigned char *psk);
+static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *psk, 
+    int plen);
 //static char *hashPwd(char *pwd); 
 //static void getKeyMgmt(char *ssid, wifi_conf *conf);
 
@@ -230,7 +231,8 @@ static FILE *conf_create(const char *filepath)
 int conf_configAuto(const char *ssid, const char *psk)
 {
   char line[128] = {0};
-  int len;
+  char *hash;
+  int plen, slen;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -238,6 +240,11 @@ int conf_configAuto(const char *ssid, const char *psk)
   }
 
   /* check ssid validity */
+  slen = strnlen(ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
   
   if (fseek(curr_conf, 0, SEEK_END) < 0) {
     fprintf(stderr, "wbapi: error seeking in configuration file!\n");
@@ -252,16 +259,16 @@ int conf_configAuto(const char *ssid, const char *psk)
   if (psk == NULL) {
     conf_write("\tkey_mgmt=NONE\n");
   } else {
-    len = strnlen(psk, 64);
-    if (len < 8 || len > 63) {
+    plen = strnlen(psk, 64);
+    if (plen < 8 || plen > 63) {
       fprintf(stderr, "wbapi: provided passkey is invalid. passkey length: 8-63 characters\n");
       return -1;
     }
+    hash = hashPsk(ssid, slen, psk, plen);
 
     conf_write("\tkey_mgmt=WPA-PSK\n");
-    sprintf(line, "\tpsk=\"%s\"\n", psk);
+    sprintf(line, "\tpsk=%s\n", hash);
     conf_write(line);
-    //hashPsk(ssid, psk);
   }
 
   conf_write("}\n");
@@ -279,6 +286,8 @@ int conf_configAuto(const char *ssid, const char *psk)
 int conf_configManual(wifi_conf conf)
 {
   char line[128] = {0};
+  unsigned char *hash, *salt;
+  int slen, plen;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -290,6 +299,11 @@ int conf_configManual(wifi_conf conf)
     return -1;
   }
   /* check ssid validity */
+  slen = strnlen(conf.ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: privided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
 
   if (fseek(curr_conf, 0, SEEK_END) < 0) {
     fprintf(stderr, "wbapi: error seeking in configuration file!\n");
@@ -310,7 +324,13 @@ int conf_configManual(wifi_conf conf)
 
   /* psk */
   if (conf.psk) {
-    sprintf(line, "\tpsk=\"%s\"\n", conf.psk);
+    plen = strnlen(conf.psk, 64);
+    if (plen < 8 || plen > 63) {
+      fprintf(stderr, "wbapi: providied passkey is invalid. passkey length: 8-63 characters\n");
+      return -1;
+    }
+    hash = hashPsk(conf.ssid, slen, conf.psk, plen);
+    sprintf(line, "\tpsk=%s\n", hash);
     conf_write(line);
   }
 
@@ -476,23 +496,17 @@ int listAvailable(char *buf, size_t len)
 // use in a configuration file
 // DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of ssid, string of passkey
-// returns: string of hashed passkey
-static void *hashPsk(unsigned char *ssid, unsigned char *psk)
+// returns: -1 on failure, 0 on success
+static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *psk, int plen)
 {
   unsigned char hash[32] = {0};
-  char out[32] = {0};
-  int plen = strnlen(psk, 64);
-  int slen = strnlen(ssid, 32);
+  char *out = malloc(sizeof(char) * 64);
   int i;
 
-  if (plen < 8 || plen > 63) {
-    fprintf(stderr, "wbapi: passkey is invalid. passkey length: 8 - 63 characters\n");
-  }
-
   PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
-  for (i = 0; i < 32; i++)
-    snprintf(&out[i], 1, "%02x", hash[i]);
-  psk = out;
+  for (i = 0; i < 64; i++)
+    snprintf(&out[i], 2, "%02x", hash[i]);
+  return out;
 }
 
 // hash a password using openssl for use in
