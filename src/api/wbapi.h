@@ -10,6 +10,7 @@
 #include <assert.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <openssl/evp.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
