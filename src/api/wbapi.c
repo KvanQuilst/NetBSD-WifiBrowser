@@ -31,7 +31,7 @@ static char *ifname = NULL;
 static FILE *conf_create(const char *filepath);
 static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *psk, 
     int plen);
-//static char *hashPwd(char *pwd); 
+//static char *hashPwd(char *pwd, int plen); 
 //static void getKeyMgmt(char *ssid, wifi_conf *conf);
 
 /**************************
@@ -494,9 +494,8 @@ int listAvailable(char *buf, size_t len)
 
 // hash a passkey against the associated ssid for 
 // use in a configuration file
-// DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
-// requires: string of ssid, string of passkey
-// returns: -1 on failure, 0 on success
+// requires: string of ssid, length of ssid, string of passkey, length of passkey
+// returns: string of hash
 static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *psk, int plen)
 {
   unsigned char hash[32] = {0};
@@ -511,12 +510,11 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
 
 // hash a password using openssl for use in
 // a configuration file
-// DOES NOT AUTOMATICALLY INSERT INTO CONFIG FILE
 // requires: string of password
 // returns: string of hashed password
-/*static char *hashPwd(char *pwd)
+/*static char *hashPwd(char *pwd, int plen)
 {
-  
+  unisgned char hash[  
   return NULL;
 }*/
 
