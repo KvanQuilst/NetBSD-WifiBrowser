@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\setlength{\parindent}{0em}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+  \textbf{\Large Milestone \#4}\\\large NetBSD Wifi Browser Project 2022\\
+  Dylan Roy, Stephen Loudiana, Kevin McGrane
+\end{center}
+
+
+\section{General Progress Report}
+Progress on the API front again has been slow, but with the minor progress
+and the implementation of the passphrase hashing, it has become apparent
+how close the API is to v1.0 completion. Moving into the next milestone, 
+the implementation of manual configuration will be changed to both simplify
+the implementation and to make configuration more expandable (and able to
+better accommodate the large amount of available configuration fields). An
+unfortunate piece of information discovered about \texttt{wpa\_supplicant}
+was that password hashing for WPA-EAP networks is not worth while considering
+that the accepted hashing algorithm does not work for passwords longer than
+14 characters, requiring them to be stored in plain text as a result. This
+can be somewhat circumvented with better file permissions, which will be considered
+during the determination of circumventing the necessity of root privileges.\\
+
+\textbf{Accomplishments}
+\begin{itemize}
+  \item API supports passphrase hashing
+  \item API has generalized and improved makefile
+\end{itemize}
+
+\textbf{Targets Not Met:}
+\begin{itemize}
+  \item Use API without root privileges
+\end{itemize}
+
+
+\section{Git Branch Report}
+One additional branch was used to implement the passphrase hashing (branch \texttt{crypto})
+in order to prevent compile issues for the others while figuring out the
+details of needing extra dependencies and the solution not being trivial.
+Beyond this, most work was performed on \texttt{master}.
+
+
+\section{Individual Progress}
+
+\textbf{Kevin:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\textbf{Dylan:}
+\begin{itemize}
+  \item Determined and changed strategy for passphrase hashing
+  \item Implemented passphrase hashing in API
+  \item Improved Makefile
+  \item Cleaned up and abstracted test file
+  \item Solve lab machine issues (there were many the first week of milestone 4)
+\end{itemize}
+
+\textbf{Stephen:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\end{document}
+
+
+
+
