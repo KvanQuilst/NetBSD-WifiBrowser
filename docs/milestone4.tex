@@ -22,18 +22,28 @@ was that password hashing for WPA-EAP networks is not worth while considering
 that the accepted hashing algorithm does not work for passwords longer than
 14 characters, requiring them to be stored in plain text as a result. This
 can be somewhat circumvented with better file permissions, which will be considered
-during the determination of circumventing the necessity of root privileges.\\
+during the determination of circumventing the necessity of root privileges. The 
+actual implementation of the NetBSD TUI application is now under way, the next 
+few days will be spent starting the TUI and building out the design and layout while
+also working more with ncurses to design an optimal layout for the TUI. Once the 
+layout and design is at a place where we feel comfortable with it we will start 
+to implement the connections with the API which will be the final part of the 
+TUI implementation\\
 
 \textbf{Accomplishments}
 \begin{itemize}
   \item API supports passphrase hashing
   \item API has generalized and improved makefile
   \item API can edit already configured networks
+  \item TUI Scaffolding and Design
+  \item TUI Devise testing strategy
 \end{itemize}
 
 \textbf{Targets Not Met:}
 \begin{itemize}
   \item Use API without root privileges
+  \item TUI Support for current API features
+  \item TUI Create Tests
 \end{itemize}
 
 
@@ -46,9 +56,12 @@ Beyond this, most work was performed on \texttt{master}.
 
 \section{Individual Progress}
 
-\textbf{Kevin:}
+\textbf{Kevin: 4.5 hours}
 \begin{itemize}
-  \item
+  \item Completed Ncurses test file
+  \item Started implementation of NetBSD Wifi Browser TUI
+  \item Tested design and layout ideas
+  \item Created testing scheme for TUI
 \end{itemize}
 
 \textbf{Dylan:}
