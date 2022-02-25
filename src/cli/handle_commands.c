@@ -46,7 +46,7 @@ void handle_conf_auto(){
     char *psk = malloc(sizeof(char) * WIFI_CONF_FIELD);
     printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
     printf("psk: "); fgets(psk, WIFI_CONF_FIELD, stdin);
-    int result = conf_configAuto(ssid, psk);
+    conf_configAuto(ssid, psk);
     free(ssid);
     free(psk);
 }
