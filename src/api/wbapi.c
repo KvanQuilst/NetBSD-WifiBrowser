@@ -283,27 +283,51 @@ int conf_configAuto(const char *ssid, const char *psk)
   return -1;
 }*/
 
-int conf_configManual(wifi_conf conf)
+int conf_addEntry(const char *ssid)
 {
+  //char repl[128] = {0};
+  //char cmd[128] = {0};
   char line[128] = {0};
-  unsigned char *hash, *salt;
-  int slen, plen;
+  int id, slen;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
     return -1;
   }
 
-  if (conf.ssid == NULL) {
-    fprintf(stderr, "Cannot create network without ssid!\n");
-    return -1;
-  }
   /* check ssid validity */
-  slen = strnlen(conf.ssid, 33);
-  if (slen == 0 || slen > 32) {
-    fprintf(stderr, "wbapi: privided ssid is invalid. ssid length: 1-32 characters\n");
+  if (ssid == NULL) {
+    fprintf(stderr, "wbapi: no ssid provided!\n");
     return -1;
   }
+  slen = strnlen(ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
+
+  /*if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
+    return -1;
+
+  id = atoi(repl);
+
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d ssid \"%s\"", id, ssid);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in adding new network entry\n");
+    return -1;
+  }
+
+  snprintf(cmd, sizeof(cmd), "ENABLE_NETWORK %d", id); 
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in enabling new network entry\n");
+    return -1;
+  }
+
+  return save();*/
 
   if (fseek(curr_conf, 0, SEEK_END) < 0) {
     fprintf(stderr, "wbapi: error seeking in configuration file!\n");
@@ -311,101 +335,53 @@ int conf_configManual(wifi_conf conf)
   }
 
   conf_write("\nnetwork={\n");
-
-  /* ssid */
-  sprintf(line, "\tssid=\"%s\"\n", conf.ssid);
+  sprintf(line, "\tssid=\"%s\"\n", ssid);
   conf_write(line);
-
-  /* key_mgmt */
-  if (conf.key_mgmt) {
-    sprintf(line, "\tkey_mgmt=%s\n", conf.key_mgmt);
-    conf_write(line);
-  }
-
-  /* psk */
-  if (conf.psk) {
-    plen = strnlen(conf.psk, 64);
-    if (plen < 8 || plen > 63) {
-      fprintf(stderr, "wbapi: providied passkey is invalid. passkey length: 8-63 characters\n");
-      return -1;
-    }
-    hash = hashPsk(conf.ssid, slen, conf.psk, plen);
-    sprintf(line, "\tpsk=%s\n", hash);
-    conf_write(line);
-  }
-
-  /* priority */
-  if (conf.priority > 0) {
-    sprintf(line, "\tpriority=%d\n", conf.priority);
-    conf_write(line);
-  }
-
-  /* EAP Specific */
-
-  /* identity */
-  if (conf.identity) {
-    sprintf(line, "\tidentity=\"%s\"\n", conf.identity);
-    conf_write(line);
-  }
-
-  /* password */
-  if (conf.password) {
-    sprintf(line, "\tpassword=\"%s\"\n", conf.password);
-    conf_write(line);
-  }
-
-  /* proto */
-  if (conf.proto) {
-    sprintf(line, "\tproto=%s\n", conf.proto);
-    conf_write(line);
-  }
-
-  /* pairwise */
-  if (conf.pairwise) {
-    sprintf(line, "\tpairwise=%s\n", conf.pairwise);
-    conf_write(line);
-  }
-
-  /* group */
-  if (conf.group) {
-    sprintf(line, "\tgroup=%s\n", conf.group);
-    conf_write(line);
-  }
-
-  /* eap */
-  if (conf.eap) {
-    sprintf(line, "\teap=%s\n", conf.eap);
-    conf_write(line);
-  }
-
-  /* phase2 */
-  if (conf.phase2) {
-    sprintf(line, "\tphase2=\"%s\"\n", conf.phase2);
-    conf_write(line);
-  }
-
+  conf_write("\tkey_mgmt=NONE\n");
   conf_write("}\n");
-
   fflush(curr_conf);
 
-  return reconfigure();
+  //return reconfigure();
+  return 0;
 }
 
 int conf_editNetwork(const char *ssid, const char *field, const char *value)
 {
   char repl[128] = {0};
   char cmd[128] = {0};
-  int id;
+  char *hash;
+  int id, plen, slen;
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
 
   /* verify ssid */
+  slen = strnlen(ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
 
   id = getNetworkID(ssid);
   if (id < 0)
     return -1;
 
-  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s \"%s\"", id, field, value);
-  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
-    return -1;
+  if (!strncmp(field, "psk", 4)) {
+    plen = strnlen(value, 64);
+    if (plen < 8 || plen > 63) {
+      fprintf(stderr, "wbapi: provided passkey is invalid. passkey length: 8-63 characters\n");
+      return -1;
+    }
+    snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s %s", id, field, hash);
+    if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+      return -1;
+  } else {
+    snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s %s", id, field, value);
+    if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+      return -1;
+  }
 
   if (strncmp("OK", repl, 2)) {
     fprintf(stderr, "wbapi: error in setting network field: %s\n", field);

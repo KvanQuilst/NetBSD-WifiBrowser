@@ -85,16 +85,16 @@ static void test_autoConf()
 
 static void test_manualConf()
 {
-  wifi_conf w = wc_init();
-
   printf("/* Manually configure network w/ ssid */\n");
-  w.ssid = net2;
-  w.key_mgmt = "WPA-PSK";
-  w.psk = "Password2";
-  w.priority = 1;
 
-  if (conf_configManual(w) < 0)
-    printf("Manual configuration failed!\n");
+  if (conf_addEntry(net2) < 0)
+    printf("Manual entry failed: ssid\n");
+  else if (conf_editNetwork(net2, "key_mgmt", "WPA-PSK") < 0)
+    printf("Manual entry failed: key_mgmt\n");
+  else if (conf_editNetwork(net2, "psk", "Password2") < 0)
+    printf("Manual entry failed: psk\n");
+  else if (conf_editNetwork(net2, "priority", "1") < 0)
+    printf("Manual entry failed: priority\n");
   else
     printf("OK\n");
 
@@ -119,10 +119,10 @@ static void test_manualEAP()
   e.password = "pass";
   e.phase2="auth=MSCHAPV2";
 
-  if (conf_configManual(e) < 0)
+  /*if (conf_configManual(e) < 0)
     printf("Manual EAP configuration failed!\n");
   else
-    printf("OK\n");
+    printf("OK\n");*/
 
 #ifdef DEBUG
   printConfig();
@@ -149,8 +149,8 @@ static void test_deletion() {
 static void test_edit() {
   int retval;
 
-  printf("/* Edit network %s*/\n", net2);
-  retval = conf_editNetwork(net2, "ssid", "editNetwork");
+  printf("/* Edit network %s*/\n", net1);
+  retval = conf_editNetwork(net1, "ssid", "editNetwork");
   if (retval < 0)
     printf("Edit network failed\n");
   else
@@ -179,17 +179,17 @@ int main()
   /* Create a new network configuration */
   test_autoConf();
 
+  /* Editting of a network */
+  //test_edit();
+
   /* Manual configuration WPA-PSK network */
   test_manualConf();
 
   /* Manual configuration WPA-EAP network */
-  test_manualEAP();
+  //test_manualEAP();
 
   /* Deletion of a network */
-  test_deletion();
-
-  /* Editting of a network */
-  test_edit();
+  //test_deletion();
 
   return 0;
 }

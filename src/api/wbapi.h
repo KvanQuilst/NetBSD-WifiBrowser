@@ -92,13 +92,13 @@ int conf_configAuto(const char *ssid, const char *psk);
 int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
 
 /*
- * conf_connectManual - adds a new network configuration using the information
- * from the provided configuration struct to the focused
- * configuration file
- * requires: wifi_conf struct
+ * conf_addEntry - adds a new network configuration entry for the provided
+ * ssid. This is intended to be used when manually configuring in conjunction
+ * with edit network
+ * requires: string of ssid
  * returns: 0 if success, -1 if fail
  */
-int conf_configManual(wifi_conf conf);
+int conf_addEntry(const char *ssid);
 
 /*
  * conf_editNetwork - edits the specified network config (based on ssid) using
