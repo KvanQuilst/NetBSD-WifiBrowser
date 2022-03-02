@@ -139,22 +139,6 @@ static void api_exit(const char *msg)
   API Functions
 ************************/
 
-wifi_conf wc_init() {
-  wifi_conf w;
-  w.ssid = NULL;
-  w.psk = NULL;
-  w.key_mgmt = NULL;
-  w.priority = 0;
-  w.identity = NULL;
-  w.password = NULL;
-  w.proto = NULL;
-  w.pairwise = NULL;
-  w.group = NULL;
-  w.eap = NULL;
-  w.phase2 = NULL;
-  return w;
-}
-
 int api_init()
 {
   /* Open default interface directory; look for interface */
@@ -285,8 +269,6 @@ int conf_configAuto(const char *ssid, const char *psk)
 
 int conf_addEntry(const char *ssid)
 {
-  //char repl[128] = {0};
-  //char cmd[128] = {0};
   char line[128] = {0};
   int id, slen;
 
@@ -301,14 +283,14 @@ int conf_addEntry(const char *ssid)
     return -1;
   }
 
-  if (fseek(curr_conf, 0, SEEK_END) < 0) {
-    fprintf(stderr, "wbapi: error seeking in configuration file!\n");
-    return -1;
-  }
-
   slen = strnlen(ssid, 33);
   if (slen == 0 || slen > 32) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
+
+  if (fseek(curr_conf, 0, SEEK_END) < 0) {
+    fprintf(stderr, "wbapi: error seeking in configuration file!\n");
     return -1;
   }
 
@@ -361,13 +343,14 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
     }
     hash = hashPsk(ssid, slen, value, plen);
     snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s %s", id, field, hash);
-    if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
-      return -1;
-  } else {
+  } else if (!strncmp(field, "ssid", 5) || !strncmp(field, "identity", 9) ||
+      !strncmp(field, "password", 9))
+    snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s \"%s\"", id, field, value);
+  else
     snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s %s", id, field, value);
-    if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
-      return -1;
-  }
+
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
 
   if (strncmp("OK", repl, 2)) {
     fprintf(stderr, "wbapi: error in setting network field: %s\n", field);
@@ -402,7 +385,7 @@ int conf_enableNetwork(const char *ssid)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "wbapi: error in disabling network %s\n", ssid);
+    fprintf(stderr, "wbapi: error in enabling network %s\n", ssid);
     return -1;
   }
   return save();

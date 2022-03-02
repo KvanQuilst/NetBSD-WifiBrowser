@@ -18,36 +18,11 @@
 #include <unistd.h>
 #include "wpa_ctrl.h"
 
-typedef struct _wifi_conf wifi_conf;
-
-struct _wifi_conf {
-  // general
-  const char *ssid;
-  const char *psk;
-  const char *key_mgmt;
-  int priority;
-
-  // eap specific
-  const char *identity;
-  const char *password;
-  const char *proto;
-  const char *pairwise;
-  const char *group;
-  const char *eap;
-  const char *phase2;
-};
-
 /* 
  * api_init - initialize wifi browser api
  * returns: 0 if successful, -1 if fail 
  */
 int api_init();
-
-/*
- * wc_init - initialize a wifi_conf struct
- * returns: initialized wifi_conf struct
- */
-wifi_conf wc_init();
 
 /**************************
  *
