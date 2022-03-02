@@ -89,12 +89,14 @@ static void test_manualConf()
 
   if (conf_addEntry(net2) < 0)
     printf("Manual entry failed: ssid\n");
-  else if (conf_editNetwork(net2, "key_mgmt", "WPA-PSK") < 0)
+  if (conf_editNetwork(net2, "key_mgmt", "WPA-PSK") < 0)
     printf("Manual entry failed: key_mgmt\n");
-  else if (conf_editNetwork(net2, "psk", "Password2") < 0)
+  if (conf_editNetwork(net2, "psk", "Password2") < 0)
     printf("Manual entry failed: psk\n");
-  else if (conf_editNetwork(net2, "priority", "1") < 0)
+  if (conf_editNetwork(net2, "priority", "1") < 0)
     printf("Manual entry failed: priority\n");
+  if (conf_enableNetwork(net2) < 0)
+    printf("Manual entry failed: enable network\n");
   else
     printf("OK\n");
 

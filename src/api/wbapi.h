@@ -103,10 +103,21 @@ int conf_addEntry(const char *ssid);
 /*
  * conf_editNetwork - edits the specified network config (based on ssid) using
  * the information from the provided configuration struct
+ * Automatically disables the network: must re-enable for network configuration
+ * to work.
+ * !!! You MUST re-enable the network for it save. Network configuration will be 
+ * deleted otherwise. !!!
  * requires: string of ssid name, string of field name, string of value
  * returns: 0 on success, -1 on fail
  */
 int conf_editNetwork(const char *ssid, const char *field, const char *value);
+
+/*
+ * conf_enableNetwork - Enables a disabled network
+ * requires: string of ssid name
+ * returns: 0 on success, -1 on fail
+ */
+int conf_enableNetwork(const char *ssid);
 
 /*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused

@@ -300,37 +300,15 @@ int conf_addEntry(const char *ssid)
     fprintf(stderr, "wbapi: no ssid provided!\n");
     return -1;
   }
-  slen = strnlen(ssid, 33);
-  if (slen == 0 || slen > 32) {
-    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
-    return -1;
-  }
-
-  /*if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
-    return -1;
-
-  id = atoi(repl);
-
-  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d ssid \"%s\"", id, ssid);
-  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
-    return -1;
-  if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "wbapi: error in adding new network entry\n");
-    return -1;
-  }
-
-  snprintf(cmd, sizeof(cmd), "ENABLE_NETWORK %d", id); 
-  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
-    return -1;
-  if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "wbapi: error in enabling new network entry\n");
-    return -1;
-  }
-
-  return save();*/
 
   if (fseek(curr_conf, 0, SEEK_END) < 0) {
     fprintf(stderr, "wbapi: error seeking in configuration file!\n");
+    return -1;
+  }
+
+  slen = strnlen(ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
 
@@ -341,8 +319,7 @@ int conf_addEntry(const char *ssid)
   conf_write("}\n");
   fflush(curr_conf);
 
-  //return reconfigure();
-  return 0;
+  return reconfigure();
 }
 
 int conf_editNetwork(const char *ssid, const char *field, const char *value)
@@ -368,12 +345,21 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
   if (id < 0)
     return -1;
 
+  snprintf(cmd, sizeof(cmd), "DISABLE_NETWORK %d", id);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in disabling network %s\n", ssid);
+    return -1;
+  }
+
   if (!strncmp(field, "psk", 4)) {
     plen = strnlen(value, 64);
     if (plen < 8 || plen > 63) {
       fprintf(stderr, "wbapi: provided passkey is invalid. passkey length: 8-63 characters\n");
       return -1;
     }
+    hash = hashPsk(ssid, slen, value, plen);
     snprintf(cmd, sizeof(cmd), "SET_NETWORK %d %s %s", id, field, hash);
     if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
       return -1;
@@ -387,7 +373,38 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
     fprintf(stderr, "wbapi: error in setting network field: %s\n", field);
     return -1;
   }
+  return 0;
+}
 
+int conf_enableNetwork(const char *ssid)
+{
+  char repl[128] = {0};
+  char cmd[32] = {0};
+  int id, slen;
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  /* verify ssid */
+  slen = strnlen(ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
+
+  id = getNetworkID(ssid);
+  if (id < 0)
+    return -1;
+
+  snprintf(cmd, sizeof(cmd), "ENABLE_NETWORK %d", id);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: error in disabling network %s\n", ssid);
+    return -1;
+  }
   return save();
 }
 
