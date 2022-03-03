@@ -1,14 +1,38 @@
 #include "commands.h"
 #include "../api/wbapi.h"
 
-void handle_conf_enableNetwork(){
-
-    
-}
-
 void handle_conf_deleteNetwork(){
 
+    char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
+    if(conf_deleteNetwork(ssid) < 0){
+
+        printf("Error delete network\n");
+    }
+
+    else{
+
+        printf("Success delete network\n");
+    }
     
+    free(ssid);
+}
+
+void handle_conf_enableNetwork(){
+
+    char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
+    if(conf_enableNetwork(ssid) < 0){
+
+        printf("Error enable network\n");
+    }
+
+    else{
+
+        printf("Success enable network\n");
+    }
+    
+    free(ssid);
 }
 
 void handle_conf_addEntry(){
@@ -34,7 +58,7 @@ void handle_conf_addEntry(){
             printf("Success edit network\n");
         }
 
-        
+        bzero(fields, WIFI_CONF_FIELD);
         printf("Additional field (y / n): "); fgets(fields, WIFI_CONF_FIELD, stdin);
         free(field);
         free(value);
@@ -60,7 +84,7 @@ void handle_conf_configAutoEAP(){
     
     else{
 
-        printf("Success!\n");
+        printf("Success config auto eap\n");
     }
 
     free(ssid);
@@ -81,7 +105,7 @@ void handle_conf_configAuto(){
 
     else{
 
-        printf("Success!\n");
+        printf("Success config auto\n");
     }
     
     free(ssid);
@@ -92,14 +116,14 @@ void handle_conf_setCurrent(){
 
     char *filepath = malloc(sizeof(char) * WIFI_CONF_FIELD);
     printf("File path: "); fgets(filepath, WIFI_CONF_FIELD, stdin);
-    if(conf_setCurrent(filepath) == -1){
+    if(conf_setCurrent(filepath) < 0){
 
         printf("Error setting filepath\n");
     }
 
     else{
 
-        printf("Success!\n");
+        printf("Success conf set Current\n");
     }
 
     free(filepath);
@@ -119,6 +143,11 @@ void handle_list_configured(){
         printf("%s\n", result); 
     }
 
+    else{
+
+        printf("Error: List configured\n");
+    }
+
     free(result);
 }
 
@@ -134,6 +163,11 @@ void handle_list_available(){
     else if(strlen(result) > 0){
 
         printf("%s\n", result); 
+    }
+
+    else{
+
+        printf("Error: List available\n");
     }
 
     free(result);

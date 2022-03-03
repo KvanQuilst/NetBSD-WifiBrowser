@@ -88,7 +88,7 @@ int run_commands(char **string_input){
 
     else{
 
-        PRINT_COMMAND_RESPONSE("Invalid command: \n");
+        PRINT_COMMAND_RESPONSE("Invalid command\n");
         return 0;
     }
 } 
