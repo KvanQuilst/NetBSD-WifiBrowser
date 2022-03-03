@@ -33,6 +33,12 @@ int run_commands(char **string_input){
         return 1;
     }
 
+    else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
+
+        handle_list_configured();
+        return 1;
+    }
+
     else if(strcmp(CONF_MANUAL, string_input[0]) == 0){
 
         handle_conf_manual();
@@ -42,12 +48,6 @@ int run_commands(char **string_input){
     else if(strcmp(CONF_AUTO, string_input[0]) == 0){
 
         handle_conf_auto();
-        return 1;
-    }
-
-    else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
-
-        handle_list_configured();
         return 1;
     }
 
