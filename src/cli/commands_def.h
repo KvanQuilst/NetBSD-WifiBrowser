@@ -1,9 +1,14 @@
 
 #define WBCLI "wbcli"
 #define LIST_AVAILABLE "list_available"
+#define LIST_CONFIG "list_configured"
+#define CONF_SET_CURRENT "conf_setCurrent"
+#define CONF_CONFIG_AUTO "conf_configAuto"
+#define CONF_CONFIG_AUTO_EAP "conf_configAutoEAP"
+
+
 #define CONF_MANUAL "conf_manual"
 #define CONF_AUTO "conf_auto"
-#define LIST_CONFIG "list_configured"
 #define EXIT "exit"
 #define DELETE "delete"
 #define CLEAR "clear"

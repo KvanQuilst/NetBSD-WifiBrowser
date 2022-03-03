@@ -39,17 +39,25 @@ int run_commands(char **string_input){
         return 1;
     }
 
-    else if(strcmp(CONF_MANUAL, string_input[0]) == 0){
+    else if(strcmp(CONF_SET_CURRENT, string_input[0]) == 0){
 
-        handle_conf_manual();
+        handle_conf_setCurrent();
         return 1;
     }
 
-    else if(strcmp(CONF_AUTO, string_input[0]) == 0){
+    else if(strcmp(CONF_CONFIG_AUTO, string_input[0]) == 0){
 
-        handle_conf_auto();
+        handle_conf_configAuto();
         return 1;
     }
+    
+    else if(strcmp(CONF_CONFIG_AUTO_EAP, string_input[0]) == 0){
+
+        handle_conf_configAutoEAP();
+        return 1;
+    }
+    
+   
 
     else if(strcmp(CLEAR, string_input[0]) == 0){
 
