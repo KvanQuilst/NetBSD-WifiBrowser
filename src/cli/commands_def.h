@@ -5,6 +5,9 @@
 #define CONF_SET_CURRENT "conf_setCurrent"
 #define CONF_CONFIG_AUTO "conf_configAuto"
 #define CONF_CONFIG_AUTO_EAP "conf_configAutoEAP"
+#define CONF_ADD_ENTRY "conf_addEntry"
+#define CONF_ENABLE_NETWORK "conf_enableNetwork"
+#define CONF_DELETE_NETWORK "conf_deleteNetwork"
 
 
 #define CONF_MANUAL "conf_manual"

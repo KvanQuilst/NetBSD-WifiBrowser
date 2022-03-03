@@ -57,7 +57,23 @@ int run_commands(char **string_input){
         return 1;
     }
     
-   
+   else if(strcmp(CONF_ADD_ENTRY, string_input[0]) == 0){
+
+        handle_conf_addEntry();
+        return 1;
+    }
+
+    else if(strcmp(CONF_ENABLE_NETWORK, string_input[0]) == 0){
+
+        handle_conf_enableNetwork();
+        return 1;
+    }
+
+    else if(strcmp(CONF_DELETE_NETWORK, string_input[0]) == 0){
+
+        handle_conf_deleteNetwork();
+        return 1;
+    }
 
     else if(strcmp(CLEAR, string_input[0]) == 0){
 

@@ -1,10 +1,71 @@
 #include "commands.h"
 #include "../api/wbapi.h"
 
-void handle_conf_configAutoEAP(){
-
+void handle_conf_enableNetwork(){
 
     
+}
+
+void handle_conf_deleteNetwork(){
+
+    
+}
+
+void handle_conf_addEntry(){
+
+    char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
+    
+    char *fields = malloc(sizeof(char) * WIFI_CONF_FIELD); 
+    printf("Additional field (y / n): "); fgets(fields, WIFI_CONF_FIELD, stdin);
+    while(strcmp(fields, "n") != 0) { 
+    
+        char *field = malloc(sizeof(char) * WIFI_CONF_FIELD);
+        char *value = malloc(sizeof(char) * WIFI_CONF_FIELD);
+        printf("field: "); fgets(field, WIFI_CONF_FIELD, stdin);
+        printf("value: "); fgets(value, WIFI_CONF_FIELD, stdin);
+        if(conf_editNetwork(ssid, field, value) == -1){
+
+            printf("Error edit network\n");   
+        }
+
+        else{
+
+            printf("Success edit network\n");
+        }
+
+        
+        printf("Additional field (y / n): "); fgets(fields, WIFI_CONF_FIELD, stdin);
+        free(field);
+        free(value);
+    }
+    
+    free(ssid);
+    free(fields);
+}
+
+void handle_conf_configAutoEAP(){
+
+    char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    char *user = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    char *pwd = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
+    printf("user: "); fgets(user, WIFI_CONF_FIELD, stdin);
+    printf("pwd: "); fgets(pwd, WIFI_CONF_FIELD, stdin);
+
+    if(conf_configAutoEAP(ssid, user, pwd) == -1){
+
+        printf("Error config auto EAP\n");
+    }
+    
+    else{
+
+        printf("Success!\n");
+    }
+
+    free(ssid);
+    free(user);
+    free(pwd);
 }
 
 void handle_conf_configAuto(){

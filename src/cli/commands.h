@@ -17,6 +17,9 @@ void handle_list_configured();
 void handle_conf_setCurrent();
 void handle_conf_configAuto();
 void handle_conf_configAutoEAP();
+void handle_conf_addEntry();
+void handle_conf_enableNetwork();
+void handle_conf_deleteNetwork();
 
 
 
