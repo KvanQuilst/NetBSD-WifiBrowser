@@ -42,7 +42,7 @@ void handle_conf_addEntry(){
     
     char *fields = malloc(sizeof(char) * WIFI_CONF_FIELD); 
     printf("Additional field (y / n): "); fgets(fields, WIFI_CONF_FIELD, stdin);
-    while(strcmp(fields, "n") != 0) { 
+    while(strcmp(fields, "n\n") != 0) { 
     
         char *field = malloc(sizeof(char) * WIFI_CONF_FIELD);
         char *value = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -153,7 +153,8 @@ void handle_list_configured(){
 
 void handle_list_available(){
 
-    char result[BUFFER_SIZE];
+    char *result = malloc(sizeof(char) * BUFFER_SIZE);
+    bzero(result, BUFFER_SIZE);
     if(listAvailable(result, BUFFER_SIZE) == 0){
 
         printf("No networks available.\n");
@@ -161,7 +162,6 @@ void handle_list_available(){
 
     else if(strlen(result) > 0){
 
-        printf("set fault? \n");
         printf("%s\n", result); 
     }
 
@@ -169,6 +169,8 @@ void handle_list_available(){
 
         printf("Error: List available\n");
     }
+
+    free(result);
 }
 
 void handle_api_init(){
