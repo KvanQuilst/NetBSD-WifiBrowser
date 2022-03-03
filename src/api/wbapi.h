@@ -70,6 +70,8 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
  * conf_addEntry - adds a new network configuration entry for the provided
  * ssid. This is intended to be used when manually configuring in conjunction
  * with edit network
+ * NETWORK IS DISABLED WHEN FIRST MADE. MAKE EDITS WITH conf_editNetwork()
+ * THEN ENABLE WITH conf_enableNetwork()
  * requires: string of ssid
  * returns: 0 if success, -1 if fail
  */

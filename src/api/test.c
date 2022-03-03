@@ -127,8 +127,10 @@ static void test_manualEAP()
     printf("Manual EAP configuration failed: identity\n");
   else if (conf_editNetwork(net3, "password", "pass") < 0)
     printf("Manual EAP configuration failed: password\n");
-  else if (conf_editNetwork(net3, "phase2", "auth=MSCHAPV2") < 0)
+  else if (conf_editNetwork(net3, "phase2", "\"auth=MSCHAPV2\"") < 0)
     printf("Manual EAP configuration failed: phase2\n");
+  else if (conf_enableNetwork(net3) < 0)
+    printf("Manual EAP configuration failed: enable\n");
   else
     printf("OK\n");
 
@@ -139,11 +141,8 @@ static void test_manualEAP()
 }
 
 static void test_deletion() {
-  int retval;
-
   printf("/* Delete network %s*/\n", net1);
-  retval = conf_deleteNetwork(net1);
-  if (retval < 0)
+  if (conf_deleteNetwork(net4) < 0)
     printf("Deletion failed!\n");
   else
     printf("OK\n");
