@@ -214,9 +214,11 @@ static FILE *conf_create(const char *filepath)
 
 int conf_configAuto(const char *ssid, const char *psk)
 {
-  char line[128] = {0};
+  //char line[128] = {0};
+  char repl[128] = {0};
+  char cmd[128] = {0};
   char *hash;
-  int plen, slen;
+  int id, plen, slen;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -234,8 +236,52 @@ int conf_configAuto(const char *ssid, const char *psk)
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
+
+  if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
+    return -1;
+  if (!strncmp("FAIL", repl, 4)) {
+    fprintf(stderr, "wbapi: failed to add new network\n");
+    return -1;
+  }
+  id = atoi(repl);
+
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d ssid \"%s\"", id, ssid);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: failed to set ssid %s\n", ssid);
+    return -1;
+  }
+
+  if (psk == NULL)
+    snprintf(cmd, sizeof(cmd), "SET_NETWORK %d key_mgmt NONE", id);
+  else {
+    plen = strnlen(psk, 64);
+    if (plen < 8 || plen > 63) {
+      fprintf(stderr, "wbapi: provided passkey is invalid. passkey length: 8-63 characters\n");
+      return -1;
+    }
+    hash = hashPsk(ssid, slen, psk, plen);
+
+    snprintf(cmd, sizeof(cmd), "SET_NETWORK %d key_mgmt NONE", id);
+    if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+      return -1;
+    if (strncmp("OK", repl, 2)) {
+      fprintf(stderr, "wbapi: failed to set key_mgmt\n");
+      return -1;
+    }
+
+    snprintf(cmd, sizeof(cmd), "SET_NETWORK %d psk %s", id, hash);
+  }
+
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: failed to set field\n");
+    return -1;
+  }
   
-  if (fseek(curr_conf, 0, SEEK_END) < 0) {
+  /*if (fseek(curr_conf, 0, SEEK_END) < 0) {
     fprintf(stderr, "wbapi: error seeking in configuration file!\n");
     return -1;
   }
@@ -262,9 +308,9 @@ int conf_configAuto(const char *ssid, const char *psk)
 
   conf_write("}\n");
 
-  fflush(curr_conf);
+  fflush(curr_conf);*/
 
-  return reconfigure();
+  return save();
 }
 
 /*int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
@@ -274,7 +320,6 @@ int conf_configAuto(const char *ssid, const char *psk)
 
 int conf_addEntry(const char *ssid)
 {
-  //char line[128] = {0};
   char repl[128] = {0};
   char cmd[128] = {0};
   int id, slen;
