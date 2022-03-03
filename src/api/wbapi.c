@@ -37,20 +37,6 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
 /**************************
   Helper Functions
 **************************/
-static int conf_write(const char *dat)
-{
-  fwrite(dat, sizeof(char), strlen(dat), curr_conf);
-  if (ferror(curr_conf)) {
-    fprintf(stderr, "wbapi: error writing to configuration file!\n");
-    return -1;
-  } else if (feof(curr_conf)) {
-    fprintf(stderr, "wbapi: end of configuration file reached!\n");
-    return -1;
-  } else {
-    return 0;
-  }
-}
-
 static int wpaReq(const char *cmd, size_t cmd_len, 
     char *repl, size_t repl_len)
 {
@@ -281,35 +267,6 @@ int conf_configAuto(const char *ssid, const char *psk)
     return -1;
   }
   
-  /*if (fseek(curr_conf, 0, SEEK_END) < 0) {
-    fprintf(stderr, "wbapi: error seeking in configuration file!\n");
-    return -1;
-  }
-
-  conf_write("\nnetwork={\n");
-
-  sprintf(line, "\tssid=\"%s\"\n", ssid);
-  conf_write(line);
-
-  if (psk == NULL) {
-    conf_write("\tkey_mgmt=NONE\n");
-  } else {
-    plen = strnlen(psk, 64);
-    if (plen < 8 || plen > 63) {
-      fprintf(stderr, "wbapi: provided passkey is invalid. passkey length: 8-63 characters\n");
-      return -1;
-    }
-    hash = hashPsk(ssid, slen, psk, plen);
-
-    conf_write("\tkey_mgmt=WPA-PSK\n");
-    sprintf(line, "\tpsk=%s\n", hash);
-    conf_write(line);
-  }
-
-  conf_write("}\n");
-
-  fflush(curr_conf);*/
-
   return save();
 }
 

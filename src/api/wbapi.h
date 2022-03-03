@@ -140,10 +140,10 @@ int listAvailable(char *buf, size_t len);
  * wpa_restart - restarts wpa_supplicant()
  * returns: 0 if successful, -1 if fail
  */
-int wpa_restart();
+//int wpa_restart();
 
 /*
  * wpa_running - check if wpa_supplicant is running
  * 1 if wpa_supplicant is running, 0 if not
  */
-int wpa_running();
+//int wpa_running();
