@@ -1,21 +1,47 @@
 #include "commands.h"
 #include "../api/wbapi.h"
 
-void handle_conf_deleteNetwork(){
+void handle_conf_addEntry(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
     printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
-    if(conf_deleteNetwork(ssid) < 0){
+    
+    char *additionalField = malloc(sizeof(char) * WIFI_CONF_FIELD); printf("Additional field (y / n): "); 
+    fgets(additionalField, sizeof(char) * WIFI_CONF_FIELD, stdin); printf("%s\n", additionalField);
+    while(strcmp(additionalField, "y\n") == 0){
 
-        printf("Error delete network\n");
+        char *field = malloc(sizeof(char) * WIFI_CONF_FIELD);
+        char *value = malloc(sizeof(char) * WIFI_CONF_FIELD);
+        printf("field: "); fgets(field, WIFI_CONF_FIELD, stdin);
+        printf("value: "); fgets(value, WIFI_CONF_FIELD, stdin);
+        if(conf_editNetwork(ssid, field, value) < 0){
+
+            printf("Error edit network\n");   
+        }
+
+        else{
+
+            printf("Success edit network\n");
+        }
+        
+        bzero(additionalField, sizeof(char) * WIFI_CONF_FIELD); 
+        printf("Additional field (y / n): ");
+        fgets(additionalField, sizeof(char) * WIFI_CONF_FIELD, stdin);
+        free(field);
+        free(value);
+    }
+
+    if(conf_enableNetwork(ssid) < 0){
+
+        printf("Error enable network\n");
     }
 
     else{
 
-        printf("Success delete network\n");
+        printf("Success enable network\n");
     }
-    
-    free(ssid);
+
+    free(ssid);   
 }
 
 void handle_conf_enableNetwork(){
@@ -35,47 +61,21 @@ void handle_conf_enableNetwork(){
     free(ssid);
 }
 
-void handle_conf_addEntry(){
+void handle_conf_deleteNetwork(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
     printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
-    
-    char *fields = malloc(sizeof(char) * WIFI_CONF_FIELD); 
-    printf("Additional field (y / n): "); fgets(fields, WIFI_CONF_FIELD, stdin);
-    while(strcmp(fields, "n\n") != 0) { 
-    
-        char *field = malloc(sizeof(char) * WIFI_CONF_FIELD);
-        char *value = malloc(sizeof(char) * WIFI_CONF_FIELD);
-        printf("field: "); fgets(field, WIFI_CONF_FIELD, stdin);
-        printf("value: "); fgets(value, WIFI_CONF_FIELD, stdin);
-        if(conf_editNetwork(ssid, field, value) == -1){
+    if(conf_deleteNetwork(ssid) < 0){
 
-            printf("Error edit network\n");   
-        }
-
-        else{
-
-            printf("Success edit network\n");
-        }
-
-        bzero(fields, WIFI_CONF_FIELD);
-        printf("Additional field (y / n): "); fgets(fields, WIFI_CONF_FIELD, stdin);
-        free(field);
-        free(value);
-    }
-    
-    if(conf_enableNetwork(ssid) < 0){
-
-        printf("Error enable network\n");
+        printf("Error delete network\n");
     }
 
     else{
 
-        printf("Success enable network\n");
+        printf("Success delete network\n");
     }
-
+    
     free(ssid);
-    free(fields);    
 }
 
 void handle_conf_configAutoEAP(){
@@ -87,7 +87,7 @@ void handle_conf_configAutoEAP(){
     printf("user: "); fgets(user, WIFI_CONF_FIELD, stdin);
     printf("pwd: "); fgets(pwd, WIFI_CONF_FIELD, stdin);
 
-    if(conf_configAutoEAP(ssid, user, pwd) == -1){
+    if(conf_configAutoEAP(ssid, user, pwd) < 0){
 
         printf("Error config auto EAP\n");
     }
@@ -108,7 +108,7 @@ void handle_conf_configAuto(){
     char *psk = malloc(sizeof(char) * WIFI_CONF_FIELD);
     printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
     printf("psk: "); fgets(psk, WIFI_CONF_FIELD, stdin);
-    if(conf_configAuto(ssid, psk) == -1){
+    if(conf_configAuto(ssid, psk) < 0){
 
         printf("Error setting config auto\n");
     }
@@ -124,16 +124,18 @@ void handle_conf_configAuto(){
 
 void handle_conf_setCurrent(){
 
-    char *filepath = malloc(sizeof(char) * WIFI_CONF_FIELD);
+    char *filepath = malloc(sizeof(char) * WIFI_CONF_FIELD); 
+    bzero(filepath, WIFI_CONF_FIELD);
+    
     printf("File path: "); fgets(filepath, WIFI_CONF_FIELD, stdin);
     if(conf_setCurrent(filepath) < 0){
 
-        printf("Error setting filepath\n");
+        printf("Error config setCurrent \n");
     }
 
     else{
 
-        printf("Success conf set Current\n");
+        printf("Success config setCurrent \n");
     }
 
     free(filepath);
@@ -153,11 +155,6 @@ void handle_list_configured(){
         printf("%s\n", result); 
     }
 
-    else{
-
-        printf("Error: List configured\n");
-    }
-
     free(result);
 }
 
@@ -173,11 +170,6 @@ void handle_list_available(){
     else if(strlen(result) > 0){
 
         printf("%s\n", result); 
-    }
-
-    else{
-
-        printf("Error: List available\n");
     }
 
     free(result);

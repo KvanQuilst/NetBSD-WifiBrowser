@@ -72,7 +72,7 @@ int conf_addEntry(const char *ssid);
  * conf_editNetwork - edits the specified network config (based on ssid) using
  * the information from the provided configuration struct
  * Automatically disables the network: must re-enable for network configuration
- * to work.
+ * to work. 
  * !!! You MUST re-enable the network for it save. Network configuration will be 
  * deleted otherwise. !!!
  * requires: string of ssid name, string of field name, string of value
