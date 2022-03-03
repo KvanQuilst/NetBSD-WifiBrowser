@@ -4,5 +4,4 @@
 *.log
 *.d
 *.swp
-build/
 wbapi
