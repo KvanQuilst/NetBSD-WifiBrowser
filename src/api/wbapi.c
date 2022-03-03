@@ -224,6 +224,11 @@ int conf_configAuto(const char *ssid, const char *psk)
   }
 
   /* check ssid validity */
+  if (ssid == NULL) {
+    fprintf(stderr, "wbapi: no ssid provided\n");
+    return -1;
+  }
+
   slen = strnlen(ssid, 33);
   if (slen == 0 || slen > 32) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
@@ -281,7 +286,7 @@ int conf_addEntry(const char *ssid)
 
   /* check ssid validity */
   if (ssid == NULL) {
-    fprintf(stderr, "wbapi: no ssid provided!\n");
+    fprintf(stderr, "wbapi: no ssid provided\n");
     return -1;
   }
 
@@ -315,18 +320,6 @@ int conf_addEntry(const char *ssid)
     return -1;
   }
 
-  /*if (fseek(curr_conf, 0, SEEK_END) < 0) {
-    fprintf(stderr, "wbapi: error seeking in configuration file!\n");
-    return -1;
-  }
-
-  conf_write("\nnetwork={\n");
-  sprintf(line, "\tssid=\"%s\"\n", ssid);
-  conf_write(line);
-  conf_write("\tkey_mgmt=NONE\n");
-  conf_write("}\n");
-  fflush(curr_conf);*/
-
   return save();
 }
 
@@ -343,6 +336,11 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
   }
 
   /* verify ssid */
+  if (ssid == NULL) {
+    fprintf(stderr, "wbapi: no ssid provided\n");
+    return -1;
+  }
+
   slen = strnlen(ssid, 33);
   if (slen == 0 || slen > 32) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
@@ -397,6 +395,11 @@ int conf_enableNetwork(const char *ssid)
   }
 
   /* verify ssid */
+  if (ssid == NULL) {
+    fprintf(stderr, "wbapi: no ssid provided\n");
+    return -1;
+  }
+
   slen = strnlen(ssid, 33);
   if (slen == 0 || slen > 32) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
@@ -424,6 +427,10 @@ int conf_deleteNetwork(const char *ssid)
   int id;
 
   /* verify ssid */
+  if (ssid == NULL) {
+    fprintf(stderr, "wbapi: no ssid provided\n");
+    return -1;
+  }
 
   id = getNetworkID(ssid);
   if (id < 0)
