@@ -153,8 +153,7 @@ void handle_list_configured(){
 
 void handle_list_available(){
 
-    char *result = malloc(sizeof(char) * BUFFER_SIZE);
-    bzero(result, BUFFER_SIZE);
+    char result[BUFFER_SIZE];
     if(listAvailable(result, BUFFER_SIZE) == 0){
 
         printf("No networks available.\n");
@@ -162,6 +161,7 @@ void handle_list_available(){
 
     else if(strlen(result) > 0){
 
+        printf("set fault? \n");
         printf("%s\n", result); 
     }
 
@@ -169,8 +169,6 @@ void handle_list_available(){
 
         printf("Error: List available\n");
     }
-
-    free(result);
 }
 
 void handle_api_init(){
