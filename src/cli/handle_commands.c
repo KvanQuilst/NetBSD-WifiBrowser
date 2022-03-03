@@ -64,8 +64,18 @@ void handle_conf_addEntry(){
         free(value);
     }
     
+    if(conf_enableNetwork(ssid) < 0){
+
+        printf("Error enable network\n");
+    }
+
+    else{
+
+        printf("Success enable network\n");
+    }
+
     free(ssid);
-    free(fields);
+    free(fields);    
 }
 
 void handle_conf_configAutoEAP(){
