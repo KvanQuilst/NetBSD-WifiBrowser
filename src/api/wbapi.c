@@ -12,10 +12,6 @@
   Global Variables
 **************************/
 
-/* Network configuration */
-#define DEF_CONFIG_FILE "/etc/wpa_supplicant.conf"
-static const char *conf_filepath = DEF_CONFIG_FILE;
-static FILE *curr_conf;
 /* wpa_supplicant related */
 static struct wpa_ctrl *wpa;
 #define CTRL_IFACE_DIR "/var/run/wpa_supplicant/"
@@ -23,7 +19,6 @@ static const char *ctrl_iface_dir = CTRL_IFACE_DIR;
 static char *ifname = NULL;
 
 #define MAX_SSID_LEN 32
-
 
 /**************************
   Static Prototypes
@@ -112,15 +107,6 @@ static int getNetworkID(const char *ssid)
   return -1;
 }
 
-static void api_exit(const char *msg)
-{
-  fprintf(stderr, "wbapi error: %s\n", msg);
-
-  if (curr_conf) {
-    fclose(curr_conf);
-  }
-}
-
 /************************
   API Functions
 ************************/
@@ -133,7 +119,7 @@ int api_init()
   DIR *dir = opendir(ctrl_iface_dir);
 
   if (dir == NULL) {
-    api_exit("Default interface location does not exist!\n");
+    fprintf(stderr, "Default interface location does not exist!\n");
     return -1;
   }
 
@@ -145,7 +131,7 @@ int api_init()
   }
 
   if (ifname == NULL) {
-    api_exit("Default interface location does not exist!\n");
+    fprintf(stderr, "Default interface location does not exist!\n");
     return -1;
   }
 
@@ -155,16 +141,9 @@ int api_init()
   /* Attempt to connect wpa_supplicant instance */
   wpa = wpa_ctrl_open(iface_dir);
   if (wpa == NULL) {
-    api_exit("Unable to connect to wpa_supplicant on this interface!\n");
+    fprintf(stderr, "Unable to connect to wpa_supplicant on this interface!\n");
     return -1;
   }
-
-  /* Grab config file */
-  if ((curr_conf = fopen(conf_filepath, "r+x")) == NULL) {
-    api_exit("Error opening configuration file");
-    return -1;
-  }
-  fprintf(stderr, "Current configuration file: %s\n", conf_filepath);
 
   return 0;
 }
@@ -216,8 +195,8 @@ int conf_configAuto(const char *ssid, const char *psk)
     return -1;
   }
 
-  slen = strnlen(ssid, 33);
-  if (slen == 0 || slen > 32) {
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
@@ -296,8 +275,8 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
     return -1;
   }
 
-  slen = strnlen(ssid, 33);
-  if (slen == 0 || slen > 32) {
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
@@ -362,8 +341,8 @@ int conf_addEntry(const char *ssid)
     return -1;
   }
 
-  slen = strnlen(ssid, 33);
-  if (slen == 0 || slen > 32) {
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
@@ -413,8 +392,8 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
     return -1;
   }
 
-  slen = strnlen(ssid, 33);
-  if (slen == 0 || slen > 32) {
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
@@ -458,7 +437,7 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
 int conf_enableNetwork(const char *ssid)
 {
   char repl[128] = {0};
-  char cmd[32] = {0};
+  char cmd[64] = {0};
   int id, slen;
 
   if (!wpa) {
@@ -472,8 +451,8 @@ int conf_enableNetwork(const char *ssid)
     return -1;
   }
 
-  slen = strnlen(ssid, 33);
-  if (slen == 0 || slen > 32) {
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
     fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
@@ -495,12 +474,18 @@ int conf_enableNetwork(const char *ssid)
 int conf_deleteNetwork(const char *ssid)
 {
   char repl[128] = {0};
-  char cmd[32] = {0};
-  int id;
+  char cmd[64] = {0};
+  int id, slen;
 
   /* verify ssid */
   if (ssid == NULL) {
     fprintf(stderr, "wbapi: no ssid provided\n");
+    return -1;
+  }
+
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
     return -1;
   }
 
@@ -595,32 +580,3 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
     snprintf(&out[i], 2, "%02x", hash[i]);
   return out;
 }
-
-// hash a password using openssl for use in
-// a configuration file
-// requires: string of password
-// returns: string of hashed password
-/*static char *hashPwd(char *pwd, int plen)
-{
-  unisgned char hash[  
-  return NULL;
-}*/
-
-// determines the key management protocol of the
-// specified ssid and updates it in the configuration struct
-// requires: string of ssid, reference to wifi_conf struct of interest
-/*static void getKeyMgmt(char *ssid, wifi_conf *conf)
-{
-  return;
-}*/
-
-
-/*int wpa_restart()
-{
-  return -1;
-}*/
-
-/*int wpa_running()
-{
-  return 0;
-}*/

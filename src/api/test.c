@@ -179,7 +179,7 @@ void test_autoConfInsec()
     printf("OK\n");
 
 #ifdef DEBUG
-  printfConfig();
+  printConfig();
 #endif
   printf("\n");
 }
@@ -193,7 +193,7 @@ void test_autoConfEAP()
     printf("OK\n");
 
 #ifdef DEBUG
-  printfConfig();
+  printConfig();
 #endif
   printf("\n");
 }

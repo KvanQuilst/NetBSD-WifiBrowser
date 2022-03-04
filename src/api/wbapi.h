@@ -31,14 +31,6 @@ int api_init();
  *************************/
 
 /*
- * conf_setDefault - set the default file location for wifi browser api
- * creates the file if the file doesn't exist
- * requires: filepath of configuration file
- * returns: 0 if success, -1 if fail
- */
-//int conf_setDefault(const char *filepath);
-
-/*
  * conf_setCurrent - set the focused configuration file for wifi browser api
  * creates the file if the file doesn't exist
  * requires: filepath of configuration file
@@ -128,21 +120,3 @@ int listConfigured(char *buf, size_t len);
  * returns: length of scan results, 0 - no networks, -1 - failed
  */
 int listAvailable(char *buf, size_t len);
-
-/**************************
- *
- * wpa_supplicant Communication
- *
- *************************/
-
-/*
- * wpa_restart - restarts wpa_supplicant()
- * returns: 0 if successful, -1 if fail
- */
-//int wpa_restart();
-
-/*
- * wpa_running - check if wpa_supplicant is running
- * 1 if wpa_supplicant is running, 0 if not
- */
-//int wpa_running();
