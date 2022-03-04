@@ -92,12 +92,12 @@ static int save()
 static int getNetworkID(const char *ssid)
 {
   int id = 0;
-  char cmd[32] = {0};
+  char cmd[64] = {0};
   char repl[128] = {0};
 
   while(strncmp(repl, "FAIL", 5)) {
-    sprintf(cmd, "GET_NETWORK %d ssid", id);
-    if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
+    snprintf(cmd, sizeof(cmd), "GET_NETWORK %d ssid", id);
+    if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0) {
       fprintf(stderr, "wbapi: error in obtaining network id\n");
       return -1;
     }
@@ -522,10 +522,17 @@ int conf_deleteNetwork(const char *ssid)
 
 int conf_cleanNetworks(void)
 {
-  fclose(curr_conf);
-  remove(conf_filepath);
-  curr_conf = conf_create(conf_filepath);
-  return reconfigure();
+  char repl[128] = {0};
+  char cmd[64] = {0};
+  int i = 0;
+
+  while (strncmp(repl, "FAIL", 4)) {
+    snprintf(cmd, sizeof(cmd), "REMOVE_NETWORK %d", i);
+    if(wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+      return -1;
+    i++;
+  }
+  return save();
 }
 
 int listConfigured(char *buf, size_t len)
