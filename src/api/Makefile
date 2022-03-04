@@ -1,35 +1,30 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -g
-ODIR=obs
 CFILES=$(wildcard *.c)
-OBJS=$(patsubst %.c, $(ODIR)/%.o, $(CFILES))
+OBJS=$(patsubst %.c, %.o, $(CFILES))
 
-wbapi: $(ODIR) $(OBJS)
-	@rm -rf $(ODIR)/testd.o
-	$(CC) $(CFLAGS) -o $@ $(ODIR)/*.o -lcrypto
+wbapi: wbapi.o test.o wpa_ctrl.o os_unix.o
+	@rm -rf testd.o
+	$(CC) $(CFLAGS) -o $@ wbapi.o test.o wpa_ctrl.o os_unix.o -lcrypto
 
-debug: $(ODIR) $(OBJS) $(ODIR)/testd.o
-	@rm -rf $(ODIR)/test.o
-	$(CC) $(CFLAGS) -o wbapi $(ODIR)/*.o -lcrypto
+debug: wbapi.o testd.o wpa_ctrl.o os_unix.o
+	@rm -rf test.o
+	$(CC) $(CFLAGS) -o wbapi wbapi.o testd.o wpa_ctrl.o os_unix.o -lcrypto
 
-$(ODIR)/wbapi.o: wbapi.c
-	$(CC) -c -I ./ -MMD -c -g -o $@ $< -lcrypto
+wbapi.o: wbapi.c
+	$(CC) -c -I ./ -MMD -c -g -o $@ wbapi.c -lcrypto
 
-$(ODIR)/testd.o: test.c
-	$(CC) -c -I ./ -MMD -c -g -o $@ $< -D DEBUG
+testd.o: test.c
+	$(CC) -c -I ./ -MMD -c -g -o $@ test.c -D DEBUG
 
-$(ODIR)/wpa_ctrl.o: wpa_ctrl.c
-	$(CC) -c -I ./ -MMD -c -g -o $@ $< -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
+wpa_ctrl.o: wpa_ctrl.c
+	$(CC) -c -I ./ -MMD -c -g -o $@ wpa_ctrl.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
 
-$(ODIR)/os_unix.o: os_unix.c
-	$(CC) $(CFLAGS) -I ./ -MMD -c -o $@ $< -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
+os_unix.o: os_unix.c
+	$(CC) $(CFLAGS) -I ./ -MMD -c -o $@ os_unix.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
 
-$(ODIR)/%.o: %.c
+%.o: %.c
 	$(CC) $(CFLAGS) -I ./ -MMD -c $< -o $@
 
-$(ODIR):
-	@mkdir $@
-
-.PHONY clean:
 clean:
-	@rm -rf $(ODIR)/*.o $(ODIR)/*.d
+	@rm -rf *.o *.d wbapi
