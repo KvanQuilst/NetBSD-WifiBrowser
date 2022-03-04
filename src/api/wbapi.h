@@ -36,7 +36,6 @@ int api_init();
  * requires: filepath of configuration file
  * returns: 0 if success, -1 if fail
  */
-// NOT AVAILABLE
 //int conf_setDefault(const char *filepath);
 
 /*

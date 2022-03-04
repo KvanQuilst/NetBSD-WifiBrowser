@@ -95,13 +95,13 @@ static int getNetworkID(const char *ssid)
   char cmd[32] = {0};
   char repl[128] = {0};
 
-  while(strncmp(repl, "FAIL", 4) && id < 4) {
+  while(strncmp(repl, "FAIL", 5)) {
     sprintf(cmd, "GET_NETWORK %d ssid", id);
     if (wpaReq(cmd, sizeof(cmd), repl, 128) < 0) {
       fprintf(stderr, "wbapi: error in obtaining network id\n");
       return -1;
     }
-    sscanf(repl, "\"%[^\",]\"", repl);
+    sscanf(repl, "\"%[^\"]\"", repl);
     if (!strncmp(ssid, repl, MAX_SSID_LEN)) {
       return id;
     }
@@ -200,7 +200,6 @@ static FILE *conf_create(const char *filepath)
 
 int conf_configAuto(const char *ssid, const char *psk)
 {
-  //char line[128] = {0};
   char repl[128] = {0};
   char cmd[128] = {0};
   char *hash;
@@ -267,13 +266,84 @@ int conf_configAuto(const char *ssid, const char *psk)
     return -1;
   }
   
-  return save();
+  return conf_enableNetwork(ssid);
 }
 
-/*int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
+int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
 {
-  return -1;
-}*/
+  char repl[128] = {0};
+  char cmd[128] = {0};
+  int id, slen;
+
+  if (!wpa) {
+    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    return -1;
+  }
+
+  /* check ssid validity */
+  if (ssid == NULL) {
+    fprintf(stderr, "wbapi: no ssid provided\n");
+    return -1;
+  }
+
+  if (user == NULL) {
+    fprintf(stderr, "wbapi: no username provided\n");
+    return -1;
+  }
+
+  if (pwd == NULL) {
+    fprintf(stderr, "wbapi: no username provided\n");
+    return -1;
+  }
+
+  slen = strnlen(ssid, 33);
+  if (slen == 0 || slen > 32) {
+    fprintf(stderr, "wbapi: provided ssid is invalid. ssid length: 1-32 characters\n");
+    return -1;
+  }
+
+  if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
+    return -1;
+  if (!strncmp("FAIL", repl, 4)) {
+    fprintf(stderr, "wbapi: failed to add new network entry\n");
+    return -1;
+  }
+  id = atoi(repl);
+
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d ssid \"%s\"", id, ssid);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: failed to add ssid field: %s\n", ssid);
+    return -1;
+  }
+
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d key_mgmt WPA-EAP", id);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: failed to set key management\n");
+    return -1;
+  }
+
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d identity \"%s\"", id, user);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: failed to set username\n");
+    return -1;
+  }
+
+  snprintf(cmd, sizeof(cmd), "SET_NETWORK %d password \"%s\"", id, pwd);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -1;
+  if (strncmp("OK", repl, 2)) {
+    fprintf(stderr, "wbapi: failed to set password\n");
+    return -1;
+  }
+
+  return conf_enableNetwork(ssid);
+}
 
 int conf_addEntry(const char *ssid)
 {

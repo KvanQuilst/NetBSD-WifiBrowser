@@ -5,6 +5,8 @@ const char *net1 = "Auto-SSID";
 const char *net2 = "Manual-PSK";
 const char *net3 = "Manual-EAP";
 const char *net4 = "editNetwork";
+const char *net5 = "Auto-EAP";
+const char *net6 = "Insecure";
 
 #ifdef DEBUG
 static void printConfig()
@@ -71,9 +73,9 @@ static void test_listConfigured()
   printf("\n");
 }
 
-static void test_autoConf()
+static void test_autoConfPSK()
 {
-  printf("/* Auto configure network w/ ssid */\n");
+  printf("/* Auto configure PSK-protected network */\n");
   if (conf_configAuto(net1, "Password") < 0)
     printf("Auto-configuration failed!\n");
   else
@@ -168,6 +170,34 @@ static void test_edit() {
   printf("\n");
 }
 
+void test_autoConfInsec()
+{
+  printf("/* Auto configure unprotected network */\n");
+  if (conf_configAuto(net6, NULL) < 0)
+    printf("Auto configure unprotected network failed\n");
+  else
+    printf("OK\n");
+
+#ifdef DEBUG
+  printfConfig();
+#endif
+  printf("\n");
+}
+
+void test_autoConfEAP()
+{
+  printf("/* Auto configure EAP Network */\n");
+  if (conf_configAutoEAP(net5, "user", "password") < 0)
+    printf("Auto configure EAP network failed\n");
+  else
+    printf("OK\n");
+
+#ifdef DEBUG
+  printfConfig();
+#endif
+  printf("\n");
+}
+
 int main()
 {
   /* Connect to wpa_supplicant */
@@ -181,9 +211,15 @@ int main()
 
   /* List configured networks visible to wpa_supplicant */
   test_listConfigured();
+
+  /* Auto Configure an insecure network */
+  test_autoConfInsec();
   
-  /* Create a new network configuration */
-  test_autoConf();
+  /* Auto Configure a WPA-PSK network */
+  test_autoConfPSK();
+
+  /* Auto Configure a WPA-EAP network */
+  test_autoConfEAP();
 
   /* Editting of a network */
   test_edit();
