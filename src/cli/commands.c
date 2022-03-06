@@ -75,6 +75,12 @@ int run_commands(char **string_input){
         return 1;
     }
 
+    else if(strcmp(MAN, string_input[0]) == 0){
+
+        handle_man();
+        return 1;
+    }
+
     else if(strcmp(CLEAR, string_input[0]) == 0){
 
         system("clear");

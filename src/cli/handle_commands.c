@@ -180,6 +180,19 @@ void handle_api_init(){
     api_init();
 }
 
+void handle_man(){
+
+    printf("Keywords used with CLI: \n");
+    printf("list_available: List all available networks\n");
+    printf("list_configured: List all configured networks\n");
+    printf("conf_setCurrent: Set default configuration file location\n");
+    printf("conf_configAuto: Add new network entry to configuration file\n");
+    printf("conf_configAutoEAP: Add new EAP network to confingureation file\n");
+    printf("conf_addEntry: Adds a new entry to the configurationi file for manual configuration\n");
+    printf("conf_enableNetwork: Enable network in configuration file\n");
+    printf("conf_deleteNetwork: Delete network in configuration file\n");
+}
+
 
 
 

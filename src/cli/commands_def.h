@@ -8,6 +8,7 @@
 #define CONF_ADD_ENTRY "conf_addEntry"
 #define CONF_ENABLE_NETWORK "conf_enableNetwork"
 #define CONF_DELETE_NETWORK "conf_deleteNetwork"
+#define MAN "man"
 #define EXIT "exit"
 #define CLEAR "clear"
 
