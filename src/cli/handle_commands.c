@@ -162,16 +162,14 @@ void handle_list_available(){
 
     char *result = malloc(sizeof(char) * BUFFER_SIZE);
     bzero(result, BUFFER_SIZE);
-
-    char c[BUFFER_SIZE];
-    if(listAvailable(c, BUFFER_SIZE) == 0){
+    if(listAvailable(result, BUFFER_SIZE) == 0){
 
         printf("No networks available.\n");
     }
 
-    else if(strlen(c) > 0){
+    else if(strlen(result) > 0){
 
-        printf("%s\n", c); 
+        printf("%s\n", result); 
     }
 
     free(result);
