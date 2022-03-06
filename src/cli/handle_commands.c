@@ -1,6 +1,7 @@
 #include "commands.h"
 #include "../api/wbapi.h"
 
+/* Manually adds new entry to configuration file */
 void handle_conf_addEntry(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -44,6 +45,7 @@ void handle_conf_addEntry(){
     free(ssid);   
 }
 
+/* Enables the specified network in the configuration file */
 void handle_conf_enableNetwork(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -61,6 +63,7 @@ void handle_conf_enableNetwork(){
     free(ssid);
 }
 
+/* Deletes the specified network from the configuration file */
 void handle_conf_deleteNetwork(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -78,6 +81,7 @@ void handle_conf_deleteNetwork(){
     free(ssid);
 }
 
+/* Adds a new network EAP to the configuration file; automatically configures network */
 void handle_conf_configAutoEAP(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -102,6 +106,7 @@ void handle_conf_configAutoEAP(){
     free(pwd);
 }
 
+/* Adds a new network to the configuration file; automatically configures network */
 void handle_conf_configAuto(){
 
     char *ssid = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -122,6 +127,7 @@ void handle_conf_configAuto(){
     free(psk);
 }
 
+/* Sets the default configuration file location */
 void handle_conf_setCurrent(){
 
     char *filepath = malloc(sizeof(char) * WIFI_CONF_FIELD); 
@@ -141,6 +147,7 @@ void handle_conf_setCurrent(){
     free(filepath);
 }
 
+/* Lists all configured networks in the configuration file */
 void handle_list_configured(){
 
     char *result = malloc(sizeof(char) * BUFFER_SIZE);
@@ -158,6 +165,7 @@ void handle_list_configured(){
     free(result);
 }
 
+/* Lists all available networks */
 void handle_list_available(){
 
     char *result = malloc(sizeof(char) * BUFFER_SIZE);
@@ -175,11 +183,13 @@ void handle_list_available(){
     free(result);
 }
 
+/* Initializes wpa_supplicant interface */
 void handle_api_init(){
 
     api_init();
 }
 
+/* Display available commands with program */
 void handle_manual(){
 
     printf("Keywords used with CLI: \n");

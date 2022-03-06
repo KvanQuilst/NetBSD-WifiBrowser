@@ -1,5 +1,6 @@
 #include "commands.h"
 
+/* Process user commands. Will run all commands and process in order */
 void process_commands(char **string_input, int *commands){
 
     while(*commands != 0){
@@ -19,6 +20,7 @@ void process_commands(char **string_input, int *commands){
     }
 }
 
+/* Helper method to process command given with input */
 int run_commands(char **string_input){
 
     if(strcmp(WBCLI, string_input[0]) == 0){
@@ -75,7 +77,7 @@ int run_commands(char **string_input){
         return 1;
     }
 
-    else if(strcmp(MAN, string_input[0]) == 0){
+    else if(strcmp(HELP, string_input[0]) == 0){
 
         handle_manual();
         return 1;
