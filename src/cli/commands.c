@@ -77,7 +77,7 @@ int run_commands(char **string_input){
 
     else if(strcmp(MAN, string_input[0]) == 0){
 
-        handle_man();
+        handle_manual();
         return 1;
     }
 

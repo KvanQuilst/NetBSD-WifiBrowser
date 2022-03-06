@@ -20,7 +20,7 @@ void handle_conf_configAutoEAP();
 void handle_conf_addEntry();
 void handle_conf_enableNetwork();
 void handle_conf_deleteNetwork();
-void handle_man();
+void handle_manual();
 
 
 

@@ -7,7 +7,7 @@ void handle_conf_addEntry(){
     printf("ssid: "); fgets(ssid, WIFI_CONF_FIELD, stdin);
     
     char *additionalField = malloc(sizeof(char) * WIFI_CONF_FIELD); printf("Additional field (y / n): "); 
-    fgets(additionalField, sizeof(char) * WIFI_CONF_FIELD, stdin); printf("%s\n", additionalField);
+    fgets(additionalField, sizeof(char) * WIFI_CONF_FIELD, stdin); 
     while(strcmp(additionalField, "y\n") == 0){
 
         char *field = malloc(sizeof(char) * WIFI_CONF_FIELD);
@@ -180,7 +180,7 @@ void handle_api_init(){
     api_init();
 }
 
-void handle_man(){
+void handle_manual(){
 
     printf("Keywords used with CLI: \n");
     printf("list_available: List all available networks\n");
