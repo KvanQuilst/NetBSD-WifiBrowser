@@ -1,5 +1,4 @@
 #include "commands.h"
-#include "../api/wbapi.h"
 
 /* Manually adds new entry to configuration file */
 void handle_conf_addEntry(){
@@ -186,21 +185,36 @@ void handle_list_available(){
 /* Initializes wpa_supplicant interface */
 void handle_api_init(){
 
-    api_init();
+    printf("Connecting...\n");
+    if(api_init() == 0){
+
+        printf("Success!!\n");
+        printf("Type command 'help' to view commands\n");
+    }
+    
+    else{
+
+        printf("Error: Cannot connect to wpa_supplicant\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 /* Display available commands with program */
 void handle_manual(){
 
     printf("Keywords used with CLI: \n");
-    printf("list_available: List all available networks\n");
-    printf("list_configured: List all configured networks\n");
-    printf("conf_setCurrent: Set default configuration file location\n");
-    printf("conf_configAuto: Add new network entry to configuration file\n");
-    printf("conf_configAutoEAP: Add new EAP network to confingureation file\n");
-    printf("conf_addEntry: Adds a new entry to the configurationi file for manual configuration\n");
-    printf("conf_enableNetwork: Enable network in configuration file\n");
-    printf("conf_deleteNetwork: Delete network in configuration file\n");
+    printf("list: List all available networks: \n");
+    printf("\t1. '-a' Available Networks\n");
+    printf("\t2. '-c' Configured Networks\n");
+    printf("conf: Used to edit configuration file: \n");
+    printf("\t1. '-sc' Set new configuration path\n");
+    printf("\t2. 'ca' Auto configuration of network to configuration file\n");
+    printf("\t3. 'eap' Auto configuration of new eap network to configuration file\n");
+    printf("\t4. 'ae' Add new entry manual configuration to configuration file\n");
+    printf("\t5. '-en' Enable specified network in configuration file\n");
+    printf("\t6. 'dn' Delete specified network in configuration file\n");
+    printf("clear: Clear screen\n");
+    printf("exit: Exit command interface\n");
 }
 
 

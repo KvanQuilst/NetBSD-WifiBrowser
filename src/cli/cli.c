@@ -13,6 +13,7 @@
 char *buffer;
 
 int main(int argc, char *argv[]) {
+    handle_api_init();
 
     while(1){
 

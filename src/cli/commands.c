@@ -11,7 +11,7 @@ void process_commands(char **string_input, int *commands){
             continue;
         }
 
-        else if(!run_commands(string_input)){
+        else if(!run_commands(string_input, commands)){
 
             break;
         }        
@@ -21,59 +21,70 @@ void process_commands(char **string_input, int *commands){
 }
 
 /* Helper method to process command given with input */
-int run_commands(char **string_input){
+int run_commands(char **string_input, int *commands){
 
-    if(strcmp(WBCLI, string_input[0]) == 0){
+    if(strcmp(LIST, string_input[0]) == 0){
 
-        handle_api_init();
+        shift_left(string_input, commands);
+        
+        if(*commands == 0){
+
+            handle_list_available();
+            handle_list_configured();
+        }
+
+        else if(strcmp(AVAILABLE, string_input[0]) == 0){
+
+            handle_list_available();
+        }
+
+        else if(strcmp(CONFIGURED, string_input[0]) == 0){
+
+            handle_list_configured();
+        }
+
         return 1;
     }
 
-    else if(strcmp(LIST_AVAILABLE, string_input[0]) == 0){
+    else if(strcmp(CONF_COMMAND, string_input[0]) == 0){
 
-        handle_list_available();
-        return 1;
-    }
+        shift_left(string_input, commands);
 
-    else if(strcmp(LIST_CONFIG, string_input[0]) == 0){
+        if(*commands == 0){
 
-        handle_list_configured();
-        return 1;
-    }
+            PRINT_CONF_RESPONSE;
+        }
 
-    else if(strcmp(CONF_SET_CURRENT, string_input[0]) == 0){
+        else if(strcmp(CONF_SET_CURRENT, string_input[0]) == 0){
 
-        handle_conf_setCurrent();
-        return 1;
-    }
+            handle_conf_setCurrent();
+        }
 
-    else if(strcmp(CONF_CONFIG_AUTO, string_input[0]) == 0){
+        else if(strcmp(CONF_AUTO, string_input[0]) == 0){
 
-        handle_conf_configAuto();
-        return 1;
-    }
-    
-    else if(strcmp(CONF_CONFIG_AUTO_EAP, string_input[0]) == 0){
+            handle_conf_configAuto();
+        }
 
-        handle_conf_configAutoEAP();
-        return 1;
-    }
-    
-   else if(strcmp(CONF_ADD_ENTRY, string_input[0]) == 0){
+        else if(strcmp(CONF_AUTO_EAP, string_input[0]) == 0){
 
-        handle_conf_addEntry();
-        return 1;
-    }
+            handle_conf_configAutoEAP();
+        }
 
-    else if(strcmp(CONF_ENABLE_NETWORK, string_input[0]) == 0){
+        else if(strcmp(CONF_ADD_ENTRY, string_input[0]) == 0){
 
-        handle_conf_enableNetwork();
-        return 1;
-    }
+            handle_conf_addEntry();
+        }
 
-    else if(strcmp(CONF_DELETE_NETWORK, string_input[0]) == 0){
+        else if(strcmp(CONF_ENABLE_NETWORK, string_input[0]) == 0){
 
-        handle_conf_deleteNetwork();
+            handle_conf_enableNetwork();
+        }
+
+        else if(strcmp(CONF_DELETE_NETWORK, string_input[0]) == 0){
+
+            handle_conf_deleteNetwork();
+        }
+
         return 1;
     }
 

@@ -583,7 +583,7 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
   char *out = malloc(sizeof(char) * 64);
   int i;
 
-  PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
+  //PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
   for (i = 0; i < 64; i++)
     snprintf(&out[i], 2, "%02x", hash[i]);
   return out;
