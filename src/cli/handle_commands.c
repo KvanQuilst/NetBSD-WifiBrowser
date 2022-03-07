@@ -207,11 +207,11 @@ void handle_manual(){
     printf("\t2. '-c' Configured Networks\n");
     printf("conf: Used to edit configuration file: \n");
     printf("\t1. '-sc' Set new configuration path\n");
-    printf("\t2. 'ca' Auto configuration of network to configuration file\n");
-    printf("\t3. 'eap' Auto configuration of new eap network to configuration file\n");
-    printf("\t4. 'ae' Add new entry manual configuration to configuration file\n");
+    printf("\t2. '-ca' Auto configuration of network to configuration file\n");
+    printf("\t3. '-eap' Auto configuration of new eap network to configuration file\n");
+    printf("\t4. '-ae' Add new entry manual configuration to configuration file\n");
     printf("\t5. '-en' Enable specified network in configuration file\n");
-    printf("\t6. 'dn' Delete specified network in configuration file\n");
+    printf("\t6. '-dn' Delete specified network in configuration file\n");
     printf("clear: Clear screen\n");
     printf("exit: Exit command interface\n");
 }
