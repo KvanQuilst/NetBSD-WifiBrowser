@@ -16,7 +16,8 @@ void process_commands(char **string_input, int *commands){
             break;
         }        
 
-        shift_left(string_input, commands);
+        if(*commands != 0)
+            shift_left(string_input, commands);
     }
 }
 

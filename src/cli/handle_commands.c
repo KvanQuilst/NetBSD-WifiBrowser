@@ -188,7 +188,6 @@ void handle_api_init(){
     printf("Connecting...\n");
     if(api_init() == 0){
 
-        printf("Success!!\n");
         printf("Type command 'help' to view commands\n");
     }
     
