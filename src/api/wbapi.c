@@ -530,12 +530,43 @@ int conf_cleanNetworks(void)
 
 int listConfigured(char *buf, size_t len)
 {
+  char list[4096] = {0};
+  char ssid[32] = {0};
+  char curr[32] = {0};
+  int pos = 0;
+
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
     return -1;
   }
 
-  return wpaReq("LIST_NETWORKS", 13, buf, len);
+  if (wpaReq("LIST_NETWORKS", 13, list, sizeof(list)) < 0)
+    return -1;
+
+  sscanf(list, "%*[^\n]%[\001-\255]", list);
+  if (list[1] == 0)
+    snprintf(buf, len, "No configured networks!\n");
+  else {
+    sscanf(list, "\n%[\001-\255]", list);
+    while (list[1] != 0) {
+      //sscanf(list, "%[^\n]%[\001-\255]", curr, list);
+      /*if (curr[1] == 0) {
+        snprintf(&buf[pos], len - pos, "[CURRENT]\n"); 
+        pos += 10;
+      } else {
+        snprintf(&buf[pos], len - pos, "\n");
+        pos++;
+      }*/
+
+      printf("list: %s\n", list);
+      sscanf(list, "%*s\t%s\t%*s\t%s\n%[\001-\255]", ssid, curr, list);
+      //printf("%s\n", ssid);
+      snprintf(&buf[pos], len - pos, "%-32s\n", ssid);
+      pos += 33;
+    }
+  }
+
+  return 0;
 }
 
 int listAvailable(char *buf, size_t len)
@@ -555,16 +586,15 @@ int listAvailable(char *buf, size_t len)
   if (wpaReq("SCAN_RESULTS", 12, list, sizeof(list)) < 0) 
     return -1;
 
-  sscanf(list, "bssid / frequency / signal level / flags / ssid%[\001-\255]", list); 
+  sscanf(list, "%*[^\n]%[\001-\255]", list); 
 
-  if (list[0] != '\n')
-    sprintf(buf, "No networks available!\n");
+  if (list[1] == 0)
+    snprintf(buf, len, "No networks available!\n");
   else {
     sscanf(list, "\n%[\001-\255]", list);
     while (list[1] != 0) {
-      sscanf(list, "\n%*s %*s\t %*s %s\t %[^\n]%[\001-\255]", flags, ssid, list);
+      sscanf(list, "\n%*s\t%*s\t%*s\t%s\t%[^\n]%[\001-\255]", flags, ssid, list);
       snprintf(&buf[pos], len - pos, "%-32s %s\n", ssid, flags);
-      //printf("%s", &buf[pos]);
       pos += 34 + strnlen(flags, sizeof(flags));
     }
   }
