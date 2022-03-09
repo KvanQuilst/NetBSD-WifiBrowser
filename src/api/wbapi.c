@@ -540,36 +540,34 @@ int listConfigured(char *buf, size_t len)
 
 int listAvailable(char *buf, size_t len)
 {
-  //char list[512] = {0};
-  //char currSSID[34] = {0};
+  char list[4096] = {0};
+  char ssid[32] = {0};
+  char flags[128] = {0};
+  int pos = 0;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
     return -1;
   }
 
-  if (wpaReq("SCAN", 4, buf, len) < 0) return -1;
+  if (wpaReq("SCAN", 4, list, sizeof(list)) < 0) 
+    return -1;
+  if (wpaReq("SCAN_RESULTS", 12, list, sizeof(list)) < 0) 
+    return -1;
 
-  if (wpaReq("SCAN_RESULTS", 12, buf, len) < 0) return -1;
+  sscanf(list, "bssid / frequency / signal level / flags / ssid%[\001-\255]", list); 
 
-  sscanf(buf, "bssid / frequency / signal level / flags / ssid\n%[^\0]", buf); 
-  //printf("\nscan:\n%s\n", buf);
-
-  /* isolate ssid for list */
-  /*do {
-    sscanf(buf, "%*s\t%*s\t%*s\t%*s\t%32[^\n]\n", currSSID);
-    printf("currSSID: %s\n", currSSID);
-    strncpy(&list[i], currSSID, 32);
-    i += strnlen(currSSID, 32);
-    list[i] = '\n';
-    i++;
-    sscanf(buf, "%*[^\n]\n%[^\0]", buf);
-  } while (strncmp("", currSSID, 1));
-
-  printf("list: %s\n", list);
-
-  buf = strndup(list, 512);*/
-
+  if (list[0] != '\n')
+    sprintf(buf, "No networks available!\n");
+  else {
+    sscanf(list, "\n%[\001-\255]", list);
+    while (list[1] != 0) {
+      sscanf(list, "\n%*s %*s\t %*s %s\t %[^\n]%[\001-\255]", flags, ssid, list);
+      snprintf(&buf[pos], len - pos, "%-32s %s\n", ssid, flags);
+      //printf("%s", &buf[pos]);
+      pos += 34 + strnlen(flags, sizeof(flags));
+    }
+  }
   return 0;
 }
 
