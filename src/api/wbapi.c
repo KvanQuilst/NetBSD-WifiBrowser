@@ -8,14 +8,6 @@
 
 #include "wbapi.h"
 
-/*
- * Stephen: Had to comment out 
- * PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
- * 
- * 
- * 
-*/
-
 /**************************
   Global Variables
 **************************/
