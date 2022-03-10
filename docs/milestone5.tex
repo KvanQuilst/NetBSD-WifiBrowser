@@ -18,10 +18,14 @@ a configuration file that is not accessible without root permission. The API is
 currently in development for v1.01 which will feature cleaner output, especially
 when listing scanned networks and configured networks, making it easier for user
 interface implementers to utilize the data passed to it.\\
+CLI component of our project is fully completed. Additional testing still 
+required. Seg faults are very common, but the CLI by itself experiences no seg 
+faults. Will definitely need to do additional debugging next quarter. \\
 
 \textbf{Accomplishments}
 \begin{itemize}
   \item Wifi Browser API v1.0 is finished and fully functional!
+  \item CLI interface is now fully completed. Additional testing still required. 
 \end{itemize}
 
 \textbf{Targets Not Met:}
@@ -57,7 +61,11 @@ Beyond this, most work was performed on \texttt{master}.
 
 \textbf{Stephen:}
 \begin{itemize}
-  \item
+  \item Finished CLI component of our application
+  \item Implemented additional commands depending on whether the command affects 
+    the focused configuration file or simply displays network information 
+  \item CLI now represents a more focused command line interface. Hyphens are 
+    used to to represent various string operators 
 \end{itemize}
 
 \end{document}
