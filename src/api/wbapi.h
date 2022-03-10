@@ -31,14 +31,6 @@ int api_init();
  *************************/
 
 /*
- * conf_setCurrent - set the focused configuration file for wifi browser api
- * creates the file if the file doesn't exist
- * requires: filepath of configuration file
- * returns: 0 if success, -1 if fail
- */
-int conf_setCurrent(const char *filepath);
-
-/*
  * conf_connectAuto - adds a new network entry to the focused configuration file
  * and automatically supplies the additional info for wpa_supplicant connection
  * Set PSK to NULL if no passkey for network
