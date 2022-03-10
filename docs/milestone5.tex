@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\setlength{\parindent}{0em}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+  \textbf{\Large Milestone \#4}\\\large NetBSD Wifi Browser Project 2022\\
+  Dylan Roy, Stephen Loudiana, Kevin McGrane
+\end{center}
+
+
+\section{General Progress Report}
+Progress in the API was brought to a version 1.0 fully functional state during
+the progress of Milestone 5. During this time, the API removed the use of file
+I/O, making it possible to use the API without root permissions if operating on
+a configuration file that is not accessible without root permission. The API is
+currently in development for v1.01 which will feature cleaner output, especially
+when listing scanned networks and configured networks, making it easier for user
+interface implementers to utilize the data passed to it.\\
+
+\textbf{Accomplishments}
+\begin{itemize}
+  \item Wifi Browser API v1.0 is finished and fully functional!
+\end{itemize}
+
+\textbf{Targets Not Met:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+
+\section{Git Branch Report}
+One additional branch was used to clean up the output provided by \texttt{wpa\_supplicant}
+(branch \texttt{output}) to preserve the functionality of the API in v1.0 state.
+Beyond this, most work was performed on \texttt{master}.
+
+\section{Individual Progress}
+
+\textbf{Kevin:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\textbf{Dylan:}
+\begin{itemize}
+  \item Finished API to v1.0
+  \item Converted all configuration manipulation to \texttt{wpa\_supplicant}'s
+    provided interface (\texttt{wpa\_ctrl})
+  \item Removed the necessity for root permissions in using the API
+  \item Reimplemented editing of network configurations to be more expandable
+    and easier for developers to utilize
+  \item Implemented auto WPA-EAP network configuration
+  \item Started \texttt{wpa\_supplicant} output cleanup for easier use in user
+    interface implementation.
+\end{itemize}
+
+\textbf{Stephen:}
+\begin{itemize}
+  \item
+\end{itemize}
+
+\end{document}
+
+
+
+
