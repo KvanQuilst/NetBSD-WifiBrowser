@@ -8,14 +8,6 @@
 
 #include "wbapi.h"
 
-/*
- * Stephen: Had to comment out 
- * PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
- * 
- * 
- * 
-*/
-
 /**************************
   Global Variables
 **************************/
@@ -34,8 +26,6 @@ static char *ifname = NULL;
 static FILE *conf_create(const char *filepath);
 static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *psk, 
     int plen);
-//static char *hashPwd(char *pwd, int plen); 
-//static void getKeyMgmt(char *ssid, wifi_conf *conf);
 
 /**************************
   Helper Functions
@@ -178,11 +168,6 @@ static FILE *conf_create(const char *filepath)
   fflush(fp);
 
   return fp;
-}
-
-int conf_setCurrent(const char *filepath)
-{
-  return -1;
 }
 
 int conf_configAuto(const char *ssid, const char *psk)
