@@ -7,17 +7,6 @@
  */
 #pragma once
 
-#include <assert.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <openssl/evp.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include "wpa_ctrl.h"
-
 /* 
  * api_init - initialize wifi browser api
  * returns: 0 if successful, -1 if fail 
@@ -29,14 +18,6 @@ int api_init();
  * Configuration File Manipulation
  *
  *************************/
-
-/*
- * conf_setCurrent - set the focused configuration file for wifi browser api
- * creates the file if the file doesn't exist
- * requires: filepath of configuration file
- * returns: 0 if success, -1 if fail
- */
-int conf_setCurrent(const char *filepath);
 
 /*
  * conf_connectAuto - adds a new network entry to the focused configuration file

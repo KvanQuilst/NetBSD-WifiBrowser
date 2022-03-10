@@ -6,15 +6,18 @@
  * Central point for processing requests made against Wifi Browser API
  */
 
-#include "wbapi.h"
+#include <assert.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <openssl/evp.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+#include "wpa_ctrl.h"
 
-/*
- * Stephen: Had to comment out 
- * PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
- * 
- * 
- * 
-*/
+#include "wbapi.h"
 
 /**************************
   Global Variables
@@ -178,11 +181,6 @@ static FILE *conf_create(const char *filepath)
   fflush(fp);
 
   return fp;
-}
-
-int conf_setCurrent(const char *filepath)
-{
-  return -1;
 }
 
 int conf_configAuto(const char *ssid, const char *psk)
@@ -534,6 +532,7 @@ int listConfigured(char *buf, size_t len)
   char ssid[32] = {0};
   char curr[32] = {0};
   int pos = 0;
+  int l = 0;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -544,25 +543,18 @@ int listConfigured(char *buf, size_t len)
     return -1;
 
   sscanf(list, "%*[^\n]%[\001-\255]", list);
-  if (list[1] == 0)
+  if (list[1] == 1)
     snprintf(buf, len, "No configured networks!\n");
   else {
     sscanf(list, "\n%[\001-\255]", list);
-    while (list[1] != 0) {
-      //sscanf(list, "%[^\n]%[\001-\255]", curr, list);
-      /*if (curr[1] == 0) {
-        snprintf(&buf[pos], len - pos, "[CURRENT]\n"); 
-        pos += 10;
-      } else {
-        snprintf(&buf[pos], len - pos, "\n");
-        pos++;
-      }*/
-
-      printf("list: %s\n", list);
-      sscanf(list, "%*s\t%s\t%*s\t%s\n%[\001-\255]", ssid, curr, list);
-      //printf("%s\n", ssid);
-      snprintf(&buf[pos], len - pos, "%-32s\n", ssid);
-      pos += 33;
+    while (l != -1) {
+      l = sscanf(list, "%*s%s%*s%[^\n]%[\001-\255]", ssid, curr, list);
+      //l = strnlen(list, 10);
+      //printf("%d\n", l);
+      if (l != -1) {
+        snprintf(&buf[pos], len - pos, "%-32s %s\n", ssid, curr);
+        pos += 34 + strnlen(curr, sizeof(curr));
+      }
     }
   }
 
@@ -593,7 +585,7 @@ int listAvailable(char *buf, size_t len)
   else {
     sscanf(list, "\n%[\001-\255]", list);
     while (list[1] != 0) {
-      sscanf(list, "\n%*s\t%*s\t%*s\t%s\t%[^\n]%[\001-\255]", flags, ssid, list);
+      sscanf(list, "\n%*s%*s%*s%s\t%[^\n]%[\001-\255]", flags, ssid, list);
       snprintf(&buf[pos], len - pos, "%-32s %s\n", ssid, flags);
       pos += 34 + strnlen(flags, sizeof(flags));
     }
@@ -611,7 +603,6 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
   char *out = malloc(sizeof(char) * 64);
   int i;
 
-  //PKCS5_PBKDF2_HMAC_SHA1(psk, plen, ssid, slen, 4096, 32, hash);
   for (i = 0; i < 64; i++)
     snprintf(&out[i], 2, "%02x", hash[i]);
   return out;
