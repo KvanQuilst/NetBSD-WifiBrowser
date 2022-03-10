@@ -4,7 +4,6 @@
 #define AVAILABLE "-a"
 #define CONFIGURED "-c"
 #define CONF_COMMAND "conf"
-#define CONF_SET_CURRENT "-sc"
 #define CONF_AUTO "-ca"
 #define CONF_AUTO_EAP "-eap"
 #define CONF_ADD_ENTRY "-ae"

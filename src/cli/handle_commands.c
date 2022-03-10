@@ -126,26 +126,6 @@ void handle_conf_configAuto(){
     free(psk);
 }
 
-/* Sets the default configuration file location */
-void handle_conf_setCurrent(){
-
-    char *filepath = malloc(sizeof(char) * WIFI_CONF_FIELD); 
-    bzero(filepath, WIFI_CONF_FIELD);
-    
-    printf("File path: "); fgets(filepath, WIFI_CONF_FIELD, stdin);
-    if(conf_setCurrent(filepath) < 0){
-
-        printf("Error config setCurrent \n");
-    }
-
-    else{
-
-        printf("Success config setCurrent \n");
-    }
-
-    free(filepath);
-}
-
 /* Lists all configured networks in the configuration file */
 void handle_list_configured(){
 

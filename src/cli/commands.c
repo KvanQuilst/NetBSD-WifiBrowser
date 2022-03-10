@@ -55,12 +55,7 @@ int run_commands(char **string_input, int *commands){
 
             PRINT_CONF_RESPONSE;
         }
-
-        else if(strcmp(CONF_SET_CURRENT, string_input[0]) == 0){
-
-            handle_conf_setCurrent();
-        }
-
+        
         else if(strcmp(CONF_AUTO, string_input[0]) == 0){
 
             handle_conf_configAuto();
