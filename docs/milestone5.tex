@@ -17,10 +17,12 @@ I/O, making it possible to use the API without root permissions if operating on
 a configuration file that is not accessible without root permission. The API is
 currently in development for v1.01 which will feature cleaner output, especially
 when listing scanned networks and configured networks, making it easier for user
-interface implementers to utilize the data passed to it.\\
+interface implementers to utilize the data passed to it.
+
 CLI component of our project is fully completed. Additional testing still 
 required. Seg faults are very common, but the CLI by itself experiences no seg 
-faults. Will definitely need to do additional debugging next quarter. \\
+faults. Will definitely need to do additional debugging next quarter.
+
 TUI is still mainly in the design and research phase. There has been some small
 ground made on the actual development of the TUI but the large majority of the
 work put in since last Milestone has been designing and researching ncurses functions 
@@ -35,7 +37,7 @@ that will be useful when implementing the TUI.
 
 \textbf{Targets Not Met:}
 \begin{itemize}
-  \item Finished TUI wiht support for all API features
+  \item Finished TUI with support for all API features
 \end{itemize}
 
 
@@ -44,16 +46,17 @@ One additional branch was used to clean up the output provided by \texttt{wpa\_s
 (branch \texttt{output}) to preserve the functionality of the API in v1.0 state.
 Beyond this, most work was performed on \texttt{master}.
 
+\newpage
 \section{Individual Progress}
 
-\textbf{Kevin: 3 hours}
+\textbf{Kevin:} 3 hours
 \begin{itemize}
   \item TUI implementation
   \item Ncurses research in subwindows and mouse events
   \item Refined Design and plan for layout of TUI
 \end{itemize}
 
-\textbf{Dylan:}
+\textbf{Dylan:} 13 hours 15 minutes
 \begin{itemize}
   \item Finished API to v1.0
   \item Converted all configuration manipulation to \texttt{wpa\_supplicant}'s
@@ -64,9 +67,10 @@ Beyond this, most work was performed on \texttt{master}.
   \item Implemented auto WPA-EAP network configuration
   \item Started \texttt{wpa\_supplicant} output cleanup for easier use in user
     interface implementation.
+  \item Initialized 492 presentation
 \end{itemize}
 
-\textbf{Stephen:}
+\textbf{Stephen:} 11 hours 40 minutes
 \begin{itemize}
   \item Finished CLI component of our application
   \item Implemented additional commands depending on whether the command affects 
