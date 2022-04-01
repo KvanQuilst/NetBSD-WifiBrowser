@@ -1,0 +1,113 @@
+\documentclass[11pt]{article}
+\setlength{\parindent}{0em}
+\usepackage[margin=1in]{geometry}
+\usepackage[normalem]{ulem}
+
+\begin{document}
+
+\begin{center}
+  \textbf{\Large Milestone \#6}\\\large NetBSD Wifi Browser Project 2022\\
+  Dylan Roy, Stephen Loudiana, Kevin McGrane
+\end{center}
+
+
+\section*{Current Project State}
+\textbf{API -} The API at this time is functionally feature complete.
+The work left to do is to improve the output of the listing functions in
+particular to simplify the work of interface implementers, and to make
+changes or fix bugs in response to anything that comes up during the CLI
+and TUI development this quarter.\\
+
+\textbf{CLI -} \\
+
+\textbf{TLI -} \\
+
+\section*{Quarter Tasks}
+
+\textit{Tasks will be stricken when they are completed like so:} \sout{Task}
+
+\subsection*{API}
+\textbf{Milestone 7} April 20
+\begin{itemize}
+  \item Improve list output for listAvailable and listConfigured
+  \item Move testing program out of \texttt{src/} and into \texttt{test/}
+\end{itemize}
+\textbf{Milestone 8-9} May 18
+\begin{itemize}
+  \item Fix bugs related to CLI and TUI work
+\end{itemize}
+
+\subsection*{CLI}
+\textbf{Milestone 7} April 20
+\begin{itemize}
+  \item
+\end{itemize}
+\textbf{Milestone 8} May 4
+\begin{itemize}
+  \item
+\end{itemize}
+\textbf{Milestone 6} May 18
+\begin{itemize}
+  \item
+\end{itemize}
+
+\subsection*{TUI}
+\textbf{Milestone 7} April 20
+\begin{itemize}
+  \item
+\end{itemize}
+\textbf{Milestone 8} May 4
+\begin{itemize}
+  \item
+\end{itemize}
+\textbf{Milestone 6} May 18
+\begin{itemize}
+  \item
+\end{itemize}
+
+\section*{Testing Plan}
+
+\subsection*{API Testing}
+\begin{itemize}
+  \item Ensure list output modifications has not affected previous 
+    successful test results
+\end{itemize}
+
+\subsection*{CLI Testing}
+\begin{itemize}
+  \item User commands are processed correctly
+  \item Print list of available networks to stdout
+  \item Print list of configured networks to stdout
+  \item Connect to network of provided ssid (unsecured)
+  \item Connect to secured network of provided ssid:
+    \begin{itemize}
+      \item Prompt for passkey
+    \end{itemize}
+
+  \item Connect to secured network of provided ssid and passkey
+  \item Connect to EAP network of provided ssid:
+    \begin{itemize}
+      \item Prompt for username
+      \item Prompt for password
+    \end{itemize}
+
+  \item Connect to manually configured network
+    \begin{itemize}
+      \item Prompt for ssid
+      \item Create a new network configuration using ssid; select as current configuration
+      \item Commands to add information to configuration
+    \end{itemize}
+
+  \item Edit a configured network
+    \begin{itemize}
+      \item Prompt for ssid
+      \item Focus network configuration of the specified ssid
+      \item Commands to edit/add information to the configuration
+    \end{itemize}
+  \item Change default configuration file
+  \item Use specified configuration file
+\end{itemize}
+
+\subsection*{TUI Testing}
+
+\end{document}
