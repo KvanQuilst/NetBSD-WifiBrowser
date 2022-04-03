@@ -1,7 +1,7 @@
-/*	$NetBSD: $	*/
+/*	$NetBSD:  $	*/
 
-/*
- * Copyright (c) 2022 Philip A. Nelson.
+/* 
+ * Copyright (c) 1994 Philip A. Nelson.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,30 +31,57 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "extern.h"
-
 /*
- * Generic Command Line Interface, example command
+ * Command tool - a library for building command languages fast.
  *
+ *   Philip A. Nelson,  Oct 1991
+ *
+ *   Some code is lifted from the PC532 monitor/debugger written
+ *   by Bruce Culbertson.   (Thanks Bruce!)
  */
 
+/* An easy to define the prototype. */
 
-/* Place holder */
+#define CMD_PROC(name) int name (int, char **, char *)
 
-int say_hello (int num, char **args, char *syntax) {
-  printf ("Hello!\n");
-  return 0;
-}
+/*  The commands are stored in a table that includes their name, a pointer
+    to the function that processes the command and a help message.  */
 
-int do_exit (int num, char **args, char *syntax) {
-  return 1;
-}
+struct command {	/* The commands, their names, help */
+	int	(*fn) (int, char **, char *);
+	char	*name;
+	char	*syntax;
+	char	*help;
+};
+
+/*  The command loop will do the following:
+	a) prompt the user for a command.
+	b) read the command line.
+	c) break the input line into arguments.
+	d) search for the command in the command table.
+	e) If the command is found, call the routine to process it.
+        f) IF the return value from the command is NON ZERO, exit the loop.
+
+Each function to process a command must be defined as follows:
+
+   int name ( int num, char ** cmd_args ) where num is the number
+   of arguments (the command name is not counted) and the cmd_args is
+   an array of pointers to the arguments.  cmd_args[0] is the command
+   name.  cmd_args[1] is the first argument.
+
+*/
 
 
-/* Main program */
+/* Constants defining the limits of the command processor.
+ */
+#define TRUE 1
+#define FALSE 0
+#define LINELEN 256
+#define MAXARGS 16
+#define BLANK_LINE 0
 
-int main (int argc, char **argv) {
-   command_loop();
-}
+/* Stuff for StrCmp()
+ */
+#define CMP_NOMATCH	0
+#define CMP_MATCH	1
+#define CMP_SUBSTR	2

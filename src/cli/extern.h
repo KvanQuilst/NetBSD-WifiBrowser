@@ -1,7 +1,7 @@
 /*	$NetBSD: $	*/
 
-/*
- * Copyright (c) 2022 Philip A. Nelson.
+/* 
+ * Copyright (c) 1994 Philip A. Nelson.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,30 +31,12 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "extern.h"
+/* From command.c */
+void  command_loop (void);
 
-/*
- * Generic Command Line Interface, example command
- *
- */
+/* from cli.c */
 
+int say_hello (int, char **, char *);
+int do_exit (int, char **, char *);
 
-/* Place holder */
-
-int say_hello (int num, char **args, char *syntax) {
-  printf ("Hello!\n");
-  return 0;
-}
-
-int do_exit (int num, char **args, char *syntax) {
-  return 1;
-}
-
-
-/* Main program */
-
-int main (int argc, char **argv) {
-   command_loop();
-}
+extern char *__progname;

@@ -1,7 +1,7 @@
 /*	$NetBSD: $	*/
 
-/*
- * Copyright (c) 2022 Philip A. Nelson.
+/* 
+ * Copyright (c) 1994 Philip A. Nelson.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -31,30 +31,60 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include "extern.h"
-
 /*
- * Generic Command Line Interface, example command
+ *  cmdtable.h - this is where the command table is defined.
  *
+ *  The user must complete this command table.  It is started.
  */
 
+/* procedure definitions. */
+#ifndef NO_HELP
+CMD_PROC (help);
+#endif
 
-/* Place holder */
+/* hdsetup commands. */
+CMD_PROC (say_hello);
+CMD_PROC (do_exit);
 
-int say_hello (int num, char **args, char *syntax) {
-  printf ("Hello!\n");
-  return 0;
-}
+/* The command definitions. This is where the user should add new
+   command definitions.
 
-int do_exit (int num, char **args, char *syntax) {
-  return 1;
-}
+   Field definition:
+
+   { proc_name, "command_name", "Syntax", "Help" }
+
+   NOTE:  For an alphabetical list from the help command, list the
+   commands in alphabetical order on the name field. */
+
+const
+struct command cmd_table [] = {		/* Command Table */
+
+{ say_hello, "hello",
+"HELLO",
+"Says hello back"
+},
+
+#ifndef NO_HELP
+{ help, "help", "HELP [<command>].",
+"Provides help for all listed <command>s.  If there none, prints a list \n\
+of the commands."
+},
+#endif
+
+#ifndef NO_HELP
+{ help, "?", "",
+"Prints a list of commands."
+},
+#endif
+
+{ do_exit, "exit", "EXIT",
+"Just get out of here."
+},
+
+};
+
+#define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
 
 
-/* Main program */
-
-int main (int argc, char **argv) {
-   command_loop();
-}
+/* The prompt! */
+#define PROMPT "cli (? for help): "
