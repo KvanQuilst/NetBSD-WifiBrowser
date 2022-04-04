@@ -40,9 +40,7 @@
  *
  */
 
-
 /* Place holder */
-
 int say_hello (int num, char **args, char *syntax) {
   printf ("Hello!\n");
   return 0;
@@ -52,9 +50,8 @@ int do_exit (int num, char **args, char *syntax) {
   return 1;
 }
 
-
 /* Main program */
-
 int main (int argc, char **argv) {
+
    command_loop();
 }

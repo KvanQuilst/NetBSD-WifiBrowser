@@ -54,11 +54,10 @@
 
 /* Other procedure prototypes. */
 const struct command *find_entry (char *);
-void	help_cmds (void);
+void prompt(char *cmdline, int linelen, const char *promptstr);
 int	parse (char *, char **);
 int	StrCmp (char *, char *);
-void    prompt(char *cmdline, int linelen, const char *promptstr);
-
+void help_cmds (void);
 
 /* A pointer to a function to be called after every command.
    A NULL pointer says no function is to be executed.
@@ -67,58 +66,73 @@ void    prompt(char *cmdline, int linelen, const char *promptstr);
 void (*after_cmd)(int) = NULL;
 
 /* This is the command processor loop. */
-void
-command_loop(void)
-{
+void command_loop(void) {
 	char    cmdline[LINELEN];
-	char   *args[MAXARGS];
+	char    *args[MAXARGS];
 	int     numargs;
-	const struct command *cmd;
 	int     done = FALSE;
+	const 	struct command *cmd;
 
 	while (!done) {
+
 		prompt(cmdline, LINELEN, PROMPT);
 		numargs = parse(cmdline, args);
-		if (numargs == BLANK_LINE)
+
+		if (numargs == BLANK_LINE){
+
 			continue;
+		}
+		
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
 			done = (*(cmd->fn)) (numargs, args, cmd->syntax);
-			if (after_cmd != NULL)
+
+			if (after_cmd != NULL){
+
 				(*(after_cmd)) (done);
-		} else
+			}
+		} 
+
+		else {
+
 			printf("Unknown command\n");
+		}
 	}
 }
 
 /* This is the command processor for a single command. */
-int
-one_command(char *cmdline)
-{
+int one_command(char *cmdline) {
 	char   *args[MAXARGS];
 	int     numargs;
 	const struct command *cmd;
 	int     done;
 
 	numargs = parse(cmdline, args);
-	if (numargs == BLANK_LINE)
+	if (numargs == BLANK_LINE){
+
 		return 0;
+	}
+	
 	cmd = find_entry(args[0]);
 	if (cmd != NULL) {
 		done = (*(cmd->fn)) (numargs, args, cmd->syntax);
-		if (after_cmd != NULL)
+		if (after_cmd != NULL){
+
 			(*(after_cmd)) (done);
-		return done;
-	} else
+			return done;
+		}
+	} 
+
+	else{
+
 		return 0;
+	}
 }
 
 /* prompt procedure....  Write out the prompt and then read a response. */
-void 
-prompt(char *cmdline, int linelen, const char *promptstr)
-{
-	int     incount = 0;
-	int     inchar;
+void  prompt(char *cmdline, int linelen, const char *promptstr) {
+	int incount = 0;
+	int inchar;
 
 	/* Give the prompt. */
 	printf("%s", promptstr);
@@ -127,12 +141,19 @@ prompt(char *cmdline, int linelen, const char *promptstr)
 	/* Read chars until newline or EOF, toss chars that won't fit in the
 	 * array. */
 	while (TRUE) {
+
 		inchar = getchar();
-		if (inchar == '\n' || inchar == EOF)
+		if (inchar == '\n' || inchar == EOF){
+
 			break;
-		if (++incount < linelen)
+		}
+			
+		if (++incount < linelen){
+
 			*cmdline++ = inchar;
+		}
 	}
+	
 	*cmdline = 0;
 }
 
@@ -141,11 +162,9 @@ prompt(char *cmdline, int linelen, const char *promptstr)
  * pointers to substrings in the original string.  It puts the string
  * terminator in the original line.
  */
-int 
-parse(char *cmdline, char **args)
-{
-	int     index;
-	int     argcnt = BLANK_LINE;
+int parse(char *cmdline, char **args) {
+	int index;
+	int argcnt = BLANK_LINE;
 
 	/* Initialize the args. */
 	for (index = 0; index < MAXARGS; index++)
@@ -172,9 +191,7 @@ parse(char *cmdline, char **args)
 /* Search cmd_tbl for 1) a command matching what the user typed or 2)
  * a unique command which is a superstring of what the user typed.
  */
-const struct command *
-find_entry(char *name)
-{
+const struct command *find_entry(char *name) {
 	const struct command *item, *save;
 	int     subcount = 0;
 
@@ -197,9 +214,7 @@ find_entry(char *name)
  * Returns CMP_MATCH if strings are the same, CMP_SUBSTR if p1 is a
  * proper substring of p2, and CMP_NOMATCH if neither.
  */
-int
-StrCmp(char *p1, char *p2)
-{
+int StrCmp(char *p1, char *p2) {
 	while (*p1 == *p2 && *p1 != '\0') {
 		++p1;
 		++p2;
@@ -211,9 +226,7 @@ StrCmp(char *p1, char *p2)
 
 
 /* Other routines that may be helpful in evaluating arguments....  */
-int
-Str2Int(char *str, int *num)
-{
+int Str2Int(char *str, int *num) {
 	if (!isdigit(*str) && *str != '-')
 		return FALSE;
 	*num = atoi(str);
@@ -224,9 +237,7 @@ Str2Int(char *str, int *num)
 #ifndef NO_HELP
 /* "?" command handler.  Print help and list of commands. */
 
-void
-help_cmds()
-{
+void help_cmds() {
 	const struct command *q;
 
 	printf("\nFor additional help, type HELP <command>.  Commands are:\n");
@@ -241,9 +252,7 @@ help_cmds()
 }
 
 /* The default help routine.  This may be redefined by the user. */
-int 
-help(int num, char **args, char *syntax)
-{
+int help(int num, char **args, char *syntax) {
 	const struct command *item;
 	int     index;
 	int     show_cmds = FALSE;
