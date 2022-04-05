@@ -1,21 +1,13 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -g
-CFILES=$(wildcard *.c)
-OBJS=$(patsubst %.c, %.o, $(CFILES))
+OUT=surf
 
-wbapi: wbapi.o test.o wpa_ctrl.o os_unix.o
-	@rm -rf testd.o
-	$(CC) $(CFLAGS) -o $@ wbapi.o test.o wpa_ctrl.o os_unix.o -lcrypto
+surf: $(OUT).o wpa_ctrl.o os_unix.o
+	@rm -f lib$(OUT).a
+	ar -cq lib$(OUT).a $(OUT).o wpa_ctrl.o os_unix.o
 
-debug: wbapi.o testd.o wpa_ctrl.o os_unix.o
-	@rm -rf test.o
-	$(CC) $(CFLAGS) -o wbapi wbapi.o testd.o wpa_ctrl.o os_unix.o -lcrypto
-
-wbapi.o: wbapi.c
-	$(CC) -c -I ./ -MMD -c -g -o $@ wbapi.c -lcrypto
-
-testd.o: test.c
-	$(CC) -c -I ./ -MMD -c -g -o $@ test.c -D DEBUG
+$(OUT).o: $(OUT).c
+	$(CC) -c -I ./ -MMD -c -g -o $@ $(OUT).c -lcrypto
 
 wpa_ctrl.o: wpa_ctrl.c
 	$(CC) -c -I ./ -MMD -c -g -o $@ wpa_ctrl.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
@@ -23,8 +15,5 @@ wpa_ctrl.o: wpa_ctrl.c
 os_unix.o: os_unix.c
 	$(CC) $(CFLAGS) -I ./ -MMD -c -o $@ os_unix.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
 
-%.o: %.c
-	$(CC) $(CFLAGS) -I ./ -MMD -c $< -o $@
-
 clean:
-	@rm -rf *.o *.d wbapi
+	@rm -rf *.o *.d libsurf.a

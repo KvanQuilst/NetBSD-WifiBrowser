@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include "wpa_ctrl.h"
 
-#include "wbapi.h"
+#include "surf.h"
 
 /**************************
   Global Variables
