@@ -45,6 +45,14 @@
 CMD_PROC(say_hello);
 CMD_PROC(do_exit);
 CMD_PROC(conf_configAuto);
+CMD_PROC(conf_configAutoEAP);
+CMD_PROC(conf_addEntry);
+CMD_PROC(conf_editNetwork);
+CMD_PROC(conf_enableNetwork);
+CMD_PROC(conf_deleteNetwork);
+CMD_PROC(conf_cleanNetworks);
+CMD_PROC(listConfigured);
+CMD_PROC(listAvailable); 
 
 /* Place holder */
 
@@ -58,7 +66,38 @@ int do_exit (int num, char **args, char *syntax) {
 }
 
 int conf_configAuto(int num, char **args, char *syntax){
+  return 1;
+}
 
+int conf_configAutoEAP(int num, char **args, char *syntax){
+  return 1;
+}
+
+int conf_addEntry(int num, char **args, char *syntax){
+  return 1;
+}
+
+int conf_editNetwork(int num, char **args, char *syntax){
+  return 1;
+}
+
+int conf_enableNetwork(int num, char **args, char *syntax){
+  return 1;
+}
+
+int conf_deleteNetwork(int num, char **args, char *syntax){
+  return 1;
+}
+
+int conf_cleanNetworks(int num, char **args, char *syntax){
+  return 1;
+}
+
+int listConfigured(int num, char **args, char *syntax){
+  return 1;
+}
+
+int listAvailable(int num, char **args, char *syntax){
   return 1;
 }
 
