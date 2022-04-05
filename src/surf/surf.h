@@ -1,5 +1,5 @@
 /*
- * Wifi Browser API / wbapi.h
+ * Surf API / surf.h
  * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
  * 
  * This software is under the terms of the BSD license.
@@ -8,10 +8,10 @@
 #pragma once
 
 /* 
- * api_init - initialize wifi browser api
+ * surf_init - initialize the surf api
  * returns: 0 if successful, -1 if fail 
  */
-int api_init();
+int surf_init();
 
 /**************************
  *
@@ -23,7 +23,7 @@ int api_init();
  * conf_connectAuto - adds a new network entry to the focused configuration file
  * and automatically supplies the additional info for wpa_supplicant connection
  * Set PSK to NULL if no passkey for network
- * requires: string of ssid, length of ssid, string of passkey for ssid, length of psk
+ * requires: string of ssid, string of passkey for ssid
  * returns: 0 if success, -1 if fail
  */
 int conf_configAuto(const char *ssid, const char *psk);
@@ -50,8 +50,8 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
 int conf_addEntry(const char *ssid);
 
 /*
- * conf_editNetwork - edits the specified network config (based on ssid) using
- * the information from the provided configuration struct
+ * conf_editNetwork - edits the specified field of a network config (based on ssid) 
+ * to the provided value
  * Automatically disables the network: must re-enable for network configuration
  * to work. 
  * !!! You MUST re-enable the network for it save. Network configuration will be 

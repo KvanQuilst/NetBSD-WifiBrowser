@@ -1,7 +1,15 @@
+/*
+ * Surf API / surf_test.c
+ * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+ * * This software is under the terms of the BSD license.  * See README for more details.
+ *
+ * Test file for the Surf API
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "surf.h"
+#include <surf.h>
 #define BUF_SIZE 4096
 
 const char *net1 = "Auto-SSID";
@@ -24,7 +32,7 @@ static void printConfig()
 static void test_connect()
 {
   printf("/* Connect to wpa_supplicant */\n");
-  if (api_init() == 0)
+  if (surf_init() == 0)
     printf("OK\n");
   else {
     printf("Failed to connect to wpa_supplicant...\n");

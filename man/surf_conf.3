@@ -1,0 +1,121 @@
+.\"
+.\" surf API / surf_conf man page
+.\" Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+.\" * This software is under the terms of the BSD license.  * See README for more details.
+.\"
+.Dd April 5, 2022
+.Dt SURF_CONF
+.Os
+.Sh NAME
+.Nm conf_addEntry ,
+.Nm conf_cleanNetworks ,
+.Nm conf_configAuto ,
+.Nm conf_configAutoEAP ,
+.Nm conf_deleteNetwork ,
+.Nm conf_editNetwork ,
+.Nm conf_enableNetwork
+.Nd functions to edit
+.Xr wpa_supplicant(8) 's
+current configuration file
+.Sh LIBRARY
+Surf Library (libsurf, -lsurf)
+.Sh SYNOPSIS
+.In "surf.h"
+.Ft int
+.Fn conf_addEntry "const char *ssid"
+.Ft int
+.Fn conf_cleanNetworks "void"
+.Ft int
+.Fn conf_configAuto "const char *ssid, const char *psk"
+.Ft int
+.Fn conf_configAutoEAP "const char *ssid, const char *usr, const char *pwd"
+.Ft int
+.Fn conf_deleteNetwork "const char *ssid"
+.Ft int
+.Fn conf_editNetwork "const char *ssid, const char *field, const char *value"
+.Ft int
+.Fn conf_enableNetwork "const char *ssid"
+.Sh DESCRIPTION
+These functions interact with
+.Xr wpa_supplicant 8
+to modify the configuration file that it is currently pointing at.
+.Pp
+The
+.Fn conf_addEntry
+function adds a new empty entry 
+to the configuration file with the ssid field set to
+.Fa ssid  . 
+This is intended to be used with
+.Fn conf_editNetwork
+for manual configurations. Note: the new network entry is disabled
+when created.
+.Pp
+The
+.Fn conf_deleteNetwork
+function deletes the configured network with name
+.Fa ssid
+from the current configuration.
+.Fn conf_cleanNetworks 
+works similarly except that it deletes
+all configured networks from the configuration.
+.Pp
+The
+.Fn conf_configAuto
+function creates a new network entry which includes the
+.Fa ssid
+and 
+.Fa psk
+provided by the user and automatically includes the
+remaining necessary information. If the
+.Fa psk
+is NULL, then the function will modify the configuration
+accordingly to require no psk.
+.Pp
+.Fn conf_configAutoEAP
+is similar to
+.Fn conf_configAuto
+except that it is specifically for EAP networks.
+The function will add a new entry to the configuration
+with the
+.Fa ssid  ,
+.Fa user  ,
+and
+.Fa pwd 
+fields set accordingly.
+.Pp
+The
+.Fn conf_editNetwork
+function edits an existing network with the matching
+.Fa ssid  .
+The function will add the provided
+.Fa value
+to the provided
+.Fa field
+of the network configuration. When a network configuration
+is edited, the network becomes disabled. Be sure to re-enable
+the network with
+.Fn conf_enableNetwork
+when editing is finished. Note:
+.Fn conf_editNetwork
+will fail if invalid field or ssid is provided.
+.Pp
+The function
+.Fn conf_enableNetwork
+enables the network having
+.Fa ssid  ,
+allowing to be utilized by 
+.Xr wpa_supplicant 8
+in a connection.
+Note: Disabled networks on reboot or reconnection to 
+.Xr wpa_supplicant 8
+may result in that network being lost.
+.Sh RETURN VALUES
+Functions will return 0 on success and a -1 on failure.
+.Sh SEE ALSO
+.Xr surf 3  ,
+.Xr surf_init 3 ,
+.Xr surf_list 3 ,
+.Xr wpa_supplicant 8 ,
+.Xr wpa_supplicant.conf 5
+.Sh AUTHORS
+.An Dylan Eskew
