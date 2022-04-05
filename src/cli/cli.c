@@ -159,9 +159,22 @@ int addEntry(int num, char **args, char *syntax){
 
 int editNetwork(int num, char **args, char *syntax){
 
-  
+  char ssid[FIELDLEN], field[FIELDLEN], value[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+  printf("field: "); fgets(field, FIELDLEN, stdin);
+  printf("value: "); fgets(value, FIELDLEN, stdin);
 
-  return 1;
+  if(conf_editNetwork(ssid, field, value) < 0){
+
+    printf("Field %s for %s has been changed. \n", field, ssid);
+    return 0;
+  }
+
+  else{
+
+    printf("Error editing specified network in configuration file.\n");    
+    return 1;
+  }
 }
 
 int enableNetwork(int num, char **args, char *syntax){
