@@ -543,7 +543,7 @@ int listConfigured(char *buf, size_t len)
     return -1;
 
   sscanf(list, "%*[^\n]%[\001-\255]", list);
-  if (list[1] == 1)
+  if (list[1] == 0)
     snprintf(buf, len, "No configured networks!\n");
   else {
     sscanf(list, "\n%[\001-\255]", list);
