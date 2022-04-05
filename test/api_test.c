@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "wbapi.h"
+#include "surf.h"
 #define BUF_SIZE 4096
 
 const char *net1 = "Auto-SSID";

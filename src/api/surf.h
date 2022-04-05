@@ -7,17 +7,6 @@
  */
 #pragma once
 
-#include <assert.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <openssl/evp.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-#include "wpa_ctrl.h"
-
 /* 
  * api_init - initialize wifi browser api
  * returns: 0 if successful, -1 if fail 
