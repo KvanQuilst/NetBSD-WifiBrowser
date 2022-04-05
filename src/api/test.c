@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "wbapi.h"
 #define BUF_SIZE 4096
 
@@ -14,7 +17,7 @@ static void printConfig()
   char buf[BUF_SIZE];
 
   if (listConfigured(buf, BUF_SIZE) >= 0)
-    printf("List of configured networks:\n%s\n", buf);
+    printf("List of configured networks:\n%s", buf);
 }
 #endif
 
@@ -52,7 +55,7 @@ static void test_listAvailable()
     printf("OK\n");
 
 #ifdef DEBUG
-  printf("List of available networks:\n%s\n", buf);
+  printf("List of available networks:\n%s", buf);
 #endif
   printf("\n");
 }
