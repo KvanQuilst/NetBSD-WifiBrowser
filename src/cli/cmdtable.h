@@ -42,9 +42,22 @@
 CMD_PROC (help);
 #endif
 
+
+/* 
+ * Define new commands in this file. 
+ * 
+ * 
+*/ 
+
+
+
+
+
+
 /* hdsetup commands. */
 CMD_PROC (say_hello);
 CMD_PROC (do_exit);
+CMD_PROC (conf_configAuto);
 
 /* The command definitions. This is where the user should add new
    command definitions.
@@ -56,35 +69,25 @@ CMD_PROC (do_exit);
    NOTE:  For an alphabetical list from the help command, list the
    commands in alphabetical order on the name field. */
 
-const
-struct command cmd_table [] = {		/* Command Table */
+const struct command cmd_table [] = {		/* Command Table */
 
-{ say_hello, "hello",
-"HELLO",
-"Says hello back"
-},
+{ say_hello, "hello", "HELLO", "Says hello back" },
 
 #ifndef NO_HELP
-{ help, "help", "HELP [<command>].",
-"Provides help for all listed <command>s.  If there none, prints a list \n\
-of the commands."
-},
+{ help, "help", "HELP [<command>].", "Provides help for all listed <command>s.  If there none, prints a list \n of the commands." },
 #endif
 
 #ifndef NO_HELP
-{ help, "?", "",
-"Prints a list of commands."
-},
+{ help, "?", "", "Prints a list of commands." },
 #endif
 
-{ do_exit, "exit", "EXIT",
-"Just get out of here."
-},
+{ do_exit, "exit", "EXIT", "Just get out of here." }, 
+{ conf_configAuto, "conf auto", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
+
 
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
-
 
 /* The prompt! */
 #define PROMPT "cli (? for help): "

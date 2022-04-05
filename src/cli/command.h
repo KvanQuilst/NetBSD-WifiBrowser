@@ -50,25 +50,24 @@
 struct command {	/* The commands, their names, help */
 	int	(*fn) (int, char **, char *);
 	char	*name;
-	char	*syntax;
+	char	*syntax; 
 	char	*help;
 };
 
-/*  The command loop will do the following:
+/*  The command loop will do the following: 
 	a) prompt the user for a command.
 	b) read the command line.
 	c) break the input line into arguments.
 	d) search for the command in the command table.
 	e) If the command is found, call the routine to process it.
-        f) IF the return value from the command is NON ZERO, exit the loop.
+    f) IF the return value from the command is NON ZERO, exit the loop.
 
 Each function to process a command must be defined as follows:
 
    int name ( int num, char ** cmd_args ) where num is the number
    of arguments (the command name is not counted) and the cmd_args is
    an array of pointers to the arguments.  cmd_args[0] is the command
-   name.  cmd_args[1] is the first argument.
-
+   name.  cmd_args[1] is the first argument. 
 */
 
 

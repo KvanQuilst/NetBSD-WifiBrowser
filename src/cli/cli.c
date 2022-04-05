@@ -33,16 +33,23 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "command.h"
 #include "extern.h"
+#include "../api/surf.h" 
 
 /*
- * Generic Command Line Interface, example command
+ * Include all the functions used with program. 
  *
  */
 
+CMD_PROC(say_hello);
+CMD_PROC(do_exit);
+CMD_PROC(conf_configAuto);
+
 /* Place holder */
+
 int say_hello (int num, char **args, char *syntax) {
-  printf ("Hello!\n");
+  printf ("Hello! ... args[0] is %s\n", args[0]);
   return 0;
 }
 
@@ -50,8 +57,19 @@ int do_exit (int num, char **args, char *syntax) {
   return 1;
 }
 
+int conf_configAuto(int num, char **args, char *syntax){
+
+  return 1;
+}
+
+
+
 /* Main program */
 int main (int argc, char **argv) {
+  
+  /* Initiate API at start of program */
+  api_init();
 
-   command_loop();
+  /* Run command loop */
+  command_loop();
 }

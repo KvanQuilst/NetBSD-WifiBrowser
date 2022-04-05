@@ -33,10 +33,3 @@
 
 /* From command.c */
 void  command_loop (void);
-
-/* from cli.c */
-
-int say_hello (int, char **, char *);
-int do_exit (int, char **, char *);
-
-extern char *__progname;
