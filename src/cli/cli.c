@@ -33,6 +33,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "command.h"
 #include "extern.h"
 #include "../api/surf.h" 
@@ -44,15 +45,15 @@
 
 CMD_PROC(say_hello);
 CMD_PROC(do_exit);
-CMD_PROC(conf_configAuto);
-CMD_PROC(conf_configAutoEAP);
-CMD_PROC(conf_addEntry);
-CMD_PROC(conf_editNetwork);
-CMD_PROC(conf_enableNetwork);
-CMD_PROC(conf_deleteNetwork);
-CMD_PROC(conf_cleanNetworks);
-CMD_PROC(listConfigured);
-CMD_PROC(listAvailable); 
+CMD_PROC(configAuto);
+CMD_PROC(configAutoEAP);
+CMD_PROC(addEntry);
+CMD_PROC(editNetwork);
+CMD_PROC(enableNetwork);
+CMD_PROC(deleteNetwork);
+CMD_PROC(cleanNetworks);
+CMD_PROC(lsConfigured);
+CMD_PROC(lsAvailable); 
 
 /* Place holder */
 
@@ -65,39 +66,121 @@ int do_exit (int num, char **args, char *syntax) {
   return 1;
 }
 
-int conf_configAuto(int num, char **args, char *syntax){
+int configAuto(int num, char **args, char *syntax){
+
+  char ssid[FIELDLEN], psk[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+  printf("psk: "); fgets(psk, FIELDLEN, stdin);
+  if(conf_configAuto(ssid, psk) < 0){
+    
+    printf("Error setting auto configuration.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Successful auto configuration. \n");
+    return 1;
+  }
+}
+
+int configAutoEAP(int num, char **args, char *syntax){
+
+  char ssid[FIELDLEN], user[FIELDLEN], pwd[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+  printf("user: "); fgets(user, FIELDLEN, stdin);
+  printf("pwd: "); fgets(pwd, FIELDLEN, stdin);
+
+  if(conf_configAutoEAP(ssid, user, pwd) < 0){
+
+    printf("Error setting auto configuration for EAP network.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Success setting auto configuration for EAP network.\n");
+    return 1;
+  }
+}
+
+int addEntry(int num, char **args, char *syntax){
+
+  char ssid[FIELDLEN]; 
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+  
+  if(conf_addEntry(ssid) < 0){
+
+    printf("Error adding new entry.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Type 'n' to end additional fields for new network.\n");
+    while(TRUE){
+
+      char field[FIELDLEN], value[FIELDLEN];
+      printf("field: "); fgets(field, FIELDLEN, stdin);
+      printf("value: "); fgets(value, FIELDLEN, stdin);
+
+      if(strcmp(field, "n\n") == 0 || strcmp(value, "n\n") == 0){
+
+        break;
+      }
+
+      else{
+
+        if(conf_editNetwork(ssid, field, value) < 0){
+
+          printf("Effor editing specified network field to configuration file.\n");
+        }
+
+        else{
+
+          printf("Field added to configuration file.\n");
+        }
+      }
+    }
+
+    if(conf_enableNetwork(ssid) < 0){
+
+      printf("Error enabling new network in configuration file.\n");
+      return 0;
+    }
+
+    else{
+
+      printf("Success enabling new network in configuration file.\n");
+      return 1;
+    }
+  }
+}
+
+int editNetwork(int num, char **args, char *syntax){
+
+  
+
   return 1;
 }
 
-int conf_configAutoEAP(int num, char **args, char *syntax){
+int enableNetwork(int num, char **args, char *syntax){
   return 1;
 }
 
-int conf_addEntry(int num, char **args, char *syntax){
+int deleteNetwork(int num, char **args, char *syntax){
   return 1;
 }
 
-int conf_editNetwork(int num, char **args, char *syntax){
+int cleanNetworks(int num, char **args, char *syntax){
   return 1;
 }
 
-int conf_enableNetwork(int num, char **args, char *syntax){
+int lsConfigured(int num, char **args, char *syntax){
   return 1;
 }
 
-int conf_deleteNetwork(int num, char **args, char *syntax){
-  return 1;
-}
-
-int conf_cleanNetworks(int num, char **args, char *syntax){
-  return 1;
-}
-
-int listConfigured(int num, char **args, char *syntax){
-  return 1;
-}
-
-int listAvailable(int num, char **args, char *syntax){
+int lsAvailable(int num, char **args, char *syntax){
   return 1;
 }
 

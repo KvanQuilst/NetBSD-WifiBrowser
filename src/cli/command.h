@@ -76,6 +76,7 @@ Each function to process a command must be defined as follows:
 #define TRUE 1
 #define FALSE 0
 #define LINELEN 256
+#define FIELDLEN 64
 #define MAXARGS 16
 #define BLANK_LINE 0
 

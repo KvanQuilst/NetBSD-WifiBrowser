@@ -52,15 +52,15 @@ CMD_PROC (help);
 /* hdsetup commands. */
 CMD_PROC (say_hello);
 CMD_PROC (do_exit);
-CMD_PROC (conf_configAuto);
-CMD_PROC (conf_configAutoEAP);
-CMD_PROC (conf_addEntry);
-CMD_PROC (conf_editNetwork);
-CMD_PROC (conf_enableNetwork);
-CMD_PROC (conf_deleteNetwork);
-CMD_PROC (conf_cleanNetworks);
-CMD_PROC (listConfigured);
-CMD_PROC (listAvailable);
+CMD_PROC (configAuto);
+CMD_PROC (configAutoEAP);
+CMD_PROC (addEntry);
+CMD_PROC (editNetwork);
+CMD_PROC (enableNetwork);
+CMD_PROC (deleteNetwork);
+CMD_PROC (cleanNetworks);
+CMD_PROC (lsConfigured);
+CMD_PROC (lsAvailable);
 
 /* The command definitions. This is where the user should add new
    command definitions.
@@ -85,15 +85,15 @@ const struct command cmd_table [] = {		/* Command Table */
 #endif
 
 { do_exit, "exit", "EXIT", "Just get out of here." }, 
-{ conf_configAuto, "conf auto", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
-{ conf_configAutoEAP, "conf auto eap", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
-{ conf_addEntry, "conf add", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
-{ conf_editNetwork, "conf edit network", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
-{ conf_enableNetwork, "conf enable network", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
-{ conf_deleteNetwork, "conf delete network", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
-{ conf_cleanNetworks, "conf clean networks", "CONF_CLEAN_NETWORKS", "Cleans all networks from the focused configuration file. "},
-{ listConfigured, "list configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
-{ listAvailable, "list available", "LIST_AVAILABLE", "Lists all available networks. "},
+{ configAuto, "conf auto", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
+{ configAutoEAP, "conf auto eap", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
+{ addEntry, "conf add", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
+{ editNetwork, "conf edit network", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
+{ enableNetwork, "conf enable network", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
+{ deleteNetwork, "conf delete network", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
+{ cleanNetworks, "conf clean networks", "CONF_CLEAN_NETWORKS", "Cleans all networks from the focused configuration file. "},
+{ lsConfigured, "list configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
+{ lsAvailable, "list available", "LIST_AVAILABLE", "Lists all available networks. "},
 
 };
 
