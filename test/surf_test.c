@@ -24,7 +24,7 @@ static void printConfig()
 static void test_connect()
 {
   printf("/* Connect to wpa_supplicant */\n");
-  if (api_init() == 0)
+  if (surf_init() == 0)
     printf("OK\n");
   else {
     printf("Failed to connect to wpa_supplicant...\n");
