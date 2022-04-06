@@ -1,5 +1,5 @@
 /*
- * Wifi Browser API / wbapi.h
+ * Wifi Browser API / surf.h
  * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
  * 
  * This software is under the terms of the BSD license.
@@ -8,10 +8,10 @@
 #pragma once
 
 /* 
- * api_init - initialize wifi browser api
+ * surf_init - initialize the surf api
  * returns: 0 if successful, -1 if fail 
  */
-int api_init();
+int surf_init();
 
 /**************************
  *

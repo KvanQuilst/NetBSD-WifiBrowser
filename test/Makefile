@@ -1,10 +1,10 @@
 CC=gcc
-LFLAGS=-L ../src/api -lsurf
-INCLUDE=-I ../src/api
-OFLAG=-o api
+LFLAGS=-L ../src/surf -lsurf
+INCLUDE=-I ../src/surf
+OFLAG=-o surf
 
-api_test: api_test.c
-	$(CC) $(OFLAG) api_test.c $(INCLUDE) $(LFLAGS)
+api_test: surf_test.c
+	$(CC) $(OFLAG) surf_test.c $(INCLUDE) $(LFLAGS)
 
-debug: api_test.c
-	$(CC) $(OFLAG) api_test.c -D DEBUG $(INCLUDE) $(LFLAGS)
+debug: surf_test.c
+	$(CC) $(OFLAG) surf_test.c -D DEBUG $(INCLUDE) $(LFLAGS)
