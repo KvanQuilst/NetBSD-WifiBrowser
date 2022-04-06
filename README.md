@@ -1,6 +1,6 @@
 # NetBSD WiFi Browser
 
-Project to create a WiFi browser for NetBSD
+Project to create a WiFi Browser for NetBSD. This include the Surf API, WBCLI, and WBTUI
 
 
 Copyright 2021-2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane. All Rights Reserved.
