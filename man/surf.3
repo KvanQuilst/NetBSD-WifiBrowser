@@ -1,0 +1,64 @@
+.\"
+.\" Wifi Browser API / surf man page
+.\" Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+.\" * This software is under the terms of the BSD license.  * See README for more details.
+.\"
+.\" Central point for processing requests made against Wifi Browser API
+.\"
+.Dd April 5, 2022
+.Dt SURF
+.Os
+.Sh NAME
+.Nm surf
+.Nd functions for semi-automated interactions with wpa_supplicant
+.Sh LIBRARY
+Surf Library (libsurf, -lsurf)
+.Sh SYNOPSIS
+.Nm cc
+.Op Ar flags
+.Ar files
+.Fl lsurf
+.Op Ar libraries
+.Sh DESCRIPTION
+These functions provide the user with a simpler way of interfacing with
+.Xr wpa_supplicant 8 
+specifically in modifying the current configuration file
+.Xr wpa_supplicant 8 
+is associated with. The user is able to leverage automatic wifi network
+configuration with
+.Fn conf_configAuto
+and
+.Fn conf_configAutoEAP
+functions.
+The user is also still able to leverage manual configuration with either
+a call to 
+.Fn conf_addEntry
+for a new network or with an existing configuration using
+.Fn conf_editNetwork  .
+The user then must remember to enable the network with
+.Fn conf_enableNetwork
+before finishing, otherwise the saved network information will be lost.
+To start using the surf library, the user must call
+.Fn api_init
+which establishes the connection with a running instance of
+.Xr wpa_supplicant 8
+and sets up the environment.
+.Sh FUNCTIONS
+.Bl -column "subwin(win,lines,cols,begin_y,begin_x)"
+.It Sy "Function Name" Ta Sy "Manual Page Name"
+.It api_init Ta Xr surf_init 3
+.It conf_addEntry Ta Xr surf_conf 3
+.It conf_cleanNetworks Ta Xr surf_conf 3
+.It conf_configAuto Ta Xr surf_conf 3
+.It conf_configAutoEap Ta Xr surf_conf 3
+.It conf_deleteNetwork Ta Xr surf_conf 3
+.It conf_editNetwork Ta Xr surf_conf 3
+.It conf_enableNetwork Ta Xr surf_conf 3
+.It listConfigured Ta Xr surf_list 3
+.It listAvailable Ta Xr surf_list 3
+.El
+.Sh SEE ALSO
+.Xr wpa_supplicant 8 ,
+.Xr wpa_supplicant.conf 5
+.Sh AUTHORS
+.An Dylan Eskew
