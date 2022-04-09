@@ -81,7 +81,7 @@ int configAuto(int num, char **args, char *syntax){
 
   else{
 
-    printf("Successful auto configuration. \n");
+    printf("Success setting auto configuration. \n");
     return 1;
   }
 }
