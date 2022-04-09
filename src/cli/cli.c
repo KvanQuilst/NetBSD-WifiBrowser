@@ -36,7 +36,7 @@
 #include <string.h>
 #include "command.h"
 #include "extern.h"
-#include "../api/surf.h" 
+#include "../surf/surf.h" 
 
 /*
  * Include all the functions used with program. 
