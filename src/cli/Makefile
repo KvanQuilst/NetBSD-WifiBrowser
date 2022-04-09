@@ -1,7 +1,7 @@
 # sample cli processor
 
 PROG   = cli
-SRCS   = cli.c command.c
+SRCS   = cli.c command.c ../surf/surf.h
 
 MAN  = cli.1
 
