@@ -73,7 +73,7 @@ int configAuto(int num, char **args, char *syntax){
   printf("psk: "); fgets(psk, FIELDLEN, stdin);
   if(conf_configAuto(ssid, psk) < 0){
     
-    printf("Error setting auto configuration.\n");
+    printf("Error setting auto configuration. \n");
     return 0;
   }
 
@@ -133,7 +133,7 @@ int addEntry(int num, char **args, char *syntax){
 
         if(conf_editNetwork(ssid, field, value) < 0){
 
-          printf("Effor editing specified network field to configuration file.\n");
+          printf("Error editing specified network field to configuration file.\n");
         }
 
         else{
@@ -178,26 +178,77 @@ int editNetwork(int num, char **args, char *syntax){
 }
 
 int enableNetwork(int num, char **args, char *syntax){
-  return 1;
+
+  char ssid[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+
+  if(conf_enableNetwork(ssid) < 0){
+
+    printf("Error enabling network.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Network %s has been enabled.\n", ssid);
+    return 1;
+  }
 }
 
 int deleteNetwork(int num, char **args, char *syntax){
-  return 1;
-}
 
-int cleanNetworks(int num, char **args, char *syntax){
-  return 1;
+  char ssid[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+
+  if(conf_deleteNetwork(ssid) < 0){
+
+    printf("Error deleting %s network from configuration file.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Success deleting %s network from configuration file.\n");
+    return 1;
+  }
 }
 
 int lsConfigured(int num, char **args, char *syntax){
-  return 1;
+
+  char buffer[LINELEN];
+  if(listConfigured(buffer, sizeof(buffer)) < 0){
+
+    printf("Error listing configured networks.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Configured Networks: %s\n", buffer);
+    return 1;
+  }
 }
 
 int lsAvailable(int num, char **args, char *syntax){
-  return 1;
+
+  char buffer[LINELEN];
+  if(listAvailable(buffer, sizeof(buffer)) < 0){
+
+    printf("Error listing available networks.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Available Networks: %s\n", buffer);
+    return 1;
+  }
 }
 
+int cleanNetworks(int num, char **args, char *syntax){
 
+  return 1;
+}
 
 /* Main program */
 int main (int argc, char **argv) {

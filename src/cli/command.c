@@ -197,7 +197,6 @@ int StrCmp(char *p1, char *p2) {
 	return CMP_NOMATCH;
 }
 
-
 /* Other routines that may be helpful in evaluating arguments....  */
 int Str2Int(char *str, int *num) {
 	if (!isdigit(*str) && *str != '-')
