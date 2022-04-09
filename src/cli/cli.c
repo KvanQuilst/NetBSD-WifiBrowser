@@ -38,11 +38,9 @@
 #include "extern.h"
 #include "../surf/surf.h" 
 
-/*
- * Include all the functions used with program. 
- *
+/* 
+ * Function PROCS to be used with program 
  */
-
 CMD_PROC(say_hello);
 CMD_PROC(do_exit);
 CMD_PROC(configAuto);
@@ -56,7 +54,6 @@ CMD_PROC(lsConfigured);
 CMD_PROC(lsAvailable); 
 
 /* Place holder */
-
 int say_hello (int num, char **args, char *syntax) {
   printf ("Hello! ... args[0] is %s\n", args[0]);
   return 0;
@@ -66,6 +63,11 @@ int do_exit (int num, char **args, char *syntax) {
   return 1;
 }
 
+/* 
+ * Auto configure a new network. Requires an ssid and psk from the user. 
+ * Automatically supplies the additional info for wpa_supplicant to the 
+ * configuration file. 
+*/ 
 int configAuto(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN], psk[FIELDLEN];
@@ -84,6 +86,11 @@ int configAuto(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Auto configures a new EAP network. Requires an ssid, username and password from 
+ * the user. Automatically supplies the additional data needed for wpa_supplicant to 
+ * the configuration file. 
+*/ 
 int configAutoEAP(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN], user[FIELDLEN], pwd[FIELDLEN];
@@ -104,6 +111,12 @@ int configAutoEAP(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Adds a new entry to the conguration file. Used to manually configure a network. 
+ * Requires an ssid from the user. Additional fields required if any. Used in 
+ * conjunction with edit network and enable network to enable the network and add 
+ * additional fields.   
+*/
 int addEntry(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN]; 
@@ -157,6 +170,10 @@ int addEntry(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Edits the specified field for a network. Requires an ssid, field, and value from 
+ * the user. Changes to the field will be updated in the configuration file. 
+*/
 int editNetwork(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN], field[FIELDLEN], value[FIELDLEN];
@@ -177,6 +194,9 @@ int editNetwork(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Enables the specified network in the configuration file. Requires an ssid from the user. 
+*/ 
 int enableNetwork(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN];
@@ -195,6 +215,9 @@ int enableNetwork(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Deletes the specified network from the configuration file. Requires an ssid from the user.
+*/ 
 int deleteNetwork(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN];
@@ -213,6 +236,9 @@ int deleteNetwork(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Lists configured networks in the configuration file. 
+*/ 
 int lsConfigured(int num, char **args, char *syntax){
 
   char buffer[LINELEN];
@@ -229,6 +255,9 @@ int lsConfigured(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Lists available visible networks. 
+*/ 
 int lsAvailable(int num, char **args, char *syntax){
 
   char buffer[LINELEN];
