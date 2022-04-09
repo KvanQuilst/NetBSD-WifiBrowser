@@ -43,8 +43,7 @@
 
 #include "command.h"
 #include "cmdtable.h"
-#include "extern.h"
-#include "../surf/surf.h" 
+#include "extern.h" 
 
 /* This allows the user to define the prompt in cmdtable.h */
 #ifndef PROMPT

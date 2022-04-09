@@ -172,7 +172,7 @@ int editNetwork(int num, char **args, char *syntax){
 
   else{
 
-    printf("Error editing specified network in configuration file.\n");    
+    printf("Error editing specified network in configuration file. \n");    
     return 1;
   }
 }
