@@ -564,7 +564,9 @@ int listAvailable(char *buf, size_t len)
   char list[4096] = {0};
   char ssid[32] = {0};
   char flags[128] = {0};
+  char signal[32] = {0};
   int pos = 0;
+  int sig;
 
   if (!wpa) {
     fprintf(stderr, "Not connected to wpa_supplicant...\n");
@@ -581,11 +583,14 @@ int listAvailable(char *buf, size_t len)
   if (list[1] == 0)
     snprintf(buf, len, "No networks available!\n");
   else {
+    //snprintf(buf, len, "%-32s %-6s %5s\n", "SSID", "SIGNAL", "FLAGS");
+    //pos += 46;
     sscanf(list, "\n%[\001-\255]", list);
     while (list[1] != 0) {
-      sscanf(list, "\n%*s%*s%*s%s\t%[^\n]%[\001-\255]", flags, ssid, list);
-      snprintf(&buf[pos], len - pos, "%-32s %s\n", ssid, flags);
-      pos += 34 + strnlen(flags, sizeof(flags));
+      sscanf(list, "\n%*s%*s%s%s\t%[^\n]%[\001-\255]", signal, flags, ssid, list);
+      sig = atoi(signal);
+      snprintf(&buf[pos], len - pos, "%-32s %-6d %s\n", ssid, sig, flags);
+      pos += 41 + strnlen(flags, sizeof(flags));
     }
   }
   return 0;
