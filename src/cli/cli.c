@@ -254,7 +254,7 @@ int cleanNetworks(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  api_init();
+  surf_init();
 
   /* Run command loop */
   command_loop();
