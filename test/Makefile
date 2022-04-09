@@ -8,3 +8,6 @@ api_test: surf_test.c
 
 debug: surf_test.c
 	$(CC) $(OFLAG) surf_test.c -D DEBUG $(INCLUDE) $(LFLAGS)
+
+clean:
+	@rm -f surf
