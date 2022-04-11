@@ -43,7 +43,7 @@
 
 #include "command.h"
 #include "cmdtable.h"
-#include "extern.h"
+#include "extern.h" 
 
 /* This allows the user to define the prompt in cmdtable.h */
 #ifndef PROMPT
@@ -196,7 +196,6 @@ int StrCmp(char *p1, char *p2) {
 		return (*p2 == '\0') ? CMP_MATCH : CMP_SUBSTR;
 	return CMP_NOMATCH;
 }
-
 
 /* Other routines that may be helpful in evaluating arguments....  */
 int Str2Int(char *str, int *num) {

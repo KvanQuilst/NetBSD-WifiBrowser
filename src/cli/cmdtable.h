@@ -93,8 +93,7 @@ const struct command cmd_table [] = {		/* Command Table */
 { deleteNetwork, "conf delete network", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
 { cleanNetworks, "conf clean networks", "CONF_CLEAN_NETWORKS", "Cleans all networks from the focused configuration file. "},
 { lsConfigured, "list configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
-{ lsAvailable, "list available", "LIST_AVAILABLE", "Lists all available networks. "},
-
+{ lsAvailable, "list available", "LIST_AVAILABLE", "Lists all available networks. "}, 
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))

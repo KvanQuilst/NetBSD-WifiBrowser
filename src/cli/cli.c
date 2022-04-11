@@ -38,11 +38,9 @@
 #include "extern.h"
 #include "surf.h" 
 
-/*
- * Include all the functions used with program. 
- *
+/* 
+ * Function PROCS to be used with program 
  */
-
 CMD_PROC(say_hello);
 CMD_PROC(do_exit);
 CMD_PROC(configAuto);
@@ -56,7 +54,6 @@ CMD_PROC(lsConfigured);
 CMD_PROC(lsAvailable); 
 
 /* Place holder */
-
 int say_hello (int num, char **args, char *syntax) {
   printf ("Hello! ... args[0] is %s\n", args[0]);
   return 0;
@@ -66,6 +63,11 @@ int do_exit (int num, char **args, char *syntax) {
   return 1;
 }
 
+/* 
+ * Auto configure a new network. Requires an ssid and psk from the user. 
+ * Automatically supplies the additional info for wpa_supplicant to the 
+ * configuration file. 
+*/ 
 int configAuto(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN], psk[FIELDLEN];
@@ -73,17 +75,22 @@ int configAuto(int num, char **args, char *syntax){
   printf("psk: "); fgets(psk, FIELDLEN, stdin);
   if(conf_configAuto(ssid, psk) < 0){
     
-    printf("Error setting auto configuration.\n");
+    printf("Error setting auto configuration. \n");
     return 0;
   }
 
   else{
 
-    printf("Successful auto configuration. \n");
+    printf("Success setting auto configuration. \n");
     return 1;
   }
 }
 
+/* 
+ * Auto configures a new EAP network. Requires an ssid, username and password from 
+ * the user. Automatically supplies the additional data needed for wpa_supplicant to 
+ * the configuration file. 
+*/ 
 int configAutoEAP(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN], user[FIELDLEN], pwd[FIELDLEN];
@@ -104,6 +111,12 @@ int configAutoEAP(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Adds a new entry to the conguration file. Used to manually configure a network. 
+ * Requires an ssid from the user. Additional fields required if any. Used in 
+ * conjunction with edit network and enable network to enable the network and add 
+ * additional fields.   
+*/
 int addEntry(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN]; 
@@ -133,7 +146,7 @@ int addEntry(int num, char **args, char *syntax){
 
         if(conf_editNetwork(ssid, field, value) < 0){
 
-          printf("Effor editing specified network field to configuration file.\n");
+          printf("Error editing specified network field to configuration file.\n");
         }
 
         else{
@@ -157,6 +170,10 @@ int addEntry(int num, char **args, char *syntax){
   }
 }
 
+/* 
+ * Edits the specified field for a network. Requires an ssid, field, and value from 
+ * the user. Changes to the field will be updated in the configuration file. 
+*/
 int editNetwork(int num, char **args, char *syntax){
 
   char ssid[FIELDLEN], field[FIELDLEN], value[FIELDLEN];
@@ -172,32 +189,95 @@ int editNetwork(int num, char **args, char *syntax){
 
   else{
 
-    printf("Error editing specified network in configuration file.\n");    
+    printf("Error editing specified network in configuration file. \n");    
     return 1;
   }
 }
 
+/* 
+ * Enables the specified network in the configuration file. Requires an ssid from the user. 
+*/ 
 int enableNetwork(int num, char **args, char *syntax){
-  return 1;
+
+  char ssid[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+
+  if(conf_enableNetwork(ssid) < 0){
+
+    printf("Error enabling network.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Network %s has been enabled.\n", ssid);
+    return 1;
+  }
 }
 
+/* 
+ * Deletes the specified network from the configuration file. Requires an ssid from the user.
+*/ 
 int deleteNetwork(int num, char **args, char *syntax){
-  return 1;
+
+  char ssid[FIELDLEN];
+  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+
+  if(conf_deleteNetwork(ssid) < 0){
+
+    printf("Error deleting %s network from configuration file.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Success deleting %s network from configuration file.\n");
+    return 1;
+  }
+}
+
+/* 
+ * Lists configured networks in the configuration file. 
+*/ 
+int lsConfigured(int num, char **args, char *syntax){
+
+  char buffer[LINELEN];
+  if(listConfigured(buffer, sizeof(buffer)) < 0){
+
+    printf("Error listing configured networks.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Configured Networks: %s\n", buffer);
+    return 1;
+  }
+}
+
+/* 
+ * Lists available visible networks. 
+*/ 
+int lsAvailable(int num, char **args, char *syntax){
+
+  char buffer[LINELEN];
+  if(listAvailable(buffer, sizeof(buffer)) < 0){
+
+    printf("Error listing available networks.\n");
+    return 0;
+  }
+
+  else{
+
+    printf("Available Networks: %s\n", buffer);
+    return 1;
+  }
 }
 
 int cleanNetworks(int num, char **args, char *syntax){
+
   return 1;
 }
-
-int lsConfigured(int num, char **args, char *syntax){
-  return 1;
-}
-
-int lsAvailable(int num, char **args, char *syntax){
-  return 1;
-}
-
-
 
 /* Main program */
 int main (int argc, char **argv) {
