@@ -36,7 +36,7 @@
 #include <string.h>
 #include "command.h"
 #include "extern.h"
-#include "../api/surf.h" 
+#include "surf.h" 
 
 /*
  * Include all the functions used with program. 
@@ -203,7 +203,7 @@ int lsAvailable(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  api_init();
+  surf_init();
 
   /* Run command loop */
   command_loop();
