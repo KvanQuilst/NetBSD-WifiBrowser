@@ -1,19 +1,13 @@
-CC=gcc
-CFLAGS=-Wall -Wextra -g -fPIC
-OUT=surf
+# NetBSD: Makefile, v 1.01 2022/04/12 11:01 royd4 $
 
-surf: $(OUT).o wpa_ctrl.o os_unix.o
-	@rm -f lib$(OUT).a
-	ar -cq lib$(OUT).a $(OUT).o wpa_ctrl.o os_unix.o
+.include <bsd.own.mk>
 
-$(OUT).o: $(OUT).c
-	$(CC) $(CFLAGS) -c -I ./ -MMD -c -g -o $@ $(OUT).c -lcrypto
+LIBISPRIVATE      = yes
 
-wpa_ctrl.o: wpa_ctrl.c
-	$(CC) $(CFLAGS) -c -I ./ -MMD -c -g -o $@ wpa_ctrl.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
+LIB                 = surf
+SRCS                = surf.c wpa_ctrl.c os_unix.c
+LDADD               += -lcrypto
+CPPFLAGS.wpa_ctrl.c = -MMD -DCONFIG_CTRL_IFACE -DCONFIG_CTRL_IFACE_UNIX
+CPPFLAGS.os_unix.c  = -MMD -DCONFIG_CTRL_IFACE -DCONFIG_CTRL_IFACE_UNIX
 
-os_unix.o: os_unix.c
-	$(CC) $(CFLAGS) -I ./ -MMD -c -o $@ os_unix.c -D CONFIG_CTRL_IFACE -D CONFIG_CTRL_IFACE_UNIX
-
-clean:
-	@rm -rf *.o *.d libsurf.a
+.include <bsd.lib.mk>
