@@ -2,6 +2,7 @@
 
 PROG = surf
 SRCS = surf_test.c
+SUBDIR += ../src/surf
 
 COPTS += -I../src/surf
 LDADD += -lsurf

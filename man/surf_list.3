@@ -1,0 +1,49 @@
+.\"
+.\" surf API / surf_list man page
+.\" Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+.\" * This software is under the terms of the BSD license.  * See README for more details.
+.\"
+.Dd April 5, 2022
+.Dt SURF_LIST
+.Os
+.Sh NAME
+.Nm listAvailable ,
+.Nm listConfigured  ,
+.Nd network listing functions for the surf api
+.Sh LIBRARY
+Surf Library (libsurf, -lsurf)
+.Sh SYNOPSIS
+.In "surf.h"
+.Ft int
+.Fn listAvailable "char *buf, size_t len"
+.Ft int
+.Fn listConfigured "char *buf, size_t len"
+.Sh DESCRIPTION
+The
+.Fn listAvailable
+function uses
+.Xr wpa_supplicant 8
+to scan for networks and fill
+.Fa buf 
+of length
+.Fa len
+with a list of the available networks in the area.
+The list will provide the SSIDs, signal strength, and network types.
+.Pp
+The
+.Fn listConfigured
+function will fill
+.Fa buf
+of length
+.Fa len
+with the list of the ssids of configured networks.
+.Sh RETURN VALUES
+Both functions will return 0 on success and a -1 on failure.
+.Sh SEE ALSO
+.Xr surf 3  ,
+.Xr surf_init 3 ,
+.Xr surf_conf 3 ,
+.Xr wpa_supplicant 8 ,
+.Xr wpa_supplicant.conf 5
+.Sh AUTHORS
+.An Dylan Eskew

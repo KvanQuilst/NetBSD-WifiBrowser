@@ -10,6 +10,4 @@ LDADD               += -lcrypto
 CPPFLAGS.wpa_ctrl.c += -MMD -DCONFIG_CTRL_IFACE -DCONFIG_CTRL_IFACE_UNIX
 CPPFLAGS.os_unix.c  += -MMD -DCONFIG_CTRL_IFACE -DCONFIG_CTRL_IFACE_UNIX
 
-MAN = surf.3
-
 .include <bsd.lib.mk>
