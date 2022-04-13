@@ -1,13 +1,12 @@
-CC=gcc
-LFLAGS=-L ../src/surf -lsurf
-INCLUDE=-I ../src/surf
-OFLAG=-o surf
+# Surf_Test Makefile
 
-api_test: surf_test.c
-	$(CC) $(OFLAG) surf_test.c $(INCLUDE) $(LFLAGS)
+PROG = surf
+SRCS = surf_test.c
 
-debug: surf_test.c
-	$(CC) $(OFLAG) surf_test.c -D DEBUG $(INCLUDE) $(LFLAGS)
+COPTS += -I../src/surf
+LDADD += -lsurf
+LDFLAGS += -L../src/surf
 
-clean:
-	@rm -f surf
+MAN =
+
+.include <bsd.prog.mk>
