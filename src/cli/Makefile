@@ -5,9 +5,6 @@ SRCS   = cli.c command.c
 
 MAN  = cli.1
 
-COPTS += -I../surf
-LDADD += -lsurf
-LDFLAGS += -L../surf
-
+.include "../Makefile.inc"
 .include <bsd.prog.mk>
 
