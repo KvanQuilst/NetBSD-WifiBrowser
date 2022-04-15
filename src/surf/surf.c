@@ -10,6 +10,7 @@
 #include <dirent.h>
 #include <fcntl.h>
 #include <openssl/evp.h>
+#include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -41,6 +42,17 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
 /**************************
   Helper Functions
 **************************/
+static void errMsg(char *format, ...) {
+  va_list vl;
+#ifdef DEBUG
+  errMsg("surf: ");
+  va_start(vl, format);
+  vfprintf(stderr, fmt, vl);
+  va_end(vl);
+  fprintf(stderr, "\n");
+#endif
+}
+
 static int wpaReq(const char *cmd, size_t cmd_len, 
     char *repl, size_t repl_len)
 {
@@ -49,10 +61,10 @@ static int wpaReq(const char *cmd, size_t cmd_len,
 
   retval = wpa_ctrl_request(wpa, cmd, cmd_len, repl, &l, NULL);
   if (retval == -2) {
-    fprintf(stderr, "Connection timed out; command dropped: %s\n", cmd);
+    errMsg("connection timed out; command dropped %s", cmd);
     return -1;
   } else if (retval < 0) {
-    fprintf(stderr, "Command failed: %s\n", cmd);
+    errMsg("command failed: %s", cmd);
     return -1;
   } else {
     repl[l] = 0;
@@ -65,7 +77,7 @@ static int reconfigure()
   char repl[128] = {0};
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
   
@@ -73,7 +85,7 @@ static int reconfigure()
     return -1;
   }
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in re-reading configuration file!\n");
+    errMsg("error in re-reading configuration file!");
     return -1;
   }
   return 0;
@@ -87,7 +99,7 @@ static int save()
     return -1;
   }
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in saving configuration!\n");
+    errMsg("error in saving configuration!");
     return -1;
   }
   return reconfigure();
@@ -102,7 +114,7 @@ static int getNetworkID(const char *ssid)
   while(strncmp(repl, "FAIL", 5)) {
     snprintf(cmd, sizeof(cmd), "GET_NETWORK %d ssid", id);
     if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0) {
-      fprintf(stderr, "surf: error in obtaining network id\n");
+      errMsg("error in obtaining network id");
       return -1;
     }
     sscanf(repl, "\"%[^\"]\"", repl);
@@ -112,7 +124,7 @@ static int getNetworkID(const char *ssid)
     id++;
   }
 
-  fprintf(stderr, "surf: network ssid does not exist!\n");
+  errMsg("network ssid does not exist!");
   return -1;
 }
 
@@ -128,19 +140,19 @@ int surf_init()
   DIR *dir = opendir(ctrl_iface_dir);
 
   if (dir == NULL) {
-    fprintf(stderr, "Default interface location does not exist!\n");
+    errMsg("default interface location does not exist!");
     return -1;
   }
 
   while ((dent = readdir(dir))) {
     if (strcmp(dent->d_name, ".") != 0 && strcmp(dent->d_name, "..") != 0) {
       ifname = strdup(dent->d_name);
-      fprintf(stderr, "Current interface: %s\n", ifname ? ifname : "n/a");
+      errMsg("current interface: %s", ifname ? ifname : "n/a");
     }
   }
 
   if (ifname == NULL) {
-    fprintf(stderr, "Default interface location does not exist!\n");
+    errMsg("default interface location does not exist!");
     return -1;
   }
 
@@ -150,7 +162,7 @@ int surf_init()
   /* Attempt to connect wpa_supplicant instance */
   wpa = wpa_ctrl_open(iface_dir);
   if (wpa == NULL) {
-    fprintf(stderr, "Unable to connect to wpa_supplicant on this interface!\n");
+    errMsg("unable to connect to wpa_supplicant on this interface!");
     return -1;
   }
 
@@ -163,12 +175,12 @@ static FILE *conf_create(const char *filepath)
   time_t t = time(NULL);
 
   if ((fp = fopen(filepath, "r")) != NULL) {
-    fprintf(stderr, "surf: Config file already exists - cannot initialize!\n");
+    errMsg("config file already exists - cannot initialize!");
     return NULL;
   }
 
   if ((fp = fopen(filepath, "w+x")) == NULL) {
-    fprintf(stderr, "surf: Error creating config file\n");
+    errMsg("error creating config file");
     return NULL;
   }
 
@@ -189,26 +201,26 @@ int conf_configAuto(const char *ssid, const char *psk)
   int id, plen, slen;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 
   /* check ssid validity */
   if (ssid == NULL) {
-    fprintf(stderr, "surf: no ssid provided\n");
+    errMsg("no ssid provided");
     return -1;
   }
 
   slen = strnlen(ssid, MAX_SSID_LEN+1);
   if (slen == 0 || slen > MAX_SSID_LEN) {
-    fprintf(stderr, "surf: provided ssid is invalid. ssid length: 1-32 characters\n");
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
     return -1;
   }
 
   if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
     return -1;
   if (!strncmp("FAIL", repl, 4)) {
-    fprintf(stderr, "surf: failed to add new network\n");
+    errMsg("failed to add new network");
     return -1;
   }
   id = atoi(repl);
@@ -217,7 +229,7 @@ int conf_configAuto(const char *ssid, const char *psk)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: failed to set ssid %s\n", ssid);
+    errMsg("failed to set ssid %s", ssid);
     return -1;
   }
 
@@ -226,7 +238,7 @@ int conf_configAuto(const char *ssid, const char *psk)
   else {
     plen = strnlen(psk, 64);
     if (plen < 8 || plen > 63) {
-      fprintf(stderr, "surf: provided passkey is invalid. passkey length: 8-63 characters\n");
+      errMsg("provided passkey is invalid. passkey length: 8-63 characters");
       return -1;
     }
     hash = hashPsk(ssid, slen, psk, plen);
@@ -235,7 +247,7 @@ int conf_configAuto(const char *ssid, const char *psk)
     if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
       return -1;
     if (strncmp("OK", repl, 2)) {
-      fprintf(stderr, "surf: failed to set key_mgmt\n");
+      errMsg("failed to set key_mgmt");
       return -1;
     }
 
@@ -245,7 +257,7 @@ int conf_configAuto(const char *ssid, const char *psk)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: failed to set field\n");
+    errMsg("failed to set field");
     return -1;
   }
   
@@ -259,36 +271,36 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
   int id, slen;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 
   /* check ssid validity */
   if (ssid == NULL) {
-    fprintf(stderr, "surf: no ssid provided\n");
+    errMsg("no ssid provided");
     return -1;
   }
 
   if (user == NULL) {
-    fprintf(stderr, "surf: no username provided\n");
+    errMsg("no username provided");
     return -1;
   }
 
   if (pwd == NULL) {
-    fprintf(stderr, "surf: no username provided\n");
+    errMsg("no username provided");
     return -1;
   }
 
   slen = strnlen(ssid, MAX_SSID_LEN+1);
   if (slen == 0 || slen > MAX_SSID_LEN) {
-    fprintf(stderr, "surf: provided ssid is invalid. ssid length: 1-32 characters\n");
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
     return -1;
   }
 
   if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
     return -1;
   if (!strncmp("FAIL", repl, 4)) {
-    fprintf(stderr, "surf: failed to add new network entry\n");
+    errMsg("failed to add new network entry");
     return -1;
   }
   id = atoi(repl);
@@ -297,7 +309,7 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: failed to add ssid field: %s\n", ssid);
+    errMsg("failed to add ssid field: %s", ssid);
     return -1;
   }
 
@@ -305,7 +317,7 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: failed to set key management\n");
+    errMsg("failed to set key management");
     return -1;
   }
 
@@ -313,7 +325,7 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: failed to set username\n");
+    errMsg("failed to set username");
     return -1;
   }
 
@@ -321,7 +333,7 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: failed to set password\n");
+    errMsg("failed to set password");
     return -1;
   }
 
@@ -335,26 +347,26 @@ int conf_addEntry(const char *ssid)
   int id, slen;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 
   /* check ssid validity */
   if (ssid == NULL) {
-    fprintf(stderr, "surf: no ssid provided\n");
+    errMsg("no ssid provided");
     return -1;
   }
 
   slen = strnlen(ssid, MAX_SSID_LEN+1);
   if (slen == 0 || slen > MAX_SSID_LEN) {
-    fprintf(stderr, "surf: provided ssid is invalid. ssid length: 1-32 characters\n");
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
     return -1;
   }
 
   if (wpaReq("ADD_NETWORK", 11, repl, sizeof(repl)) < 0)
     return -1;
   if (!strncmp("FAIL", repl, 4)) {
-    fprintf(stderr, "surf: error in adding new network\n");
+    errMsg("error in adding new network");
     return -1;
   }
   id = atoi(repl);
@@ -363,7 +375,7 @@ int conf_addEntry(const char *ssid)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in setting network ssid: %s\n", ssid);
+    errMsg("error in setting network ssid: %s", ssid);
     return -1;
   }
 
@@ -371,7 +383,7 @@ int conf_addEntry(const char *ssid)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in setting network key_mgmt\n");
+    errMsg("error in setting network key_mgmt");
     return -1;
   }
 
@@ -386,19 +398,19 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
   int id, plen, slen;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 
   /* verify ssid */
   if (ssid == NULL) {
-    fprintf(stderr, "surf: no ssid provided\n");
+    errMsg("no ssid provided\n");
     return -1;
   }
 
   slen = strnlen(ssid, MAX_SSID_LEN+1);
   if (slen == 0 || slen > MAX_SSID_LEN) {
-    fprintf(stderr, "surf: provided ssid is invalid. ssid length: 1-32 characters\n");
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
     return -1;
   }
 
@@ -410,14 +422,14 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in disabling network %s\n", ssid);
+    errMsg("error in disabling network %s", ssid);
     return -1;
   }
 
   if (!strncmp(field, "psk", 4)) {
     plen = strnlen(value, 64);
     if (plen < 8 || plen > 63) {
-      fprintf(stderr, "surf: provided passkey is invalid. passkey length: 8-63 characters\n");
+      errMsg("provided passkey is invalid. passkey length: 8-63 characters");
       return -1;
     }
     hash = hashPsk(ssid, slen, value, plen);
@@ -432,7 +444,7 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
     return -1;
 
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in setting network field: %s\n", field);
+    errMsg("error in setting network field: %s", field);
     return -1;
   }
   return 0;
@@ -445,19 +457,19 @@ int conf_enableNetwork(const char *ssid)
   int id, slen;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 
   /* verify ssid */
   if (ssid == NULL) {
-    fprintf(stderr, "surf: no ssid provided\n");
+    errMsg("no ssid provided");
     return -1;
   }
 
   slen = strnlen(ssid, MAX_SSID_LEN+1);
   if (slen == 0 || slen > MAX_SSID_LEN) {
-    fprintf(stderr, "surf: provided ssid is invalid. ssid length: 1-32 characters\n");
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
     return -1;
   }
 
@@ -469,7 +481,7 @@ int conf_enableNetwork(const char *ssid)
   if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
     return -1;
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in enabling network %s\n", ssid);
+    errMsg("error in enabling network %s", ssid);
     return -1;
   }
   return save();
@@ -483,13 +495,13 @@ int conf_deleteNetwork(const char *ssid)
 
   /* verify ssid */
   if (ssid == NULL) {
-    fprintf(stderr, "surf: no ssid provided\n");
+    errMsg("no ssid provided");
     return -1;
   }
 
   slen = strnlen(ssid, MAX_SSID_LEN+1);
   if (slen == 0 || slen > MAX_SSID_LEN) {
-    fprintf(stderr, "surf: provided ssid is invalid. ssid length: 1-32 characters\n");
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
     return -1;
   }
 
@@ -502,7 +514,7 @@ int conf_deleteNetwork(const char *ssid)
     return -1;
 
   if (strncmp("OK", repl, 2)) {
-    fprintf(stderr, "surf: error in removing network: %s\n", ssid);
+    errMsg("error in removing network: %s", ssid);
     return -1;
   }
 
@@ -533,7 +545,7 @@ int listConfigured(char *buf, size_t len)
   int l = 0;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 
@@ -569,7 +581,7 @@ int listAvailable(char *buf, size_t len)
   int sig;
 
   if (!wpa) {
-    fprintf(stderr, "Not connected to wpa_supplicant...\n");
+    errMsg("not connected to wpa_supplicant...");
     return -1;
   }
 

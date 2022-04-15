@@ -6,5 +6,9 @@
 *.swp
 .~*
 ~*
+.gdbinit
+*html*
+tui
+cli
 surf
 .vscode/
