@@ -70,7 +70,7 @@ int do_exit (int num, char **args, char *syntax) {
 */ 
 int configAuto(int num, char **args, char *syntax){
 
-  if(conf_configAuto(ssid, psk) < 0){
+  if(conf_configAuto(args[1], args[2]) < 0){
     
     printf("Error setting auto configuration. \n");
     return 0;
