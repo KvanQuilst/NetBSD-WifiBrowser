@@ -170,8 +170,8 @@ int parse(char *cmdline, char **args) {
 const struct command *find_entry(char *name) {
 	const struct command *item, *save; 
 	int     subcount = 0;
-
 	save = NULL; 
+
 	for (item = cmd_table; item < cmd_table + CMDLEN; item++)
 		switch (StrCmp(name, item->name)) {
 		case CMP_MATCH:
