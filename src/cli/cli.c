@@ -70,9 +70,6 @@ int do_exit (int num, char **args, char *syntax) {
 */ 
 int configAuto(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN], psk[FIELDLEN];
-  printf("ssid: %s\n", args[1]); //fgets(ssid, FIELDLEN, stdin);
-  printf("psk: %s\n", args[2]); //fgets(psk, FIELDLEN, stdin);
   if(conf_configAuto(ssid, psk) < 0){
     
     printf("Error setting auto configuration. \n");
