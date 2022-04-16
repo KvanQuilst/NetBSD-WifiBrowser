@@ -77,6 +77,9 @@ void command_loop(void) {
 		numargs = parse(cmdline, args);
 		if (numargs == BLANK_LINE)
 			continue;
+
+		
+		//getopt_long
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
 			done = (*(cmd->fn)) (numargs, args, cmd->syntax);
@@ -168,7 +171,7 @@ const struct command *find_entry(char *name) {
 	const struct command *item, *save; 
 	int     subcount = 0;
 
-	save = NULL;
+	save = NULL; 
 	for (item = cmd_table; item < cmd_table + CMDLEN; item++)
 		switch (StrCmp(name, item->name)) {
 		case CMP_MATCH:

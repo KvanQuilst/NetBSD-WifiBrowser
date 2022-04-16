@@ -90,12 +90,7 @@ int configAuto(int num, char **args, char *syntax){
 */ 
 int configAutoEAP(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN], user[FIELDLEN], pwd[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  printf("user: "); fgets(user, FIELDLEN, stdin);
-  printf("pwd: "); fgets(pwd, FIELDLEN, stdin);
-
-  if(conf_configAutoEAP(ssid, user, pwd) < 0){
+  if(conf_configAutoEAP(args[0], args[1], args[2]) < 0){
 
     printf("Error setting auto configuration for EAP network.\n");
     return 0;
@@ -116,10 +111,7 @@ int configAutoEAP(int num, char **args, char *syntax){
 */
 int addEntry(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN]; 
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  
-  if(conf_addEntry(ssid) < 0){
+  if(conf_addEntry(args[0]) < 0){
 
     printf("Error adding new entry.\n");
     return 0;
@@ -141,7 +133,7 @@ int addEntry(int num, char **args, char *syntax){
 
       else{
 
-        if(conf_editNetwork(ssid, field, value) < 0){
+        if(conf_editNetwork(args[0], field, value) < 0){
 
           printf("Error editing specified network field to configuration file.\n");
         }
@@ -153,7 +145,7 @@ int addEntry(int num, char **args, char *syntax){
       }
     }
 
-    if(conf_enableNetwork(ssid) < 0){
+    if(conf_enableNetwork(args[0]) < 0){
 
       printf("Error enabling new network in configuration file.\n");
       return 0;
@@ -173,14 +165,9 @@ int addEntry(int num, char **args, char *syntax){
 */
 int editNetwork(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN], field[FIELDLEN], value[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  printf("field: "); fgets(field, FIELDLEN, stdin);
-  printf("value: "); fgets(value, FIELDLEN, stdin);
+  if(conf_editNetwork(args[0], args[1], args[2]) < 0){
 
-  if(conf_editNetwork(ssid, field, value) < 0){
-
-    printf("Field %s for %s has been changed. \n", field, ssid);
+    printf("Field %s for %s has been changed. \n", args[1], args[0]);
     return 0;
   }
 
@@ -196,10 +183,7 @@ int editNetwork(int num, char **args, char *syntax){
 */ 
 int enableNetwork(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-
-  if(conf_enableNetwork(ssid) < 0){
+  if(conf_enableNetwork(args[0]) < 0){
 
     printf("Error enabling network.\n");
     return 0;
@@ -207,7 +191,7 @@ int enableNetwork(int num, char **args, char *syntax){
 
   else{
 
-    printf("Network %s has been enabled.\n", ssid);
+    printf("Network %s has been enabled.\n", args[0]);
     return 1;
   }
 }
@@ -217,18 +201,15 @@ int enableNetwork(int num, char **args, char *syntax){
 */ 
 int deleteNetwork(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+  if(conf_deleteNetwork(args[0]) < 0){
 
-  if(conf_deleteNetwork(ssid) < 0){
-
-    printf("Error deleting %s network from configuration file.\n");
+    printf("Error deleting %s network from configuration file.\n", args[0]);
     return 0;
   }
 
   else{
 
-    printf("Success deleting %s network from configuration file.\n");
+    printf("Success deleting %s network from configuration file.\n", args[0]);
     return 1;
   }
 }

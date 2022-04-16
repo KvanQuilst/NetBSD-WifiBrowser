@@ -86,12 +86,12 @@ const struct command cmd_table [] = {		/* Command Table */
 
 { do_exit, "exit", "EXIT", "Just get out of here." }, 
 { configAuto, "conf_auto ssid psk", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
-{ configAutoEAP, "conf_auto_eap", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
-{ addEntry, "conf_add", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
-{ editNetwork, "conf_edit_network", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
-{ enableNetwork, "conf_enable_network", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
-{ deleteNetwork, "conf_delete_network", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
-{ cleanNetworks, "conf_clean_networks", "CONF_CLEAN_NETWORKS", "Cleans all networks from the focused configuration file. "},
+{ configAutoEAP, "conf_auto_eap ssid user pwd", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
+{ addEntry, "conf_add ssid", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
+{ editNetwork, "conf_edit_network ssid field value", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
+{ enableNetwork, "conf_enable_network ssid", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
+{ deleteNetwork, "conf_delete_network ssid", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
+{ cleanNetworks, "clean_networks", "CLEAN_NETWORKS", "Removes all networks from the configuration file. "},
 { lsConfigured, "list_configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
 { lsAvailable, "list_available", "LIST_AVAILABLE", "Lists all available networks. "}, 
 };
