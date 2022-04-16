@@ -85,7 +85,7 @@ const struct command cmd_table [] = {		/* Command Table */
 #endif
 
 { do_exit, "exit", "EXIT", "Just get out of here." }, 
-{ configAuto, "conf_auto", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
+{ configAuto, "conf_auto ssid psk", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
 { configAutoEAP, "conf_auto_eap", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
 { addEntry, "conf_add", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
 { editNetwork, "conf_edit_network", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
