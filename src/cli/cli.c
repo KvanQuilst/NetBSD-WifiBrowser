@@ -283,7 +283,14 @@ int cleanNetworks(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  surf_init();
+  if(surf_init() < 0){
+
+    printf("Error connecting to wpa_supplicant.\n");
+  }
+  else{
+
+    printf("Success connecting to wpa_supplicant.\n");
+  }
 
   /* Run command loop */
   command_loop();
