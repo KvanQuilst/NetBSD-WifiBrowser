@@ -78,8 +78,6 @@ void command_loop(void) {
 		if (numargs == BLANK_LINE)
 			continue;
 
-		
-		//getopt_long
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
 			done = (*(cmd->fn)) (numargs, args, cmd->syntax);
