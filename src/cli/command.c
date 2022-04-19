@@ -78,6 +78,7 @@ void command_loop(void) {
 		if (numargs == BLANK_LINE)
 			continue;
 
+		//Looks at first entry for function name 
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
 			done = (*(cmd->fn)) (numargs, args, cmd->syntax);
@@ -144,9 +145,8 @@ int prompt(char *cmdline, int linelen, const char *promptstr) {
  */
 
 /* 
- * My Summary: 
- * 
- * 
+ * My Summary: cmdline takes in every argument for the user input at each index, minus 
+ * the first command of the previous index. 
 */ 
 int parse(char *cmdline, char **args) {
 	int     index;
@@ -179,12 +179,18 @@ int parse(char *cmdline, char **args) {
 /* Search cmd_tbl for 1) a command matching what the user typed or 2)
  * a unique command which is a superstring of what the user typed.
  */
+
+/* 
+ * 
+ * 
+*/ 
 const struct command *find_entry(char *name) {
 	const struct command *item, *save; 
 	int     subcount = 0;
 	save = NULL; 
 
-	for (item = cmd_table; item < cmd_table + CMDLEN; item++)
+	for (item = cmd_table; item < cmd_table + CMDLEN; item++) {
+		printf("item: %s\n", item -> name);
 		switch (StrCmp(name, item->name)) {
 		case CMP_MATCH:
 			return item;
@@ -195,6 +201,8 @@ const struct command *find_entry(char *name) {
 		case CMP_NOMATCH:
 			break;
 		}
+	}
+	
 	return (subcount == 1) ? save : NULL;
 }
 
