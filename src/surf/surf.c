@@ -47,7 +47,7 @@ static void errMsg(char *format, ...) {
 #ifdef DEBUG
   errMsg("surf: ");
   va_start(vl, format);
-  vfprintf(stderr, fmt, vl);
+  vfprintf(stderr, format, vl);
   va_end(vl);
   fprintf(stderr, "\n");
 #endif
