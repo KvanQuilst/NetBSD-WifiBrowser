@@ -164,7 +164,7 @@ int parse(char *cmdline, char **args) {
 			/* Start of new argument. */
 			if (argcnt < MAXARGS)
 				args[argcnt] = cmdline;
-				printf("arg %d: %s\n", index, args[index]);
+				printf("arg %d: %s\n", argcnt, args[argcnt]);
 			while (!isspace(*cmdline) && *cmdline != 0)
 				cmdline++;
 			if (*cmdline != 0)
