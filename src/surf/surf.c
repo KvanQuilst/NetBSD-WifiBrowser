@@ -162,7 +162,8 @@ int surf_init()
   /* Attempt to connect wpa_supplicant instance */
   wpa = wpa_ctrl_open(iface_dir);
   if (wpa == NULL) {
-    errMsg("unable to connect to wpa_supplicant on this interface!");
+    fprintf(stderr, "surf: unable to connect to wpa_supplicant on this interface!... "
+        "Is wpa_supplicant running?\n");
     return -1;
   }
 
