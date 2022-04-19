@@ -133,7 +133,7 @@ int prompt(char *cmdline, int linelen, const char *promptstr) {
 			*cmdline++ = inchar;
 	}
 	
-	*cmdline = 0;
+	*cmdline = 0; 
 	return inchar == EOF;
 }
 
@@ -164,11 +164,12 @@ int parse(char *cmdline, char **args) {
 			/* Start of new argument. */
 			if (argcnt < MAXARGS)
 				args[argcnt] = cmdline;
+				printf("arg %d: %s\n", index, args[index]);
 			while (!isspace(*cmdline) && *cmdline != 0)
 				cmdline++;
 			if (*cmdline != 0)
 				*cmdline++ = 0;
-			argcnt++;
+			argcnt++; 
 		}
 	}
 	
