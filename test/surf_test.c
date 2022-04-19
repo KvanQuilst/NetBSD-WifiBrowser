@@ -8,9 +8,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <surf.h>
 #define BUF_SIZE 4096
+
+extern void testErrors();
 
 const char *net1 = "Auto-SSID";
 const char *net2 = "Manual-PSK";
@@ -209,8 +212,17 @@ void test_autoConfEAP()
   printf("\n");
 }
 
-int main()
+int main(int argc, char **argv)
 {
+  if (argc > 1 && !strncmp(argv[1], "error", 6)) {
+    testErrors();
+    return 0;
+  }
+
+  printf("/*********************************/\n");
+  printf("/*        General Testing        */\n");
+  printf("/*********************************/\n\n");
+
   /* Connect to wpa_supplicant */
   test_connect();
 

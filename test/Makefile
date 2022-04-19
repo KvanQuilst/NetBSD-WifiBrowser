@@ -6,7 +6,7 @@ COPTS += -DDEBUG
 .endif
 
 PROG = surf
-SRCS = surf_test.c
+SRCS = surf_test.c surf_error.c
 SUBDIR += ../src/surf
 
 COPTS += -I../src/surf

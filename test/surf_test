@@ -19,5 +19,8 @@ make -DDEBUG
 cd ../../test
 make $debug
 
+echo
 ./surf
-make clean
+echo
+./surf error
+make clean > /dev/null

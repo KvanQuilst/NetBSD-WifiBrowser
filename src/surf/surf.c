@@ -288,7 +288,7 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd)
   }
 
   if (pwd == NULL) {
-    errMsg("no username provided");
+    errMsg("no password provided");
     return -1;
   }
 
