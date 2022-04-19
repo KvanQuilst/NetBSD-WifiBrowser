@@ -78,10 +78,13 @@ void command_loop(void) {
 		if (numargs == BLANK_LINE)
 			continue;
 
-		//Looks at first entry for function name 
+		/* 
+		* Looks at first entry for function name. Again, first time I have seen the syntax like this. 
+		* Done should return false if the input does not match command syntax. (*cmd -> fn) (args)
+		*/ 
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
-			done = (*(cmd->fn)) (numargs, args, cmd->syntax);
+			done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
 			if (after_cmd != NULL)
 				(*(after_cmd)) (done);
 		} else
@@ -101,7 +104,11 @@ int one_command(char *cmdline) {
 		return 0;
 	cmd = find_entry(args[0]);
 	if (cmd != NULL) {
-		done = (*(cmd->fn)) (numargs, args, cmd->syntax);
+
+		/* 
+		* Function gets called here. 
+		*/
+		done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
 		if (after_cmd != NULL)
 			(*(after_cmd)) (done);
 		return done;
@@ -164,7 +171,6 @@ int parse(char *cmdline, char **args) {
 			/* Start of new argument. */
 			if (argcnt < MAXARGS)
 				args[argcnt] = cmdline;
-				printf("arg %d: %s\n", argcnt, args[argcnt]);
 			while (!isspace(*cmdline) && *cmdline != 0)
 				cmdline++;
 			if (*cmdline != 0)
@@ -178,19 +184,13 @@ int parse(char *cmdline, char **args) {
 
 /* Search cmd_tbl for 1) a command matching what the user typed or 2)
  * a unique command which is a superstring of what the user typed.
- */
-
-/* 
- * 
- * 
 */ 
-const struct command *find_entry(char *name) {
+const struct command *find_entry(char *name) { 
 	const struct command *item, *save; 
 	int     subcount = 0;
 	save = NULL; 
 
 	for (item = cmd_table; item < cmd_table + CMDLEN; item++) {
-		printf("item: %s\n", item -> name);
 		switch (StrCmp(name, item->name)) {
 		case CMP_MATCH:
 			return item;
@@ -209,7 +209,7 @@ const struct command *find_entry(char *name) {
 /*
  * Returns CMP_MATCH if strings are the same, CMP_SUBSTR if p1 is a
  * proper substring of p2, and CMP_NOMATCH if neither.
- */
+*/ 
 int StrCmp(char *p1, char *p2) {
 	while (*p1 == *p2 && *p1 != '\0') {
 		++p1;
