@@ -45,7 +45,7 @@ static char *hashPsk(const unsigned char *ssid, int slen, const unsigned char *p
 static void errMsg(char *format, ...) {
   va_list vl;
 #ifdef DEBUG
-  errMsg("surf: ");
+  fprintf(stderr, "surf: ");
   va_start(vl, format);
   vfprintf(stderr, format, vl);
   va_end(vl);

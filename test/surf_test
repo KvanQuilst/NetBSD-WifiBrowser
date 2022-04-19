@@ -14,7 +14,8 @@ do
 done
 
 cd ../src/surf
-make
+make clean
+make -DDEBUG
 cd ../../test
 make $debug
 
