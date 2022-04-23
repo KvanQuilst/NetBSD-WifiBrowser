@@ -44,8 +44,8 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
  * with edit network 
  * NETWORK IS DISABLED WHEN FIRST MADE. MAKE EDITS WITH conf_editNetwork()
  * THEN ENABLE WITH conf_enableNetwork()
- * requires: string of ssid
- * returns: 0 if success, -1 if fail
+ * requires: string of ssid 
+ * returns: 0 if success, -1 if fail 
  */
 int conf_addEntry(const char *ssid);
 

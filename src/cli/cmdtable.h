@@ -42,11 +42,8 @@
 CMD_PROC (help);
 #endif
 
-
 /* 
- * Define new commands in this file. 
- * 
- * 
+ * Define new commands in this file.  
 */ 
 
 /* hdsetup commands. */
