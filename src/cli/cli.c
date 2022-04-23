@@ -36,7 +36,7 @@
 #include <string.h>
 #include "command.h"
 #include "extern.h"
-#include "surf.h" 
+#include "../surf/surf.h" 
 
 /* 
  * Function PROCS to be used with program 
