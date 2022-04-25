@@ -2,8 +2,8 @@
 
 /*
  * Copyright (c) 2022 Philip A. Nelson.
- * All rights reserved.
- *
+ * All rights reserved. 
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -122,11 +122,13 @@ int addEntry(int num, char **args, char *syntax){
     printf("Type 'n' to end additional fields for new network.\n");
     while(TRUE){
 
-      char field[FIELDLEN], value[FIELDLEN];
-      printf("field: "); fgets(field, FIELDLEN, stdin);
-      printf("value: "); fgets(value, FIELDLEN, stdin);
+      char field[FIELDLEN], value[FIELDLEN]; 
+      printf("field: "); fgets(field, FIELDLEN, stdin); 
+      printf("value: "); fgets(value, FIELDLEN, stdin); 
+      field[strlen(field) - 1] = 0; 
+      value[strlen(value) - 1] = 0; 
 
-      if(strcmp(field, "n\n") == 0 || strcmp(value, "n\n") == 0){
+      if(strcmp(field, "n") == 0 || strcmp(value, "n") == 0){
 
         break;
       }
@@ -137,7 +139,7 @@ int addEntry(int num, char **args, char *syntax){
 
           printf("Error editing specified network field to configuration file.\n");
         }
-
+        
         else{
 
           printf("Field added to configuration file.\n");
