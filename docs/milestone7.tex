@@ -1,0 +1,75 @@
+\documentclass[11pt]{article}
+\setlength{\parindent}{0em}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+  \textbf{\Large Milestone \#7}\\\large NetBSD Wifi Browser Project 2022\\
+  Dylan Roy, Stephen Loudiana, Kevin McGrane
+\end{center}
+
+\section{General Progress Report}
+Progress within Surf was fairly minimal this milestone. Being that it
+is functinally complete, little tasks are being performed to improve
+it in small ways. Along with this, the Makefiles were converted to BSDMake. 
+Progress for CLI mostly involved thoroughly taking the time to understand 
+the skeleton code and implement the remaining CLI methods. Some research on 
+getopt\_long and how I might implement it. Cannot test CLI interface on my 
+computer through WWU Linux shell. Currently looking for a solution to this. 
+TUI implementation is well under way, skeleton and layout of TUI is complete 
+and API is beiginning to be implemented. Most of the current work is looking
+at the curses man pages to figure out what functions are needed when retrieving 
+data from the API and printing it, and also when retrieving input from the user
+and sending it to the API.
+
+\textbf{Accomplishments}
+\begin{itemize}
+  \item Surf listing output has been improved 
+  \item Makefiles converted to BSDMake
+  \item All API methods implemented in CLI 
+  \item Have TUI be able to be interacted with
+\end{itemize}
+
+\textbf{Targets Not Met:}
+\begin{itemize}
+  \item Cannot test CLI interface on Stephen's computer 
+  \item TUI implementation not yet at 50 percent implemented
+\end{itemize}
+
+
+\section{Git Branch Report}
+A branch, \texttt{TUI\_test} was made to begin implementation of the TUI.
+
+\newpage
+\section{Individual Progress}
+
+\textbf{Kevin:} 7 hours
+\begin{itemize}
+  \item created seperate TUI branch as not to mess up the API and CLI when they are testing
+  \item uploaded some of the TUI implementation to test branch (more needs to be Added)
+  \item worked with window creation and implementation of TUI display for user interface
+  \item worked with curses man pages to asses what functions are needed when giving and getting info from the API
+\end{itemize}
+
+\textbf{Dylan:} 4 hours, 5 minutes
+\begin{itemize}
+  \item Improve the output for Surf's listing functions
+  \item Moved the testing files for Surf into the dedicated test directory
+  \item Added a testing script to automate Surf testing
+  \item Converted all of Surf's Makefiles into BSDMake
+  \item Modified Surf's error output to only print when \texttt{DEBUG} flag set
+    at compile time $\rightarrow$ might send to a log alternatively
+\end{itemize}
+
+\textbf{Stephen:} 4 hours, 0 minutes 
+\begin{itemize}
+  \item All API methods for the CLI have been implemented 
+  \item Thoroughly took the time to go through the code, did some research on getopt\_long
+	and how to implement it
+  \item Cannot test CLI interface on my home console, will need to find solution. I'm not 
+	sure why but I cannot connect to wpa\_supplicant through WWU Linux shell. Currently 
+	looking for a solution to this. 
+\end{itemize}
+
+\end{document}

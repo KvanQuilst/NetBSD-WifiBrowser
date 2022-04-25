@@ -77,9 +77,14 @@ void command_loop(void) {
 		numargs = parse(cmdline, args);
 		if (numargs == BLANK_LINE)
 			continue;
+
+		/* 
+		* Looks at first entry for function name. Again, first time I have seen the syntax like this. 
+		* Done should return false if the input does not match command syntax. (*cmd -> fn) (args)
+		*/ 
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
-			done = (*(cmd->fn)) (numargs, args, cmd->syntax);
+			done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
 			if (after_cmd != NULL)
 				(*(after_cmd)) (done);
 		} else
@@ -99,7 +104,11 @@ int one_command(char *cmdline) {
 		return 0;
 	cmd = find_entry(args[0]);
 	if (cmd != NULL) {
-		done = (*(cmd->fn)) (numargs, args, cmd->syntax);
+
+		/* 
+		* Function gets called here. 
+		*/
+		done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
 		if (after_cmd != NULL)
 			(*(after_cmd)) (done);
 		return done;
@@ -108,6 +117,13 @@ int one_command(char *cmdline) {
 }
 
 /* prompt procedure....  Write out the prompt and then read a response. */
+
+/* 
+ * My Summary: getchar() will block until a character is to be read. Once a string is 
+ * entered by the user, continue to read characters until newline or EOF. Increment the command 
+ * line array and set each index to each character. At the end, we will null terminate command line 
+ * by setting it equal to zero. Return whether or not the end of line character has been read. 
+*/
 int prompt(char *cmdline, int linelen, const char *promptstr) {
 	int     incount = 0;
 	int     inchar;
@@ -125,7 +141,7 @@ int prompt(char *cmdline, int linelen, const char *promptstr) {
 			*cmdline++ = inchar;
 	}
 	
-	*cmdline = 0;
+	*cmdline = 0; 
 	return inchar == EOF;
 }
 
@@ -134,6 +150,11 @@ int prompt(char *cmdline, int linelen, const char *promptstr) {
  * pointers to substrings in the original string.  It puts the string
  * terminator in the original line.
  */
+
+/* 
+ * My Summary: cmdline takes in every argument for the user input at each index, minus 
+ * the first command of the previous index. 
+*/ 
 int parse(char *cmdline, char **args) {
 	int     index;
 	int     argcnt = BLANK_LINE;
@@ -154,7 +175,7 @@ int parse(char *cmdline, char **args) {
 				cmdline++;
 			if (*cmdline != 0)
 				*cmdline++ = 0;
-			argcnt++;
+			argcnt++; 
 		}
 	}
 	
@@ -163,13 +184,13 @@ int parse(char *cmdline, char **args) {
 
 /* Search cmd_tbl for 1) a command matching what the user typed or 2)
  * a unique command which is a superstring of what the user typed.
- */
-const struct command *find_entry(char *name) {
+*/ 
+const struct command *find_entry(char *name) { 
 	const struct command *item, *save; 
 	int     subcount = 0;
+	save = NULL; 
 
-	save = NULL;
-	for (item = cmd_table; item < cmd_table + CMDLEN; item++)
+	for (item = cmd_table; item < cmd_table + CMDLEN; item++) {
 		switch (StrCmp(name, item->name)) {
 		case CMP_MATCH:
 			return item;
@@ -180,13 +201,15 @@ const struct command *find_entry(char *name) {
 		case CMP_NOMATCH:
 			break;
 		}
+	}
+	
 	return (subcount == 1) ? save : NULL;
 }
 
 /*
  * Returns CMP_MATCH if strings are the same, CMP_SUBSTR if p1 is a
  * proper substring of p2, and CMP_NOMATCH if neither.
- */
+*/ 
 int StrCmp(char *p1, char *p2) {
 	while (*p1 == *p2 && *p1 != '\0') {
 		++p1;

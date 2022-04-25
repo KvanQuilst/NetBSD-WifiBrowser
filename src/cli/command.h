@@ -42,12 +42,18 @@
 
 /* An easy to define the prototype. */
 
-#define CMD_PROC(name) int name (int, char **, char *)
+#define CMD_PROC(name) int name (int, char **, char *) 
 
 /*  The commands are stored in a table that includes their name, a pointer
     to the function that processes the command and a help message.  */
+/* The commands, their names, help */
 
-struct command {	/* The commands, their names, help */
+/* 
+ * First time I've seen this syntax. We are initializing the arguments for each 
+ * function call as the first variable. I think this is honestly really cool and 
+ * have never seen this done before. Makes sense of how you use (cmd->*fn) (args) 
+*/ 
+struct command {	
 	int	(*fn) (int, char **, char *);
 	char	*name;
 	char	*syntax; 

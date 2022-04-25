@@ -38,7 +38,11 @@ of length
 .Fa len
 with the list of the ssids of configured networks.
 .Sh RETURN VALUES
-Both functions will return 0 on success and a -1 on failure.
+Both functions will return 0 on success and a -1 on user error
+and -2 on wpa_supplicant related error. Note: User error includes
+Surf not being connected to wpa_supplicant (call
+.Xr surf_init 3
+).
 .Sh SEE ALSO
 .Xr surf 3  ,
 .Xr surf_init 3 ,

@@ -9,14 +9,18 @@
 while getopts d flag
 do
   case "${flag}" in
-    d) debug="debug";;
+    d) debug="-DDEBUG";;
   esac
 done
 
 cd ../src/surf
-make
+make clean
+make -DDEBUG
 cd ../../test
 make $debug
 
+echo
 ./surf
-make clean
+echo
+./surf error
+make clean > /dev/null

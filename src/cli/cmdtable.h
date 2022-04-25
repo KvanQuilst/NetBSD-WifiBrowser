@@ -42,11 +42,8 @@
 CMD_PROC (help);
 #endif
 
-
 /* 
- * Define new commands in this file. 
- * 
- * 
+ * Define new commands in this file.  
 */ 
 
 /* hdsetup commands. */
@@ -85,15 +82,15 @@ const struct command cmd_table [] = {		/* Command Table */
 #endif
 
 { do_exit, "exit", "EXIT", "Just get out of here." }, 
-{ configAuto, "conf auto", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
-{ configAutoEAP, "conf auto eap", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
-{ addEntry, "conf add", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
-{ editNetwork, "conf edit network", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
-{ enableNetwork, "conf enable network", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
-{ deleteNetwork, "conf delete network", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
-{ cleanNetworks, "conf clean networks", "CONF_CLEAN_NETWORKS", "Cleans all networks from the focused configuration file. "},
-{ lsConfigured, "list configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
-{ lsAvailable, "list available", "LIST_AVAILABLE", "Lists all available networks. "}, 
+{ configAuto, "conf_auto ssid psk", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
+{ configAutoEAP, "conf_auto_eap ssid user pwd", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
+{ addEntry, "conf_add ssid", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
+{ editNetwork, "conf_edit_network ssid field value", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
+{ enableNetwork, "conf_enable_network ssid", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
+{ deleteNetwork, "conf_delete_network ssid", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
+{ cleanNetworks, "clean_networks", "CLEAN_NETWORKS", "Removes all networks from the configuration file. "},
+{ lsConfigured, "list_configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
+{ lsAvailable, "list_available", "LIST_AVAILABLE", "Lists all available networks. "}, 
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))

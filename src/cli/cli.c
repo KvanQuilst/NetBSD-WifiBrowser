@@ -2,8 +2,8 @@
 
 /*
  * Copyright (c) 2022 Philip A. Nelson.
- * All rights reserved.
- *
+ * All rights reserved. 
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -70,10 +70,7 @@ int do_exit (int num, char **args, char *syntax) {
 */ 
 int configAuto(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN], psk[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  printf("psk: "); fgets(psk, FIELDLEN, stdin);
-  if(conf_configAuto(ssid, psk) < 0){
+  if(conf_configAuto(args[1], args[2]) < 0){
     
     printf("Error setting auto configuration. \n");
     return 0;
@@ -93,12 +90,7 @@ int configAuto(int num, char **args, char *syntax){
 */ 
 int configAutoEAP(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN], user[FIELDLEN], pwd[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  printf("user: "); fgets(user, FIELDLEN, stdin);
-  printf("pwd: "); fgets(pwd, FIELDLEN, stdin);
-
-  if(conf_configAutoEAP(ssid, user, pwd) < 0){
+  if(conf_configAutoEAP(args[0], args[1], args[2]) < 0){
 
     printf("Error setting auto configuration for EAP network.\n");
     return 0;
@@ -119,10 +111,7 @@ int configAutoEAP(int num, char **args, char *syntax){
 */
 int addEntry(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN]; 
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  
-  if(conf_addEntry(ssid) < 0){
+  if(conf_addEntry(args[0]) < 0){
 
     printf("Error adding new entry.\n");
     return 0;
@@ -133,22 +122,24 @@ int addEntry(int num, char **args, char *syntax){
     printf("Type 'n' to end additional fields for new network.\n");
     while(TRUE){
 
-      char field[FIELDLEN], value[FIELDLEN];
-      printf("field: "); fgets(field, FIELDLEN, stdin);
-      printf("value: "); fgets(value, FIELDLEN, stdin);
+      char field[FIELDLEN], value[FIELDLEN]; 
+      printf("field: "); fgets(field, FIELDLEN, stdin); 
+      printf("value: "); fgets(value, FIELDLEN, stdin); 
+      field[strlen(field) - 1] = 0; 
+      value[strlen(value) - 1] = 0; 
 
-      if(strcmp(field, "n\n") == 0 || strcmp(value, "n\n") == 0){
+      if(strcmp(field, "n") == 0 || strcmp(value, "n") == 0){
 
         break;
       }
 
       else{
 
-        if(conf_editNetwork(ssid, field, value) < 0){
+        if(conf_editNetwork(args[0], field, value) < 0){
 
           printf("Error editing specified network field to configuration file.\n");
         }
-
+        
         else{
 
           printf("Field added to configuration file.\n");
@@ -156,7 +147,7 @@ int addEntry(int num, char **args, char *syntax){
       }
     }
 
-    if(conf_enableNetwork(ssid) < 0){
+    if(conf_enableNetwork(args[0]) < 0){
 
       printf("Error enabling new network in configuration file.\n");
       return 0;
@@ -176,14 +167,9 @@ int addEntry(int num, char **args, char *syntax){
 */
 int editNetwork(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN], field[FIELDLEN], value[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-  printf("field: "); fgets(field, FIELDLEN, stdin);
-  printf("value: "); fgets(value, FIELDLEN, stdin);
+  if(conf_editNetwork(args[0], args[1], args[2]) < 0){
 
-  if(conf_editNetwork(ssid, field, value) < 0){
-
-    printf("Field %s for %s has been changed. \n", field, ssid);
+    printf("Field %s for %s has been changed. \n", args[1], args[0]);
     return 0;
   }
 
@@ -199,10 +185,7 @@ int editNetwork(int num, char **args, char *syntax){
 */ 
 int enableNetwork(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
-
-  if(conf_enableNetwork(ssid) < 0){
+  if(conf_enableNetwork(args[0]) < 0){
 
     printf("Error enabling network.\n");
     return 0;
@@ -210,7 +193,7 @@ int enableNetwork(int num, char **args, char *syntax){
 
   else{
 
-    printf("Network %s has been enabled.\n", ssid);
+    printf("Network %s has been enabled.\n", args[0]);
     return 1;
   }
 }
@@ -220,18 +203,15 @@ int enableNetwork(int num, char **args, char *syntax){
 */ 
 int deleteNetwork(int num, char **args, char *syntax){
 
-  char ssid[FIELDLEN];
-  printf("ssid: "); fgets(ssid, FIELDLEN, stdin);
+  if(conf_deleteNetwork(args[0]) < 0){
 
-  if(conf_deleteNetwork(ssid) < 0){
-
-    printf("Error deleting %s network from configuration file.\n");
+    printf("Error deleting %s network from configuration file.\n", args[0]);
     return 0;
   }
 
   else{
 
-    printf("Success deleting %s network from configuration file.\n");
+    printf("Success deleting %s network from configuration file.\n", args[0]);
     return 1;
   }
 }
@@ -283,7 +263,15 @@ int cleanNetworks(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  surf_init();
+  if(surf_init() < 0){
+
+    printf("Error connecting to wpa_supplicant.\n");
+  }
+  
+  else{
+
+    printf("Success connecting to wpa_supplicant.\n");
+  }
 
   /* Run command loop */
   command_loop();
