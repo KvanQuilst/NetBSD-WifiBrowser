@@ -110,7 +110,10 @@ Note: Disabled networks on reboot or reconnection to
 .Xr wpa_supplicant 8
 may result in that network being lost.
 .Sh RETURN VALUES
-Functions will return 0 on success and a -1 on failure.
+Functions will return 0 on success, -1 on a user input error, and -2 on a
+wpa_supplicant related error. Note: user does include not being connected
+to wpa_supplicant (call 
+.Xr surf_init 3 ).
 .Sh SEE ALSO
 .Xr surf 3  ,
 .Xr surf_init 3 ,

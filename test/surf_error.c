@@ -73,7 +73,6 @@ void testErrors()
   noInit();
   printf("\n");
 
-  printf("Disregard: connecting to wpa_supplicant for further testing.\n");
   if (surf_init() < 0) {
     printf("Error connecting to wpa_supplicant... Is it running?\n");
     return;
