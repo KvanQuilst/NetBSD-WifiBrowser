@@ -107,7 +107,7 @@ int configAutoEAP(int num, char **args, char *syntax){
  * Adds a new entry to the conguration file. Used to manually configure a network. 
  * Requires an ssid from the user. Additional fields required if any. Used in 
  * conjunction with edit network and enable network to enable the network and add 
- * additional fields.   
+ * additional fields. 
 */
 int addEntry(int num, char **args, char *syntax){
 
