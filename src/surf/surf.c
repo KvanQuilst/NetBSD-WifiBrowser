@@ -408,7 +408,17 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value)
 
   /* verify ssid */
   if (ssid == NULL) {
-    errMsg("no ssid provided\n");
+    errMsg("no ssid provided");
+    return -1;
+  }
+
+  if (field == NULL) {
+    errMsg("no field provided");
+    return -1;
+  }
+
+  if (value == NULL) {
+    errMsg("no field value provided");
     return -1;
   }
 

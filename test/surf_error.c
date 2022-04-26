@@ -64,6 +64,31 @@ static void eapNoPWD()
     printf("OK\n");
 }
 
+static void addNoSSID()
+{
+  printf("/* addEntry no provided SSID */\n");
+  if (conf_addEntry(NULL) != -1)
+    printf("Test failed: No error when no SSID is provided in addEntry\n");
+  else
+    printf("OK\n");
+}
+
+static void editNoField() {
+  printf("/* editNetwork no provided field */\n");
+  if (conf_editNetwork("ValidSSID", NULL, "VALUE") != -1)
+    printf("Test failed: No error when no field is provided in editNetwork\n");
+  else
+    printf("OK\n");
+}
+
+static void editNoValue() {
+  printf("/* editNetwork no provided field value */\n");
+  if (conf_editNetwork("ValidSSID", "FIELD", NULL) != -1)
+    printf("Test failed: No error when no field is provided in editNetwork\n");
+  else
+    printf("OK\n");
+}
+
 void testErrors()
 {
   printf("/*********************************/\n");
@@ -92,5 +117,14 @@ void testErrors()
   printf("\n");
 
   eapNoPWD();
+  printf("\n");
+
+  addNoSSID();
+  printf("\n");
+
+  editNoField();
+  printf("\n");
+
+  editNoValue();
   printf("\n");
 }
