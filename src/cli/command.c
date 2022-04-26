@@ -77,11 +77,6 @@ void command_loop(void) {
 		numargs = parse(cmdline, args);
 		if (numargs == BLANK_LINE)
 			continue;
-
-		/* 
-		* Looks at first entry for function name. Again, first time I have seen the syntax like this. 
-		* Done should return false if the input does not match command syntax. (*cmd -> fn) (args)
-		*/ 
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
 			done = (*(cmd->fn)) (numargs, args, cmd->syntax); 

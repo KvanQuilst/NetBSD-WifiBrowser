@@ -58,6 +58,7 @@ CMD_PROC (deleteNetwork);
 CMD_PROC (cleanNetworks);
 CMD_PROC (lsConfigured);
 CMD_PROC (lsAvailable);
+CMD_PROC (conf);
 
 /* The command definitions. This is where the user should add new
    command definitions.
@@ -91,6 +92,14 @@ const struct command cmd_table [] = {		/* Command Table */
 { cleanNetworks, "clean_networks", "CLEAN_NETWORKS", "Removes all networks from the configuration file. "},
 { lsConfigured, "list_configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
 { lsAvailable, "list_available", "LIST_AVAILABLE", "Lists all available networks. "}, 
+
+{ conf, "conf ", "CONFIGURATION_FILE_METHODS", "Perform operations on the configuration file. Usage: \n"
+                     "-a (auto configuration) (ssid, psk)\n"
+                     "-ae (auto configuration eap) (ssid, user, pwd)\n"
+                     "-ne (add entry to configuration file) (ssid)\n"
+                     "-e (edit network in configuration file) (ssid, field, value)\n"
+                     "-en (enable network in configuration file) (ssid)\n"
+                     "-dn (delete network in configuration file) (ssid)\n"}, 
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))

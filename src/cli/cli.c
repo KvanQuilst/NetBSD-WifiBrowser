@@ -53,6 +53,86 @@ CMD_PROC(cleanNetworks);
 CMD_PROC(lsConfigured);
 CMD_PROC(lsAvailable); 
 
+CMD_PROC(conf);
+
+/*
+ * TODO: Implement checks for each method (check correct number of arguments) 
+ * TODO: Allow common prefixes for certain functions (write a conf function) 
+ * TODO: Allow user to enter a string of commands to be processed all at once  
+ * 
+*/
+
+int conf(int num, char **args, char *syntax){
+
+  if(num < 2){
+
+    printf("Requires at least two additional arguments.\n");
+    return 0;
+  }
+
+  if(strcmp(args[1], "-a") == 0){
+
+    if(num != 4){
+
+      printf("Auto configuration requires ssid, psk.\n");
+      return 0;
+    }
+    else{
+
+      if(conf_configAuto(args[2], args[3]) < 0){
+
+        printf("Error setting auto configuration of network.\n");
+        return 0;
+      }
+      else{
+
+        printf("Success setting auto configuration of network.\n");
+        return 1;
+      }
+    }
+  }
+
+  if(strcmp(args[1], "-ae") == 0){
+
+    if(num != 5){
+
+      printf("Auto configuration eap requires ssid, user and pwd.\n");
+    }
+
+    else{
+
+      if(conf_configAutoEAP(args[2], args[3], args[4]) < 0){
+
+        printf("Error setting auto configuration eap of network.\n");
+        return 0;
+      }
+      else{
+
+        printf("Success setting auto configuration eap of network.\n");
+        return 1;
+      }
+    }
+  }
+
+  if(strcmp(args[1], "-ne") == 0){
+
+    if(num != 3){
+
+      printf("Adding network requires ssid.\n");
+      return 0;
+    }
+
+    else{
+
+      if(conf_addEntry(args[2]) < 0){
+
+        
+      }
+    }
+  }
+  return 0;
+}
+
 /* Place holder */
 int say_hello (int num, char **args, char *syntax) {
   printf ("Hello! ... args[0] is %s\n", args[0]);
