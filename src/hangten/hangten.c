@@ -8,7 +8,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-//#include <surf.h>
+#include <surf.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -44,7 +44,7 @@ int main()
   // Open a display.
   Display *d = XOpenDisplay(0);
 
-  if ( d )
+  if (d)
     {
       // Create the window
       Window w = XCreateWindow(d, DefaultRootWindow(d), 0, 0, 200,
