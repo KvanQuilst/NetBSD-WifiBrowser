@@ -7,6 +7,7 @@
  */
 
 #include <stdlib.h>
+#include <unistd.h>
 //#include <surf.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -38,7 +39,7 @@ int main(int argc, char **argv)
   
 }*/
 
-main()
+int main()
 {
   // Open a display.
   Display *d = XOpenDisplay(0);
