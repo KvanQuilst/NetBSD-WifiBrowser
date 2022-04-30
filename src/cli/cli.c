@@ -51,6 +51,8 @@ CMD_PROC(ls);
  * Only return one if no commands remain 
 */
 
+int shiftLeft(char **args);
+
 int conf(int num, char **args, char *syntax){
 
   shiftLeft(args);
