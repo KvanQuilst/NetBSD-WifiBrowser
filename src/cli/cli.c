@@ -51,11 +51,7 @@ CMD_PROC(ls);
  * Only return one if no commands remain 
 */
 
-int shiftLeft(char **args);
-
 int conf(int num, char **args, char *syntax){
-
-  shiftLeft(args);
 
   if(num < 2){
 
@@ -80,7 +76,6 @@ int conf(int num, char **args, char *syntax){
       else{
 
         printf("Success setting auto configuration of network.\n");
-        //return shift_left(args)
         return 1;
       }
     }
@@ -277,12 +272,6 @@ int editNetwork(char *ssid, char *field, char *value){
     printf("Error editing specified network in configuration file. \n");    
     return 0;
   }
-}
-
-int shiftLeft(char **args){
-
-  int commands = sizeof(args[0]) / sizeof(args);
-  printf("%d\n", commands);
 }
 
 /* Main program */
