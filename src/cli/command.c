@@ -99,10 +99,6 @@ int one_command(char *cmdline) {
 		return 0;
 	cmd = find_entry(args[0]);
 	if (cmd != NULL) {
-
-		/* 
-		* Function gets called here. 
-		*/
 		done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
 		if (after_cmd != NULL)
 			(*(after_cmd)) (done);

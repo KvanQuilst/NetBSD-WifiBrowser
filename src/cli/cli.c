@@ -48,6 +48,7 @@ CMD_PROC(ls);
  * TODO: Implement checks for each method (check correct number of arguments) 
  * TODO: Allow common prefixes for certain functions (write a conf function) 
  * TODO: Allow user to enter a string of commands to be processed all at once  
+ * Only return one if no commands remain 
 */
 
 int conf(int num, char **args, char *syntax){
@@ -85,6 +86,7 @@ int conf(int num, char **args, char *syntax){
     if(num < 5){
 
       printf("Auto configuration eap requires ssid, user and pwd.\n");
+      return 0;
     }
 
     else{
@@ -138,7 +140,7 @@ int conf(int num, char **args, char *syntax){
 
             if(conf_editNetwork(args[2], field, value) < 0){
 
-              printf("Error editing specified network field to configuration file.\n");
+              printf("Error editing specified network field to configuration file.\n"); 
             }
             
             else{
