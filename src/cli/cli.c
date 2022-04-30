@@ -41,7 +41,6 @@
 /* 
  * Function PROCS to be used with program 
  */
-CMD_PROC(do_exit);
 CMD_PROC(conf);
 CMD_PROC(ls);
 
@@ -271,11 +270,6 @@ int editNetwork(char *ssid, char *field, char *value){
     printf("Error editing specified network in configuration file. \n");    
     return 0;
   }
-}
-
-int do_exit (int num, char **args, char *syntax) {
-  
-  return 1;
 }
 
 /* Main program */
