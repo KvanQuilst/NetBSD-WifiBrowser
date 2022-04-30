@@ -279,7 +279,7 @@ int editNetwork(char *ssid, char *field, char *value){
 
 int shiftLeft(char **args){
 
-  int commands = sizeof(args[0]) / sizeof(args));
+  int commands = sizeof(args[0]) / sizeof(args);
   printf("%d\n", commands);
 }
 
