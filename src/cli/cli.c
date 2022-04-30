@@ -41,7 +41,6 @@
 /* 
  * Function PROCS to be used with program 
  */
-CMD_PROC(say_hello);
 CMD_PROC(do_exit);
 CMD_PROC(conf);
 CMD_PROC(ls);
@@ -50,7 +49,6 @@ CMD_PROC(ls);
  * TODO: Implement checks for each method (check correct number of arguments) 
  * TODO: Allow common prefixes for certain functions (write a conf function) 
  * TODO: Allow user to enter a string of commands to be processed all at once  
- * 
 */
 
 int conf(int num, char **args, char *syntax){
@@ -63,7 +61,7 @@ int conf(int num, char **args, char *syntax){
 
   if(strcmp(args[1], "-a") == 0){
 
-    if(num != 4){
+    if(num < 4){
 
       printf("Auto configuration requires ssid, psk.\n");
       return 0;
@@ -85,7 +83,7 @@ int conf(int num, char **args, char *syntax){
 
   if(strcmp(args[1], "-ae") == 0){
 
-    if(num != 5){
+    if(num < 5){
 
       printf("Auto configuration eap requires ssid, user and pwd.\n");
     }
@@ -107,7 +105,7 @@ int conf(int num, char **args, char *syntax){
 
   if(strcmp(args[1], "-an") == 0){
 
-    if(num != 3){
+    if(num < 3){
 
       printf("Adding network requires ssid.\n");
       return 0;
@@ -168,7 +166,7 @@ int conf(int num, char **args, char *syntax){
 
   if(strcmp(args[1], "-en") == 0){
 
-    if(num != 3){
+    if(num < 3){
 
       printf("Enabling network requires ssid.\n");
       return 0;
@@ -192,7 +190,7 @@ int conf(int num, char **args, char *syntax){
 
   if(strcmp(args[1], "-dn") == 0){
 
-    if(num != 3){
+    if(num < 3){
 
       printf("Deleting network requires ssid.\n");
       return 0;
@@ -219,7 +217,7 @@ int conf(int num, char **args, char *syntax){
 
 int ls(int num, char **args, char *syntax){
 
-  if(num != 2){
+  if(num < 2){
 
     printf("Requires at least two additional arguments.\n");
     return 0;
@@ -275,13 +273,8 @@ int editNetwork(char *ssid, char *field, char *value){
   }
 }
 
-/* Place holder */
-int say_hello (int num, char **args, char *syntax) {
-  printf ("Hello! ... args[0] is %s\n", args[0]);
-  return 0;
-}
-
 int do_exit (int num, char **args, char *syntax) {
+  
   return 1;
 }
 

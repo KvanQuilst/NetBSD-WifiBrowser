@@ -47,7 +47,6 @@ CMD_PROC (help);
 */ 
 
 /* hdsetup commands. */
-CMD_PROC (say_hello);
 CMD_PROC (do_exit);
 CMD_PROC (conf);
 CMD_PROC (ls);
@@ -64,8 +63,6 @@ CMD_PROC (ls);
 
 const struct command cmd_table [] = {		/* Command Table */
 
-{ say_hello, "hello", "HELLO", "Says hello back" },
-
 #ifndef NO_HELP
 { help, "help", "HELP [<command>].", "Provides help for all listed <command>s.  If there none, prints a list \n of the commands." },
 #endif
@@ -74,7 +71,7 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ do_exit, "exit", "EXIT", "Just get out of here." }, 
+{ exit, "exit", "EXIT", "Exit." }, 
 { conf, "conf", "CONFIGURATION_FILE_METHODS", "Perform operations on the configuration file. Usage: \n"
                      "-a (auto configuration) (ssid, psk)\n"
                      "-ae (auto configuration eap) (ssid, user, pwd)\n"
