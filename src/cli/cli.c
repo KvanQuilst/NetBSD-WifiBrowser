@@ -259,7 +259,7 @@ int editNetwork(char *ssid, char *field, char *value){
 
 int do_exit(int num, char **args, char *syntax){
 
-  return 0;
+  return 1;
 }
 
 /* Main program */
