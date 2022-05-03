@@ -48,6 +48,9 @@ CMD_PROC (ls);
 /*
  * TODO: Implement checks for each method (check correct number of arguments)  
  * TODO: Allow user to enter a string of commands to be processed all at once  
+ * Notes: When using getopt_long, you specific an index for each command. 
+ * You can use this option index to remove the values in args[] and replace with 
+ * the option index. User can enter string of commands to be processed all at once. 
 */
 
 int conf(int num, char **args, char *syntax){
