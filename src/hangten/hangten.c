@@ -1,6 +1,6 @@
 /*
  * HangTen / hangten.c
- * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+ * Copyright (c) 2022 Dylan Eskew
  * * This software is under the terms of the BSD license.  * See README for more details.
  *
  * XLib graphical user interface for Surf API
@@ -13,11 +13,17 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include "button.h"
+#include "global.h"
+
+Display *dpy;
+int scr;
+
+XFontStruct *font;
+
 int main()
 {
-  Display   *dpy;
-  int       scr;
-  Window    w, c;
+  Window    w/*, c*/;
   XEvent    ev;
 
   int x, y, width, height, border_width, depth;
@@ -28,9 +34,6 @@ int main()
   XGCValues gcv_lightgrey, gcv_darkgrey;
   GC gc_lightgrey, gc_darkgrey;
 
-  XFontStruct *font;
-  XTextItem ti[1];
-
   /* Open connection to XServer */
   dpy = XOpenDisplay(NULL);
   if (!dpy) {
@@ -40,13 +43,15 @@ int main()
 
   scr = DefaultScreen(dpy);
 
+  /* Init Globals */
+  font = XLoadQueryFont(dpy, "7x14");
+
   /* Parent Window */
   w = XCreateSimpleWindow(dpy, RootWindow(dpy, scr), 0, 0, 500,
          500, 0, BlackPixel(dpy,scr), WhitePixel(dpy, scr));
 
   XSelectInput(dpy, w, ExposureMask | KeyPressMask);
   XMapWindow(dpy, w);
-
 
   /* Child Window */
   colormap = DefaultColormap(dpy, scr);
@@ -70,21 +75,19 @@ int main()
   gc_darkgrey = XCreateGC(dpy, RootWindow(dpy, scr), 
       GCForeground | GCBackground, &gcv_darkgrey);
 
-  c = XCreateSimpleWindow(dpy, w, 199, 199, 100, 25,
+  /*c = XCreateSimpleWindow(dpy, w, 199, 199, 100, 25,
       1, BlackPixel(dpy, scr), button_color.pixel);
+      */
 
-  XSelectInput(dpy, c, 
-      ExposureMask | KeyPressMask | ButtonPressMask | ButtonReleaseMask);
-  XMapWindow(dpy, c);
-
-  XGetGeometry(dpy, c, &root_win, &x, &y, &width, &height,
-      &border_width, &depth);
+  XButton c = buttonCreate(w, 199, 199, 100, 25, "Scan Networks");
+  if (!c)
+    exit(1);
 
   while (1) {
     XNextEvent(dpy, &ev);
-    if (ev.xany.window == c) {
+    if (ev.xany.window == c->win) {
       if (ev.type == Expose) {
-          XDrawLine(dpy, c, gc_lightgrey,
+          /*XDrawLine(dpy, c, gc_lightgrey,
               0, 0, width-1, 0);
           XDrawLine(dpy, c, gc_lightgrey,
               0, 0, 0, height-1);
@@ -101,10 +104,11 @@ int main()
           XDrawText(dpy, c, DefaultGC(dpy, scr),
               (width-XTextWidth(font, ti[0].chars, ti[0].nchars))/2,
               (height-(font->ascent+font->descent))/2+font->ascent, 
-              ti, 1);
+              ti, 1);*/
+        buttonExpose(c);
       }
 
-      if (ev.type == ButtonPress) {
+      /*if (ev.type == ButtonPress) {
         if (ev.xbutton.button == 1) {
           XDrawLine(dpy, c, gc_darkgrey,
               0, 0, width-1, 0);
@@ -127,7 +131,7 @@ int main()
               width-1, 0, width-1, height-1);
           XDrawLine(dpy, c, gc_darkgrey,
               0, height-1, width-1, height-1);
-        }
+        }*/
     }
   }
 

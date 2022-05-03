@@ -1,6 +1,6 @@
 PROG   = hangten
-SRCS   = hangten.c
-CPPFLAGS += -I/usr/X11R7/include
+SRCS   = hangten.c button.c
+CPPFLAGS += -g -I/usr/X11R7/include
 LDADD += -L/usr/X11R7/lib -lX11
 
 MAN  = 
