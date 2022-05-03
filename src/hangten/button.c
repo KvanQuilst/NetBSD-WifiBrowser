@@ -22,7 +22,7 @@ XGCValues gcv_light, gcv_dark;
 GC gc_light, gc_dark;
 
 XButton buttonCreate(Window p, int x, int y, 
-    int width, int height, char *text)
+    int width, int height, char *text, void (*press)())
 {
   Window win;
   XButton button = malloc(sizeof(struct XBUTTON_T));
@@ -43,6 +43,7 @@ XButton buttonCreate(Window p, int x, int y,
   button->y     = y;
   button->w     = width;
   button->h     = height;
+  button->press = press;
 
   button->ti.chars = malloc(TEXT_LEN * sizeof(char));
   if (!button->ti.chars)
@@ -84,10 +85,7 @@ void buttonPress(XButton b)
   XDrawLine(dpy, b->win, gc_light,
       0, b->h-1, b->w-1, b->h-1);
 
-  XDrawText(dpy, b->win, DefaultGC(dpy, scr),
-      (b->w-XTextWidth(font, b->ti.chars, b->ti.nchars))/2,
-      (b->h-(font->ascent+font->descent))/2+font->ascent,
-      &b->ti, 1);
+  (*b->press)();
 }
 
 void buttonRelease(XButton b)
@@ -100,11 +98,6 @@ void buttonRelease(XButton b)
       b->w-1, 0, b->w-1, b->h-1);
   XDrawLine(dpy, b->win, gc_dark,
       0, b->h-1, b->w-1, b->h-1);
-
-  XDrawText(dpy, b->win, DefaultGC(dpy, scr),
-      (b->w-XTextWidth(font, b->ti.chars, b->ti.nchars))/2,
-      (b->h-(font->ascent+font->descent))/2+font->ascent,
-      &b->ti, 1);
 }
 
 void buttonInitColor()

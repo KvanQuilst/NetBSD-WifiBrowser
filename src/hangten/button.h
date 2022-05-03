@@ -12,10 +12,11 @@ struct XBUTTON_T {
   Window  win; 
   int x, y, w, h;
   XTextItem ti;
+  void (*press)();
 };
 
 XButton buttonCreate(Window p, int x, int y,
-    int width, int height, char *text);
+    int width, int height, char *text, void (*press)());
 
 void buttonInitColor();
 
