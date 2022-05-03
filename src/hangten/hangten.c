@@ -17,14 +17,19 @@
 #include "button.h"
 #include "global.h"
 
+#define BUF_SIZE 2048
+
 Display *dpy;
 Window w;
 int scr;
 
 XFontStruct *font;
 
+char buf[BUF_SIZE];
+char **list;
 
 void scanList();
+static int separate();
 
 int main()
 {
@@ -94,27 +99,13 @@ void scanList()
 {
   Window s; 
   XTextItem *ti;
-  int cnt = 1, num = 0;
-  char **list;
-  char *buf = malloc(2048 * sizeof(char));
-  if (!buf)
-    return;
+  int num;
 
-  if (listAvailable(buf, 2048) < 0) {
+  if (listAvailable(buf, BUF_SIZE) < 0) {
     strcpy(buf, "Could not scan");
   } else {
-    for (int i = 0; i < 2048; i++)
-      if (buf[i] == '\n') {
-        buf[i] = 0;
-        num++;
-      }
-    list = malloc(num * sizeof(char *));
-    list[0] = buf; 
-    for (int i = 0; i < 2048; i++)
-      if (buf[i] == 0) {
-        list[cnt] = &buf[i+1];
-        cnt++; i++;
-      }
+    if ((num = separate()) < 0)
+      return;
   }
 
   s = XCreateSimpleWindow(dpy, w, 10, 45, 480, 450,
@@ -125,13 +116,44 @@ void scanList()
   XSelectInput(dpy, s, ExposureMask | KeyPressMask);
   XMapWindow(dpy, s);
 
+  ti = malloc(num * sizeof(XTextItem));
+  if (!ti)
+    return;
+
   for (int i = 0; i < num; i++) {
-    ti[i].chars = buf;
-    ti[i].nchars = strnlen(buf, 2048);
+    ti[i].chars = list[i];
+    ti[i].nchars = strnlen(list[i], BUF_SIZE);
     ti[i].delta = 0;
     ti[i].font = font->fid;
 
     XDrawText(dpy, s, DefaultGC(dpy, scr),
-      5, 15+(font->descent-font->ascent+5)*i, &ti[i], 1);
+      5, 15+(font->ascent+5)*i, &ti[i], 1);
   }
+}
+
+static int separate()
+{
+  int cnt = 1, num = 0;
+
+  for (int i = 0; i < BUF_SIZE; i++)
+    if (buf[i] == '\n') {
+      buf[i] = 0;
+      num++;
+    }
+
+  free(list);
+  list = malloc(num * sizeof(char *));
+  if (!list)
+    return -1;
+
+  list[0] = buf; 
+  int i = 0;
+  while (cnt < num || i < BUF_SIZE) {
+    if (buf[i] == 0) {
+      list[cnt] = &buf[i+1];
+      cnt++; i++;
+    }
+    i++;
+  }
+  return num;
 }
