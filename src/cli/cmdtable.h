@@ -64,7 +64,7 @@ const struct command cmd_table [] = {		/* Command Table */
 
 #ifndef NO_HELP
 { help, "help", "HELP [<command>].", "Provides help for all listed <command>s.  If there none, prints a list \n of the commands." },
-#endif
+#endif 
 
 #ifndef NO_HELP
 { help, "?", "", "Prints a list of commands." },

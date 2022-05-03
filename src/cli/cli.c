@@ -48,7 +48,6 @@ CMD_PROC(ls);
  * TODO: Implement checks for each method (check correct number of arguments) 
  * TODO: Allow common prefixes for certain functions (write a conf function) 
  * TODO: Allow user to enter a string of commands to be processed all at once  
- * Only return one if no commands remain 
 */
 
 int conf(int num, char **args, char *syntax){
@@ -56,7 +55,6 @@ int conf(int num, char **args, char *syntax){
   if(num < 2){
 
     printf("Requires at least two additional arguments.\n");
-    return 0;
   }
 
   if(strcmp(args[1], "-a") == 0){
@@ -64,19 +62,16 @@ int conf(int num, char **args, char *syntax){
     if(num < 4){
 
       printf("Auto configuration requires ssid, psk.\n");
-      return 0;
     }
     else{
 
       if(conf_configAuto(args[2], args[3]) < 0){
 
         printf("Error setting auto configuration of network.\n");
-        return 0;
       }
       else{
 
         printf("Success setting auto configuration of network.\n");
-        return 1;
       }
     }
   }
@@ -86,7 +81,6 @@ int conf(int num, char **args, char *syntax){
     if(num < 5){
 
       printf("Auto configuration eap requires ssid, user and pwd.\n");
-      return 0;
     }
 
     else{
@@ -94,12 +88,11 @@ int conf(int num, char **args, char *syntax){
       if(conf_configAutoEAP(args[2], args[3], args[4]) < 0){
 
         printf("Error setting auto configuration eap of network.\n");
-        return 0;
       }
+
       else{
 
         printf("Success setting auto configuration eap of network.\n");
-        return 1;
       }
     }
   }
@@ -109,7 +102,6 @@ int conf(int num, char **args, char *syntax){
     if(num < 3){
 
       printf("Adding network requires ssid.\n");
-      return 0;
     }
 
     else{
@@ -117,7 +109,6 @@ int conf(int num, char **args, char *syntax){
       if(conf_addEntry(args[2]) < 0){
 
         printf("Error adding new entry.\n");
-        return 0;
       }
 
       else{
@@ -153,13 +144,11 @@ int conf(int num, char **args, char *syntax){
         if(conf_enableNetwork(args[2]) < 0){
 
           printf("Error enabling new network in configuration file.\n");
-          return 0;
         }
 
         else{
 
           printf("Success enabling new network in configuration file.\n");
-          return 1;
         }
       }
     }
@@ -170,7 +159,6 @@ int conf(int num, char **args, char *syntax){
     if(num < 3){
 
       printf("Enabling network requires ssid.\n");
-      return 0;
     }
 
     else{
@@ -178,13 +166,11 @@ int conf(int num, char **args, char *syntax){
       if(conf_enableNetwork(args[2]) < 0){
 
         printf("Error enabling network.\n");
-        return 0;
       }
 
       else{
 
         printf("Success enabling network.\n");
-        return 1;
       }
     }
   }
@@ -194,7 +180,6 @@ int conf(int num, char **args, char *syntax){
     if(num < 3){
 
       printf("Deleting network requires ssid.\n");
-      return 0;
     }
 
     else{
@@ -202,16 +187,20 @@ int conf(int num, char **args, char *syntax){
       if(conf_deleteNetwork(args[2]) < 0){
 
         printf("Error deleting network.\n");
-        return 0;
       }
       
       else{
 
         printf("Success deleting network.\n");
-        return 1;
       }
     }
   }
+  
+  if(strcmp(args[1], "exit") == 0){
+
+    
+  }
+  
 
   return 0;
 }
