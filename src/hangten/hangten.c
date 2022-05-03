@@ -1,6 +1,6 @@
 /*
  * HangTen / hangten.c
- * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+ * Copyright (c) 2022 Dylan Eskew
  * * This software is under the terms of the BSD license.  * See README for more details.
  *
  * XLib graphical user interface for Surf API
@@ -8,28 +8,38 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <surf.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+#include "button.h"
+#include "global.h"
+
+Display *dpy;
+Window w;
+int scr;
+
+XFontStruct *font;
+
+
+void scanList();
+
 int main()
 {
-  Display   *dpy;
-  int       scr;
-  Window    w, c;
+  XButton buttons[4];
   XEvent    ev;
+
+  char *labels[4] = {
+    "Scan Networks",
+    "Refresh",
+    "Connect",
+    "Help"
+  };
 
   int x, y, width, height, border_width, depth;
   Window root_win;
-  Colormap colormap;
-  XColor button_color;
-  XColor light_grey, dark_grey;
-  XGCValues gcv_lightgrey, gcv_darkgrey;
-  GC gc_lightgrey, gc_darkgrey;
-
-  XFontStruct *font;
-  XTextItem ti[1];
 
   /* Open connection to XServer */
   dpy = XOpenDisplay(NULL);
@@ -40,96 +50,88 @@ int main()
 
   scr = DefaultScreen(dpy);
 
+  /* Init Globals */
+  font = XLoadQueryFont(dpy, "7x14");
+  surf_init();
+
   /* Parent Window */
   w = XCreateSimpleWindow(dpy, RootWindow(dpy, scr), 0, 0, 500,
-         500, 0, BlackPixel(dpy,scr), WhitePixel(dpy, scr));
+         500, 0, BlackPixel(dpy,scr), BlackPixel(dpy, scr));
 
   XSelectInput(dpy, w, ExposureMask | KeyPressMask);
   XMapWindow(dpy, w);
 
+  buttonInitColor();
 
-  /* Child Window */
-  colormap = DefaultColormap(dpy, scr);
-  XParseColor(dpy, colormap, "rgb:cc/cc/cc", &button_color);
-  XAllocColor(dpy, colormap, &button_color);
-
-  /* Light Grey */
-  XParseColor(dpy, colormap, "rgb:ee/ee/ee", &light_grey);
-  XAllocColor(dpy, colormap, &light_grey);
-  gcv_lightgrey.foreground = light_grey.pixel;
-  gcv_lightgrey.background = button_color.pixel;
-  gc_lightgrey = XCreateGC(dpy, RootWindow(dpy, scr), 
-      GCForeground | GCBackground, &gcv_lightgrey);
-
-
-  /* Dark Grey */
-  XParseColor(dpy, colormap, "rgb:88/88/88", &dark_grey);
-  XAllocColor(dpy, colormap, &dark_grey);
-  gcv_darkgrey.foreground = dark_grey.pixel;
-  gcv_darkgrey.background = button_color.pixel;
-  gc_darkgrey = XCreateGC(dpy, RootWindow(dpy, scr), 
-      GCForeground | GCBackground, &gcv_darkgrey);
-
-  c = XCreateSimpleWindow(dpy, w, 199, 199, 100, 25,
-      1, BlackPixel(dpy, scr), button_color.pixel);
-
-  XSelectInput(dpy, c, 
-      ExposureMask | KeyPressMask | ButtonPressMask | ButtonReleaseMask);
-  XMapWindow(dpy, c);
-
-  XGetGeometry(dpy, c, &root_win, &x, &y, &width, &height,
-      &border_width, &depth);
+  for (int i = 0; i < 4; i++) {
+    buttons[i] = buttonCreate(w, 10+i*110, 10, 100, 25, labels[i], *scanList);
+    if (!buttons[i])
+      exit(1);
+  }
 
   while (1) {
     XNextEvent(dpy, &ev);
-    if (ev.xany.window == c) {
-      if (ev.type == Expose) {
-          XDrawLine(dpy, c, gc_lightgrey,
-              0, 0, width-1, 0);
-          XDrawLine(dpy, c, gc_lightgrey,
-              0, 0, 0, height-1);
-          XDrawLine(dpy, c, gc_darkgrey,
-              width-1, 0, width-1, height-1);
-          XDrawLine(dpy, c, gc_darkgrey,
-              0, height-1, width-1, height-1);
+    for (int i = 0; i < 4; i++) {
+      if (ev.xany.window == buttons[i]->win) {
+        if (ev.type == Expose)
+          buttonExpose(buttons[i]);
 
-          font = XLoadQueryFont(dpy, "7x14");
-          ti[0].chars = "Scan Networks";
-          ti[0].nchars = 13;
-          ti[0].delta = 0;
-          ti[0].font = font->fid;
-          XDrawText(dpy, c, DefaultGC(dpy, scr),
-              (width-XTextWidth(font, ti[0].chars, ti[0].nchars))/2,
-              (height-(font->ascent+font->descent))/2+font->ascent, 
-              ti, 1);
+        if (ev.type == ButtonPress)
+          if (ev.xbutton.button == 1)
+          buttonPress(buttons[i]);
+
+        if (ev.type == ButtonRelease)
+          if (ev.xbutton.button == 1)
+            buttonRelease(buttons[i]);
       }
-
-      if (ev.type == ButtonPress) {
-        if (ev.xbutton.button == 1) {
-          XDrawLine(dpy, c, gc_darkgrey,
-              0, 0, width-1, 0);
-          XDrawLine(dpy, c, gc_darkgrey,
-              0, 0, 0, height-1);
-          XDrawLine(dpy, c, gc_lightgrey,
-              width-1, 0, width-1, height-1);
-          XDrawLine(dpy, c, gc_lightgrey,
-              0, height-1, width-1, height-1);
-        }
-      }
-
-      if (ev.type == ButtonRelease)
-        if (ev.xbutton.button == 1) {
-          XDrawLine(dpy, c, gc_lightgrey,
-              0, 0, width-1, 0);
-          XDrawLine(dpy, c, gc_lightgrey,
-              0, 0, 0, height-1);
-          XDrawLine(dpy, c, gc_darkgrey,
-              width-1, 0, width-1, height-1);
-          XDrawLine(dpy, c, gc_darkgrey,
-              0, height-1, width-1, height-1);
-        }
     }
   }
 
   return 0;
+}
+
+void scanList()
+{
+  Window s; 
+  XTextItem *ti;
+  int cnt = 1, num = 0;
+  char **list;
+  char *buf = malloc(2048 * sizeof(char));
+  if (!buf)
+    return;
+
+  if (listAvailable(buf, 2048) < 0) {
+    strcpy(buf, "Could not scan");
+  } else {
+    for (int i = 0; i < 2048; i++)
+      if (buf[i] == '\n') {
+        buf[i] = 0;
+        num++;
+      }
+    list = malloc(num * sizeof(char *));
+    list[0] = buf; 
+    for (int i = 0; i < 2048; i++)
+      if (buf[i] == 0) {
+        list[cnt] = &buf[i+1];
+        cnt++; i++;
+      }
+  }
+
+  s = XCreateSimpleWindow(dpy, w, 10, 45, 480, 450,
+      0, BlackPixel(dpy, scr), WhitePixel(dpy, scr));
+  if (!w)
+    return;
+
+  XSelectInput(dpy, s, ExposureMask | KeyPressMask);
+  XMapWindow(dpy, s);
+
+  for (int i = 0; i < num; i++) {
+    ti[i].chars = buf;
+    ti[i].nchars = strnlen(buf, 2048);
+    ti[i].delta = 0;
+    ti[i].font = font->fid;
+
+    XDrawText(dpy, s, DefaultGC(dpy, scr),
+      5, 15+(font->descent-font->ascent+5)*i, &ti[i], 1);
+  }
 }
