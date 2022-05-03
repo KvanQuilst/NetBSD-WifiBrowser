@@ -79,6 +79,8 @@ int main()
       1, BlackPixel(dpy, scr), button_color.pixel);
       */
 
+  buttonInitColor();
+
   XButton c = buttonCreate(w, 199, 199, 100, 25, "Scan Networks");
   if (!c)
     exit(1);
@@ -108,8 +110,8 @@ int main()
         buttonExpose(c);
       }
 
-      /*if (ev.type == ButtonPress) {
-        if (ev.xbutton.button == 1) {
+      if (ev.type == ButtonPress) {
+        /*if (ev.xbutton.button == 1) {
           XDrawLine(dpy, c, gc_darkgrey,
               0, 0, width-1, 0);
           XDrawLine(dpy, c, gc_darkgrey,
@@ -118,11 +120,12 @@ int main()
               width-1, 0, width-1, height-1);
           XDrawLine(dpy, c, gc_lightgrey,
               0, height-1, width-1, height-1);
-        }
+        }*/
+        buttonPress(c);
       }
 
       if (ev.type == ButtonRelease)
-        if (ev.xbutton.button == 1) {
+        /*if (ev.xbutton.button == 1) {
           XDrawLine(dpy, c, gc_lightgrey,
               0, 0, width-1, 0);
           XDrawLine(dpy, c, gc_lightgrey,
@@ -132,6 +135,7 @@ int main()
           XDrawLine(dpy, c, gc_darkgrey,
               0, height-1, width-1, height-1);
         }*/
+        buttonRelease(c);
     }
   }
 
