@@ -59,7 +59,7 @@ int conf(int num, char **args, char *syntax){
 
     if(num < 2){
       
-      help(num, args, syntax);
+      printf("Requires at least two additional arguments.\n");
     }
 
     else if(strcmp(args[1], "-a") == 0){
@@ -260,7 +260,7 @@ int editNetwork(char *ssid, char *field, char *value){
   }
 }
 
-int do_exit(char **ssid, char *field, char *value){
+int do_exit(int num, char **args, char *syntax){
 
   return 0;
 }
