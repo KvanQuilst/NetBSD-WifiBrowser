@@ -48,8 +48,6 @@ CMD_PROC (ls);
 /*
  * TODO: Implement checks for each method (check correct number of arguments)  
  * TODO: Allow user to enter a string of commands to be processed all at once  
- * Note: Not sure how to use getopt_long without editing command.c 
- * Note: Set a variable to args and increment with each command entered 
 */
 
 int conf(int num, char **args, char *syntax){
