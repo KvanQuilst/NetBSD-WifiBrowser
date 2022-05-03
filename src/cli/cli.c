@@ -41,166 +41,166 @@
 /* 
  * Function PROCS to be used with program 
  */
-CMD_PROC(conf);
-CMD_PROC(ls);
+CMD_PROC (do_exit);
+CMD_PROC (conf);
+CMD_PROC (ls);
 
 /*
- * TODO: Implement checks for each method (check correct number of arguments) 
- * TODO: Allow common prefixes for certain functions (write a conf function) 
+ * TODO: Implement checks for each method (check correct number of arguments)  
  * TODO: Allow user to enter a string of commands to be processed all at once  
+ * Note: Not sure how to use getopt_long without editing command.c 
+ * 
 */
 
 int conf(int num, char **args, char *syntax){
 
-  if(num < 2){
+  int option = 0;
+  while(option = getopt_long(num, args, syntax)){
 
-    printf("Requires at least two additional arguments.\n");
-  }
-
-  if(strcmp(args[1], "-a") == 0){
-
-    if(num < 4){
-
-      printf("Auto configuration requires ssid, psk.\n");
+    if(num < 2){
+      
+      help(num, args, syntax);
     }
-    else{
 
-      if(conf_configAuto(args[2], args[3]) < 0){
+    else if(strcmp(args[1], "-a") == 0){
 
-        printf("Error setting auto configuration of network.\n");
+      if(num < 4){
+
+        printf("Auto configuration requires ssid, psk.\n");
       }
       else{
 
-        printf("Success setting auto configuration of network.\n");
-      }
-    }
-  }
+        if(conf_configAuto(args[2], args[3]) < 0){
 
-  if(strcmp(args[1], "-ae") == 0){
-
-    if(num < 5){
-
-      printf("Auto configuration eap requires ssid, user and pwd.\n");
-    }
-
-    else{
-
-      if(conf_configAutoEAP(args[2], args[3], args[4]) < 0){
-
-        printf("Error setting auto configuration eap of network.\n");
-      }
-
-      else{
-
-        printf("Success setting auto configuration eap of network.\n");
-      }
-    }
-  }
-
-  if(strcmp(args[1], "-an") == 0){
-
-    if(num < 3){
-
-      printf("Adding network requires ssid.\n");
-    }
-
-    else{
-
-      if(conf_addEntry(args[2]) < 0){
-
-        printf("Error adding new entry.\n");
-      }
-
-      else{
-
-        printf("Type 'n' to end additional fields for new network.\n");
-        while(TRUE){
-
-          char field[FIELDLEN], value[FIELDLEN]; 
-          printf("field: "); fgets(field, FIELDLEN, stdin); 
-          printf("value: "); fgets(value, FIELDLEN, stdin); 
-          field[strlen(field) - 1] = 0; 
-          value[strlen(value) - 1] = 0; 
-
-          if(strcmp(field, "n") == 0 || strcmp(value, "n") == 0){
-
-            break;
-          }
-
-          else{
-
-            if(conf_editNetwork(args[2], field, value) < 0){
-
-              printf("Error editing specified network field to configuration file.\n"); 
-            }
-            
-            else{
-
-              printf("Field added to configuration file.\n");
-            }
-          }
+          printf("Error setting auto configuration of network.\n");
         }
+        else{
 
-        if(conf_enableNetwork(args[2]) < 0){
+          printf("Success setting auto configuration of network.\n");
+        }
+      }
+    }
 
-          printf("Error enabling new network in configuration file.\n");
+    else if(strcmp(args[1], "-ae") == 0){
+
+      if(num < 5){
+
+        printf("Auto configuration eap requires ssid, user and pwd.\n");
+      }
+
+      else{
+
+        if(conf_configAutoEAP(args[2], args[3], args[4]) < 0){
+
+          printf("Error setting auto configuration eap of network.\n");
         }
 
         else{
 
-          printf("Success enabling new network in configuration file.\n");
+          printf("Success setting auto configuration eap of network.\n");
+        }
+      }
+    }
+
+    else if(strcmp(args[1], "-an") == 0){
+
+      if(num < 3){
+
+        printf("Adding network requires ssid.\n");
+      }
+
+      else{
+
+        if(conf_addEntry(args[2]) < 0){
+
+          printf("Error adding new entry.\n");
+        }
+
+        else{
+
+          printf("Type 'n' to end additional fields for new network.\n");
+          while(TRUE){
+
+            char field[FIELDLEN], value[FIELDLEN]; 
+            printf("field: "); fgets(field, FIELDLEN, stdin); 
+            printf("value: "); fgets(value, FIELDLEN, stdin); 
+            field[strlen(field) - 1] = 0; 
+            value[strlen(value) - 1] = 0; 
+
+            if(strcmp(field, "n") == 0 || strcmp(value, "n") == 0){
+
+              break;
+            }
+
+            else{
+
+              if(conf_editNetwork(args[2], field, value) < 0){
+
+                printf("Error editing specified network field to configuration file.\n"); 
+              }
+              
+              else{
+
+                printf("Field added to configuration file.\n");
+              }
+            }
+          }
+
+          if(conf_enableNetwork(args[2]) < 0){
+
+            printf("Error enabling new network in configuration file.\n");
+          }
+
+          else{
+
+            printf("Success enabling new network in configuration file.\n");
+          }
+        }
+      }
+    }
+
+    else if(strcmp(args[1], "-en") == 0){
+
+      if(num < 3){
+
+        printf("Enabling network requires ssid.\n");
+      }
+
+      else{
+
+        if(conf_enableNetwork(args[2]) < 0){
+
+          printf("Error enabling network.\n");
+        }
+
+        else{
+
+          printf("Success enabling network.\n");
+        }
+      }
+    }
+
+    else if(strcmp(args[1], "-dn") == 0){
+
+      if(num < 3){
+
+        printf("Deleting network requires ssid.\n");
+      }
+
+      else{
+
+        if(conf_deleteNetwork(args[2]) < 0){
+
+          printf("Error deleting network.\n");
+        }
+        
+        else{
+
+          printf("Success deleting network.\n");
         }
       }
     }
   }
-
-  if(strcmp(args[1], "-en") == 0){
-
-    if(num < 3){
-
-      printf("Enabling network requires ssid.\n");
-    }
-
-    else{
-
-      if(conf_enableNetwork(args[2]) < 0){
-
-        printf("Error enabling network.\n");
-      }
-
-      else{
-
-        printf("Success enabling network.\n");
-      }
-    }
-  }
-
-  if(strcmp(args[1], "-dn") == 0){
-
-    if(num < 3){
-
-      printf("Deleting network requires ssid.\n");
-    }
-
-    else{
-
-      if(conf_deleteNetwork(args[2]) < 0){
-
-        printf("Error deleting network.\n");
-      }
-      
-      else{
-
-        printf("Success deleting network.\n");
-      }
-    }
-  }
-  
-  if(strcmp(args[1], "exit") == 0){
-
-    
-  }
-  
 
   return 0;
 }
@@ -210,7 +210,6 @@ int ls(int num, char **args, char *syntax){
   if(num < 2){
 
     printf("Requires at least two additional arguments.\n");
-    return 0;
   }
 
   else{
@@ -221,13 +220,11 @@ int ls(int num, char **args, char *syntax){
       if(listConfigured(buffer, BUFSIZ) < 0){
 
         printf("Error listing configured networks.\n");
-        return 0;
       }
 
       else{
 
         printf("%s\n", buffer);
-        return 1;
       }
     }
 
@@ -236,16 +233,16 @@ int ls(int num, char **args, char *syntax){
       if(listAvailable(buffer, BUFSIZ) < 0){
 
         printf("Error listing available networks.\n");
-        return 0;
       }
 
       else{
 
         printf("%s\n", buffer);
-        return 1;
       }
     }
   }
+
+  return 0;
 }
 
 int editNetwork(char *ssid, char *field, char *value){
@@ -261,6 +258,11 @@ int editNetwork(char *ssid, char *field, char *value){
     printf("Error editing specified network in configuration file. \n");    
     return 0;
   }
+}
+
+int do_exit(char **ssid, char *field, char *value){
+
+  return 0;
 }
 
 /* Main program */

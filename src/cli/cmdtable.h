@@ -47,6 +47,7 @@ CMD_PROC (help);
 */ 
 
 /* hdsetup commands. */
+CMD_PROC (do_exit);
 CMD_PROC (conf);
 CMD_PROC (ls);
 
@@ -70,17 +71,19 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ conf, "conf", "CONFIGURATION_FILE_METHODS", "Perform operations on the configuration file. Usage: \n"
+{ conf, "conf", "a:ae:an:en:dn", "Perform operations on the configuration file. Usage: \n"
                      "-a (auto configuration) (ssid, psk)\n"
                      "-ae (auto configuration eap) (ssid, user, pwd)\n"
                      "-an (add entry to configuration file) (ssid)\n"
                      "-e (edit network in configuration file) (ssid, field, value)\n"
                      "-en (enable network in configuration file) (ssid)\n"
-                     "-dn (delete network in configuration file) (ssid)\n"}, 
+                     "-dn (delete network in configuration file) (ssid)\n"},
 
-{ ls, "ls", "LIST_NETWORKS", "List available networks. Usage: \n"
+{ ls, "ls", "c:a", "List available networks. Usage: \n"
                      "-c (list configured) \n"
                      "-a (list available) \n"},
+
+{ do_exit, "exit", "e", "Exit program"},
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
