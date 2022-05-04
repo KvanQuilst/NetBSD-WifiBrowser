@@ -17,12 +17,15 @@
 #include "button.h"
 #include "global.h"
 
+#define BUF_SIZE 2048
+
 Display *dpy;
 Window w;
 int scr;
 
 XFontStruct *font;
 
+char buf[BUF_SIZE];
 
 void scanList();
 
@@ -96,14 +99,14 @@ void scanList()
   XTextItem *ti;
   int cnt = 1, num = 0;
   char **list;
-  char *buf = malloc(2048 * sizeof(char));
+  //char *buf = malloc(2048 * sizeof(char));
   if (!buf)
     return;
 
-  if (listAvailable(buf, 2048) < 0) {
+  if (listAvailable(buf, BUF_SIZE) < 0) {
     strcpy(buf, "Could not scan");
   } else {
-    for (int i = 0; i < 2048; i++)
+    for (int i = 0; i < BUF_SIZE; i++)
       if (buf[i] == '\n') {
         buf[i] = 0;
         num++;
@@ -111,7 +114,7 @@ void scanList()
     list = malloc(num * sizeof(char *));
     list[0] = buf; 
     int i = 0;
-    while (cnt < num || i < 2048) {
+    while (cnt < num || i < BUF_SIZE) {
       if (buf[i] == 0) {
         list[cnt] = &buf[i+1];
         cnt++; i++;
@@ -132,7 +135,7 @@ void scanList()
 
   for (int i = 0; i < num; i++) {
     ti[i].chars = list[i];
-    ti[i].nchars = strnlen(list[i], 2048);
+    ti[i].nchars = strnlen(list[i], BUF_SIZE);
     ti[i].delta = 0;
     ti[i].font = font->fid;
 
