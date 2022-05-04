@@ -86,7 +86,7 @@ void buttonPress(XButton b)
   XDrawLine(dpy, b->win, gc_lgrey,
       0, b->h-1, b->w-1, b->h-1);
 
-  (*b->press)();
+  if (b->press) (*b->press)();
 }
 
 void buttonRelease(XButton b)

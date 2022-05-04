@@ -30,8 +30,8 @@ Window l;
 XTextItem *lti;
 char buf[BUF_SIZE];
 char **list;
-
-void scanList();
+static void scanList();
+static void knownList();
 static int separate();
 
 int main()
@@ -44,6 +44,14 @@ int main()
     "Refresh",
     "Connect",
     "Help"
+  };
+
+  void (*funs[4])() = {
+    scanList,
+    //knownList,
+    NULL,
+    NULL,
+    NULL
   };
 
   int x, y, width, height, border_width, depth;
@@ -71,7 +79,7 @@ int main()
   XMapWindow(dpy, w);
 
   for (int i = 0; i < 4; i++) {
-    buttons[i] = buttonCreate(w, 10+i*110, 10, 100, 25, labels[i], *scanList);
+    buttons[i] = buttonCreate(w, 10+i*110, 10, 100, 25, labels[i], funs[i]);
     if (!buttons[i])
       exit(1);
   }
@@ -97,11 +105,14 @@ int main()
   return 0;
 }
 
-void scanList()
+static void listWin(int (*listfun)(char *, size_t))
 {
   int num;
 
-  if (listAvailable(buf, BUF_SIZE) < 0) {
+  if (!listfun)
+    return;
+
+  if ((listfun)(buf, BUF_SIZE) < 0) {
     strcpy(buf, "Could not scan");
   } else if ((num = separate()) < 0) return;
 
@@ -149,6 +160,10 @@ void scanList()
       5, 15+(font->ascent+5)*i, &lti[i], 1);
   }
 }
+
+static void scanList() { listWin(*listAvailable); }
+
+static void knownList() { listWin(*listConfigured); }
 
 static int separate()
 {
