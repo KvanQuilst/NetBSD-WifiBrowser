@@ -1,5 +1,5 @@
 PROG   = hangten
-SRCS   = hangten.c button.c
+SRCS   = hangten.c button.c color.c
 CPPFLAGS += -g -I/usr/X11R7/include
 LDADD += -L/usr/X11R7/lib -lX11
 

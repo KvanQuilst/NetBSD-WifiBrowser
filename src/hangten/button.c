@@ -12,14 +12,15 @@
 #include <X11/Xutil.h>
 
 #include "button.h"
+#include "color.h"
 #include "global.h"
 
 #define TEXT_LEN 32
 
-Colormap colormap;
-XColor c_button, c_light, c_dark;
-XGCValues gcv_light, gcv_dark;
-GC gc_light, gc_dark;
+/*Colormap colormap;
+XColor c_grey, c_lgrey, c_dgrey;
+XGCValues gcv_lgrey, gcv_dgrey;
+GC gc_lgrey, gc_dgrey;*/
 
 XButton buttonCreate(Window p, int x, int y, 
     int width, int height, char *text, void (*press)())
@@ -30,7 +31,7 @@ XButton buttonCreate(Window p, int x, int y,
     return NULL;
 
   win = XCreateSimpleWindow(dpy, p, x, y, width, height,
-      1, BlackPixel(dpy, scr), c_button.pixel);
+      1, BlackPixel(dpy, scr), c_grey.pixel);
   if (!win)
     return NULL;
 
@@ -59,13 +60,13 @@ XButton buttonCreate(Window p, int x, int y,
 
 void buttonExpose(XButton b)
 {
-  XDrawLine(dpy, b->win, gc_light,
+  XDrawLine(dpy, b->win, gc_lgrey,
       0, 0, b->w-1, 0);
-  XDrawLine(dpy, b->win, gc_light,
+  XDrawLine(dpy, b->win, gc_lgrey,
       0, 0, 0, b->h-1);
-  XDrawLine(dpy, b->win, gc_dark,
+  XDrawLine(dpy, b->win, gc_dgrey,
       b->w-1, 0, b->w-1, b->h-1);
-  XDrawLine(dpy, b->win, gc_dark,
+  XDrawLine(dpy, b->win, gc_dgrey,
       0, b->h-1, b->w-1, b->h-1);
 
   XDrawText(dpy, b->win, DefaultGC(dpy, scr),
@@ -76,13 +77,13 @@ void buttonExpose(XButton b)
 
 void buttonPress(XButton b)
 {
-  XDrawLine(dpy, b->win, gc_dark,
+  XDrawLine(dpy, b->win, gc_dgrey,
       0, 0, b->w-1, 0);
-  XDrawLine(dpy, b->win, gc_dark,
+  XDrawLine(dpy, b->win, gc_dgrey,
       0, 0, 0, b->h-1);
-  XDrawLine(dpy, b->win, gc_light,
+  XDrawLine(dpy, b->win, gc_lgrey,
       b->w-1, 0, b->w-1, b->h-1);
-  XDrawLine(dpy, b->win, gc_light,
+  XDrawLine(dpy, b->win, gc_lgrey,
       0, b->h-1, b->w-1, b->h-1);
 
   (*b->press)();
@@ -90,36 +91,12 @@ void buttonPress(XButton b)
 
 void buttonRelease(XButton b)
 {
-  XDrawLine(dpy, b->win, gc_light,
+  XDrawLine(dpy, b->win, gc_lgrey,
       0, 0, b->w-1, 0);
-  XDrawLine(dpy, b->win, gc_light,
+  XDrawLine(dpy, b->win, gc_lgrey,
       0, 0, 0, b->h-1);
-  XDrawLine(dpy, b->win, gc_dark,
+  XDrawLine(dpy, b->win, gc_dgrey,
       b->w-1, 0, b->w-1, b->h-1);
-  XDrawLine(dpy, b->win, gc_dark,
+  XDrawLine(dpy, b->win, gc_dgrey,
       0, b->h-1, b->w-1, b->h-1);
-}
-
-void buttonInitColor()
-{
-  /* Base button color */
-  colormap = DefaultColormap(dpy, scr);
-  XParseColor(dpy, colormap, "rgb:cc/cc/cc", &c_button);
-  XAllocColor(dpy, colormap, &c_button);
-
-  /* Light */
-  XParseColor(dpy, colormap, "rgb:ee/ee/ee", &c_light);
-  XAllocColor(dpy, colormap, &c_light);
-  gcv_light.foreground = c_light.pixel;
-  gcv_light.background = c_button.pixel;
-  gc_light = XCreateGC(dpy, RootWindow(dpy, scr),
-      GCForeground | GCBackground, &gcv_light);
-
-  /* Dark */
-  XParseColor(dpy, colormap, "rgb:88/88/88", &c_dark);
-  XAllocColor(dpy, colormap, &c_dark);
-  gcv_dark.foreground = c_dark.pixel;
-  gcv_dark.background = c_button.pixel;
-  gc_dark = XCreateGC(dpy, RootWindow(dpy, scr),
-      GCForeground | GCBackground, &gcv_dark);
 }

@@ -15,6 +15,7 @@
 #include <X11/Xutil.h>
 
 #include "button.h"
+#include "color.h"
 #include "global.h"
 
 #define BUF_SIZE 2048
@@ -25,6 +26,8 @@ int scr;
 
 XFontStruct *font;
 
+Window l;
+XTextItem *lti;
 char buf[BUF_SIZE];
 char **list;
 
@@ -58,15 +61,16 @@ int main()
   /* Init Globals */
   font = XLoadQueryFont(dpy, "7x14");
   surf_init();
+  initColor();
 
   /* Parent Window */
   w = XCreateSimpleWindow(dpy, RootWindow(dpy, scr), 0, 0, 500,
-         500, 0, BlackPixel(dpy,scr), BlackPixel(dpy, scr));
+         500, 0, BlackPixel(dpy,scr), c_grey.pixel);
 
   XSelectInput(dpy, w, ExposureMask | KeyPressMask);
   XMapWindow(dpy, w);
 
-  buttonInitColor();
+  //buttonInitColor();
 
   for (int i = 0; i < 4; i++) {
     buttons[i] = buttonCreate(w, 10+i*110, 10, 100, 25, labels[i], *scanList);
@@ -97,37 +101,36 @@ int main()
 
 void scanList()
 {
-  Window s; 
-  XTextItem *ti;
   int num;
 
   if (listAvailable(buf, BUF_SIZE) < 0) {
     strcpy(buf, "Could not scan");
+  } else if ((num = separate()) < 0) return;
+
+  if (!l) {
+    l = XCreateSimpleWindow(dpy, w, 10, 45, 480, 450,
+        0, BlackPixel(dpy, scr), WhitePixel(dpy, scr));
+    if (!l) return;
+
+    XSelectInput(dpy, l, ExposureMask | KeyPressMask);
+    XMapWindow(dpy, l);
   } else {
-    if ((num = separate()) < 0)
-      return;
+    XClearWindow(dpy, l);
   }
 
-  s = XCreateSimpleWindow(dpy, w, 10, 45, 480, 450,
-      0, BlackPixel(dpy, scr), WhitePixel(dpy, scr));
-  if (!w)
-    return;
+  if (lti) free(lti);
 
-  XSelectInput(dpy, s, ExposureMask | KeyPressMask);
-  XMapWindow(dpy, s);
-
-  ti = malloc(num * sizeof(XTextItem));
-  if (!ti)
-    return;
+  lti = malloc(num * sizeof(XTextItem));
+  if (!lti) return;
 
   for (int i = 0; i < num; i++) {
-    ti[i].chars = list[i];
-    ti[i].nchars = strnlen(list[i], BUF_SIZE);
-    ti[i].delta = 0;
-    ti[i].font = font->fid;
+    lti[i].chars = list[i];
+    lti[i].nchars = strnlen(list[i], BUF_SIZE);
+    lti[i].delta = 0;
+    lti[i].font = font->fid;
 
-    XDrawText(dpy, s, DefaultGC(dpy, scr),
-      5, 15+(font->ascent+5)*i, &ti[i], 1);
+    XDrawText(dpy, l, DefaultGC(dpy, scr),
+      5, 15+(font->ascent+5)*i, &lti[i], 1);
   }
 }
 
@@ -143,8 +146,7 @@ static int separate()
 
   free(list);
   list = malloc(num * sizeof(char *));
-  if (!list)
-    return -1;
+  if (!list) return -1;
 
   list[0] = buf; 
   int i = 0;

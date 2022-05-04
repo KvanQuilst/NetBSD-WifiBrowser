@@ -10,5 +10,3 @@ extern Display  *dpy;
 extern int      scr; 
 
 extern XFontStruct *font;
-
-
