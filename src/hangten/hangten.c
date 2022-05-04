@@ -70,8 +70,6 @@ int main()
   XSelectInput(dpy, w, ExposureMask | KeyPressMask);
   XMapWindow(dpy, w);
 
-  //buttonInitColor();
-
   for (int i = 0; i < 4; i++) {
     buttons[i] = buttonCreate(w, 10+i*110, 10, 100, 25, labels[i], *scanList);
     if (!buttons[i])
@@ -114,8 +112,26 @@ void scanList()
 
     XSelectInput(dpy, l, ExposureMask | KeyPressMask);
     XMapWindow(dpy, l);
+
+    XDrawLine(dpy, l, gc_dgrey,
+        0, 0, 479, 0);
+    XDrawLine(dpy, l, gc_dgrey,
+        0, 0, 0, 449);
+    XDrawLine(dpy, l, gc_lgrey,
+        479, 0, 479, 449);
+    XDrawLine(dpy, l, gc_lgrey,
+        0, 449, 479, 449);
   } else {
     XClearWindow(dpy, l);
+
+    XDrawLine(dpy, l, gc_dgrey,
+        0, 0, 479, 0);
+    XDrawLine(dpy, l, gc_dgrey,
+        0, 0, 0, 449);
+    XDrawLine(dpy, l, gc_lgrey,
+        479, 0, 479, 449);
+    XDrawLine(dpy, l, gc_lgrey,
+        0, 449, 479, 449);
   }
 
   if (lti) free(lti);

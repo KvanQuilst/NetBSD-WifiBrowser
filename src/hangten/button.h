@@ -18,8 +18,6 @@ struct XBUTTON_T {
 XButton buttonCreate(Window p, int x, int y,
     int width, int height, char *text, void (*press)());
 
-//void buttonInitColor();
-
 void buttonExpose(XButton b);
 void buttonPress(XButton b);
 void buttonRelease(XButton b);
