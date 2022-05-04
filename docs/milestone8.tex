@@ -11,15 +11,16 @@
 
 \section{General Progress Report}
 Surf is finished, so work on an XLib GUI of the wifi browser has begun.
-At the very moment, the GUI has some buttons and is almost successfully
+At the very moment, the GUI has some buttons and is successfully
 listing available networks from a scan. CLI methods are correctly implemented 
 with the help listing for each command, as well as the syntax to be used for 
-getopt_long. Most of the work this week was researching how to use getopt_long 
+getopt\_long. Most of the work this week was researching how to use getopt\_long 
 for our program. The TUI is at a stage where API implementation is now needed to further implement, as of now the TUI displays placeholder networks and the user is able to select a specific network and open a sub window where they will be able to access more network specific options and commands.
 
 \textbf{Accomplishments}
 \begin{itemize}
   \item Started a GUI: Hangten
+  \item Hangten shows available networks
   \item Help methods for CLI, program loop fixed, exit method, reorganizing of cli
   \item Have a TUI that works and is able to be interacted with
 \end{itemize}
@@ -29,36 +30,40 @@ for our program. The TUI is at a stage where API implementation is now needed to
   \item TUI has not fully implemented API
 \end{itemize}
 
+\textbf{New Expectations:}
+Hangten should at the very least be able to connect to simple networks by the
+next milestone, if not EAP networks too.
 
 \section{Git Branch Report}
+There exists \texttt{TUI\_test}. TUI development has been taking place here.
 
 \newpage
 \section{Individual Progress}
 
-\textbf{Kevin: 7 hours, 15 minutes}
+\textbf{Kevin:} 7 hours, 15 minutes
 \begin{itemize}
   \item Implemented placeholder connections that are able to be selected
   \item Implemented light user input and interaction to select possible Network connection
-  \item Formated window for displaying all possible network connectinos
+  \item Formatted window for displaying all possible network connections
   \item Began implementation on sub window used for network specific actions once networks is selected
-  \item Brainstormed more Naming options and finalized on either "Costal" or "Tidal"
+  \item Brainstormed more Naming options and finalized on either "Coastal" or "Tidal"
 \end{itemize}
 
-\textbf{Dylan:}
+\textbf{Dylan:} 11 hours, 15 minutes
 \begin{itemize}
   \item More Surf error stuff
   \item Started XLib GUI
   \item Buttons!
-  \item Almost listing scanned networks
+  \item Listing scanned networks working
 \end{itemize}
 
-\textbf{Stephen: 4 hours, 13 minutes}
+\textbf{Stephen:} 4 hours, 13 minutes
 \begin{itemize}
-  \item Implemented CLI methods to use getopt_long syntax
-  \item Did some research on getopt_long and how to implement it
+  \item Implemented CLI methods to use getopt\_long syntax
+  \item Did some research on getopt\_long and how to implement it
   \item Fixed help listings for each command and fixed command loop 
   \item Most of the work this week involved developing a plan to use 
-	getopt_long in our program. To which I am fully confident in 
+	getopt\_long in our program. To which I am fully confident in 
 	implementing. 
 \end{itemize}
 
