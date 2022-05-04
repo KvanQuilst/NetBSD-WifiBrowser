@@ -110,11 +110,14 @@ void scanList()
       }
     list = malloc(num * sizeof(char *));
     list[0] = buf; 
-    for (int i = 0; i < 2048; i++)
+    int i = 0;
+    while (cnt < num || i < 2048) {
       if (buf[i] == 0) {
         list[cnt] = &buf[i+1];
         cnt++; i++;
       }
+      i++;
+    }
   }
 
   s = XCreateSimpleWindow(dpy, w, 10, 45, 480, 450,
@@ -125,13 +128,15 @@ void scanList()
   XSelectInput(dpy, s, ExposureMask | KeyPressMask);
   XMapWindow(dpy, s);
 
+  ti = malloc(num * sizeof(XTextItem));
+
   for (int i = 0; i < num; i++) {
-    ti[i].chars = buf;
-    ti[i].nchars = strnlen(buf, 2048);
+    ti[i].chars = list[i];
+    ti[i].nchars = strnlen(list[i], 2048);
     ti[i].delta = 0;
     ti[i].font = font->fid;
 
     XDrawText(dpy, s, DefaultGC(dpy, scr),
-      5, 15+(font->descent-font->ascent+5)*i, &ti[i], 1);
+      5, 15+(font->ascent+5)*i, &ti[i], 1);
   }
 }
