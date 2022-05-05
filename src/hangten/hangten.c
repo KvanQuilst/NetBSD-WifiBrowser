@@ -29,7 +29,7 @@ XFontStruct *font;
 Window l;
 XTextItem *lti;
 char buf[BUF_SIZE];
-char **list;
+//char **list;
 static void scanList();
 static void knownList();
 static int separate();
@@ -67,8 +67,15 @@ int main()
   scr = DefaultScreen(dpy);
 
   /* Init Globals */
-  font = XLoadQueryFont(dpy, "7x14");
-  surf_init();
+  font = XLoadQueryFont(dpy, "fixed");
+  if (!font) {
+    fprintf(stderr, "Hangten: error loading font\n");
+    exit(1);
+  }
+  if (surf_init() < 0) {
+    fprintf(stderr, "Hangten: error connecting to wireless device\n");
+    exit(1);
+  }
   initColor();
 
   /* Parent Window */
@@ -151,8 +158,8 @@ static void listWin(int (*listfun)(char *, size_t))
   if (!lti) return;
 
   for (int i = 0; i < num; i++) {
-    lti[i].chars = list[i];
-    lti[i].nchars = strnlen(list[i], BUF_SIZE);
+    //lti[i].chars = list[i];
+    lti[i].nchars = strnlen(lti[i].chars, BUF_SIZE);
     lti[i].delta = 0;
     lti[i].font = font->fid;
 
@@ -160,9 +167,7 @@ static void listWin(int (*listfun)(char *, size_t))
       5, 15+(font->ascent+5)*i, &lti[i], 1);
   }
 }
-
 static void scanList() { listWin(*listAvailable); }
-
 static void knownList() { listWin(*listConfigured); }
 
 static int separate()
@@ -175,15 +180,15 @@ static int separate()
       num++;
     }
 
-  free(list);
-  list = malloc(num * sizeof(char *));
-  if (!list) return -1;
+  if (lti) free(lti);
+  lti = malloc(num * sizeof(XTextItem));
+  if (!lti) return -1;
 
-  list[0] = buf; 
+  lti[0].chars = buf; 
   int i = 0;
   while (cnt < num || i < BUF_SIZE) {
     if (buf[i] == 0) {
-      list[cnt] = &buf[i+1];
+      lti[cnt].chars = &buf[i+1];
       cnt++; i++;
     }
     i++;

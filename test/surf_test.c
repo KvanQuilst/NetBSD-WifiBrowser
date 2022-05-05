@@ -212,6 +212,15 @@ void test_autoConfEAP()
   printf("\n");
 }
 
+void test_currConnection()
+{ 
+  printf("/* Current Connection */\n");
+  if (currConnection() == NULL)
+    printf("Current connection failed!\n");
+  else
+    printf("OK\n");
+}
+
 int main(int argc, char **argv)
 {
   if (argc > 1 && !strncmp(argv[1], "error", 6)) {
@@ -255,6 +264,8 @@ int main(int argc, char **argv)
 
   /* Deletion of a network */
   test_deletion();
+
+  test_currConnection();
 
   return 0;
 }

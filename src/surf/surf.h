@@ -101,3 +101,9 @@ int listConfigured(char *buf, size_t len);
  * returns: length of scan results, 0 no networks, -1 user error, -2 wpa_supplicant error
  */
 int listAvailable(char *buf, size_t len);
+
+/*
+ * currConnection - what's the current connection?
+ * returns: size 32 character string
+ */
+char *currConnection();

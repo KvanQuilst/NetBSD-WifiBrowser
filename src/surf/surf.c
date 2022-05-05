@@ -621,6 +621,31 @@ int listAvailable(char *buf, size_t len)
   return 0;
 }
 
+char *currConnection()
+{
+  char *ssid;
+  char buf[4096] = {0};
+ 
+  ssid = malloc(MAX_SSID_LEN * sizeof(char));
+
+  if (!wpa) {
+    errMsg("not connected to wpa_supplicant...");
+    return NULL;
+  }
+
+  if (wpaReq("STATUS", 6, buf, sizeof(buf)) < 0)
+    return NULL;
+
+  sscanf(buf, "%*[^\n]\n%[\001-\255]", buf);
+  if (buf[0] == 'w')
+    strncpy(ssid, "No connection", MAX_SSID_LEN);
+  else {
+    sscanf(buf, "%*[^\n]\n%*[^\n]\nssid=%s", ssid);
+  }
+
+  return ssid;
+}
+
 // hash a passkey against the associated ssid for 
 // use in a configuration file
 // requires: string of ssid, length of ssid, string of passkey, length of passkey
