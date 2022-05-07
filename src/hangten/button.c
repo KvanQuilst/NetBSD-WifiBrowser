@@ -20,6 +20,9 @@
 XButton buttonCreate(Window p, int x, int y, 
     int width, int height, char *text, void (*press)())
 {
+  if (!p)
+    return NULL;
+
   Window win;
   XButton button = malloc(sizeof(struct XBUTTON_T));
   if (!button)

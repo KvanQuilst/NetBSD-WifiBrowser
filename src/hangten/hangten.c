@@ -40,7 +40,7 @@ int main()
 
   char *labels[4] = {
     "Scan Networks",
-    "Refresh",
+    "Configured",
     "Connect",
     "Help"
   };
@@ -77,8 +77,8 @@ int main()
   initColor();
 
   /* Parent Window */
-  w = XCreateSimpleWindow(dpy, RootWindow(dpy, scr), 0, 0, 500,
-         500, 0, BlackPixel(dpy,scr), c_grey.pixel);
+  w = XCreateSimpleWindow(dpy, RootWindow(dpy, scr), 0, 0, M_WIDTH,
+         M_HEIGHT, 0, BlackPixel(dpy,scr), c_grey.pixel);
 
   XSelectInput(dpy, w, ExposureMask | KeyPressMask);
   XMapWindow(dpy, w);
@@ -122,7 +122,7 @@ static void listWin(int (*listfun)(char *, size_t))
   } else if ((num = separate()) < 0) return;
 
   if (!l) {
-    l = XCreateSimpleWindow(dpy, w, 10, 45, 480, 450,
+    l = XCreateSimpleWindow(dpy, w, 10, 45, M_WIDTH/2 - 20, 445,
         0, BlackPixel(dpy, scr), WhitePixel(dpy, scr));
     if (!l) return;
 

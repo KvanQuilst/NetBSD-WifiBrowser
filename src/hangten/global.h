@@ -6,6 +6,9 @@
  */
 #pragma once
 
+#define M_WIDTH 850
+#define M_HEIGHT 500
+
 extern Display  *dpy;
 extern int      scr; 
 
