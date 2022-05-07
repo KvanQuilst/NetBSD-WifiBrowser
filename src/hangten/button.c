@@ -17,11 +17,6 @@
 
 #define TEXT_LEN 32
 
-/*Colormap colormap;
-XColor c_grey, c_lgrey, c_dgrey;
-XGCValues gcv_lgrey, gcv_dgrey;
-GC gc_lgrey, gc_dgrey;*/
-
 XButton buttonCreate(Window p, int x, int y, 
     int width, int height, char *text, void (*press)())
 {

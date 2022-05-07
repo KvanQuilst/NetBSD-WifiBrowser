@@ -46,9 +46,8 @@ int main()
   };
 
   void (*funs[4])() = {
-    //scanList,
+    scanList,
     knownList,
-    NULL,
     NULL,
     NULL
   };
@@ -184,7 +183,7 @@ static int separate()
 
   lti[0].chars = buf; 
   int i = 0;
-  while (cnt < num || i < BUF_SIZE) {
+  while (cnt < num && i < BUF_SIZE) {
     if (buf[i] == 0) {
       lti[cnt].chars = &buf[i+1];
       cnt++; i++;
