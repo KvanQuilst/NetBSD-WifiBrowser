@@ -572,8 +572,6 @@ int listConfigured(char *buf, size_t len)
     sscanf(list, "\n%[\001-\255]", list);
     while (l != -1) {
       l = sscanf(list, "%*s%s%*s%[^\n]%[\001-\255]", ssid, curr, list);
-      //l = strnlen(list, 10);
-      //printf("%d\n", l);
       if (l != -1) {
         snprintf(&buf[pos], len - pos, "%-32s %s\n", ssid, curr);
         pos += 34 + strnlen(curr, sizeof(curr));

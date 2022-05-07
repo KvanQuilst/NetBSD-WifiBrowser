@@ -29,7 +29,6 @@ XFontStruct *font;
 Window l;
 XTextItem *lti;
 char buf[BUF_SIZE];
-//char **list;
 static void scanList();
 static void knownList();
 static int separate();
@@ -47,8 +46,8 @@ int main()
   };
 
   void (*funs[4])() = {
-    scanList,
-    //knownList,
+    //scanList,
+    knownList,
     NULL,
     NULL,
     NULL
@@ -158,7 +157,6 @@ static void listWin(int (*listfun)(char *, size_t))
   if (!lti) return;
 
   for (int i = 0; i < num; i++) {
-    //lti[i].chars = list[i];
     lti[i].nchars = strnlen(lti[i].chars, BUF_SIZE);
     lti[i].delta = 0;
     lti[i].font = font->fid;
