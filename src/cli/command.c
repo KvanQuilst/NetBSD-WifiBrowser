@@ -234,6 +234,7 @@ int help(int num, char **args, char *syntax) {
 	if (args[0][0] == '?')
 		num = 1;	/* Force "no args" for ?. */
 
+	printf("num: %d\n", num);
 	/* Print help for each argument. */
 	if (num > 1)
 		for (index = 1; index < num; index++) {
