@@ -34,7 +34,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cmdtable.h"
 #include "command.h"
 #include "extern.h"
 #include "surf.h" 
