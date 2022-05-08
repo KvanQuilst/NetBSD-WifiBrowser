@@ -52,8 +52,6 @@ CMD_PROC (ls);
 */
 
 /* 
- * Don't understand how to implement help(num, args, syntax) on unknown arguments. 
- * Function is called as (*(cmd -> fn) (numargs, args, cmd->syntax)) 
  * getopt works by creating a structure like this: 
  * {"configure", no_argument, 0, 'c'}   (The use for the entire string 'configure' is unnecessary)
  * Should I only be including syntax in the help method? 
@@ -65,7 +63,8 @@ int conf(int num, char **args, char *syntax){
 
   if(num < 2)
     help(num, args, syntax);
-  else if(strcmp(args[1], "-a") == 0)
+
+  else if(strcmp(args[1], "-a") == 0){
     if(num < 4)
       help(num, args, syntax);
     else
@@ -73,8 +72,9 @@ int conf(int num, char **args, char *syntax){
         printf("Error setting auto configuration of network.\n");
       else
         printf("Success setting auto configuration of network.\n");
+  }
       
-  else if(strcmp(args[1], "-ae") == 0)
+  else if(strcmp(args[1], "-ae") == 0){
     if(num < 5)
       help(num, args, syntax);
     else
@@ -82,14 +82,14 @@ int conf(int num, char **args, char *syntax){
         printf("Error setting auto configuration eap of network.\n");
       else
         printf("Success setting auto configuration eap of network.\n");
+  }
 
-  else if(strcmp(args[1], "-an") == 0)
+  else if(strcmp(args[1], "-an") == 0){
     if(num < 3)
       help(num, args, syntax);
-    else
+    else{
       if(conf_addEntry(args[2]) < 0)
         printf("Error adding new entry.\n");
-
       else {
         printf("Type 'n' to end additional fields for new network.\n");
         while(TRUE){
@@ -102,30 +102,33 @@ int conf(int num, char **args, char *syntax){
 
           if(strcmp(field, "n") == 0 || strcmp(value, "n") == 0)
             break;
-          else
+          else{
             if(conf_editNetwork(args[2], field, value) < 0)
               printf("Error editing specified network field to configuration file.\n"); 
             else
               printf("Field added to configuration file.\n");
           }
+        }
 
         if(conf_enableNetwork(args[2]) < 0)
           printf("Error enabling new network in configuration file.\n");
         else
           printf("Success enabling new network in configuration file.\n");
       }
+    }
+  }
 
-  else if(strcmp(args[1], "-en") == 0)
+  else if(strcmp(args[1], "-en") == 0){
     if(num < 3)
       help(num, args, syntax);
-
     else
       if(conf_enableNetwork(args[2]) < 0)
         printf("Error enabling network.\n");
       else
         printf("Success enabling network.\n");
+  }
 
-  else if(strcmp(args[1], "-dn") == 0)
+  else if(strcmp(args[1], "-dn") == 0){
     if(num < 3)
       help(num, args, syntax);
     else
@@ -133,6 +136,7 @@ int conf(int num, char **args, char *syntax){
         printf("Error deleting network.\n");
       else
         printf("Success deleting network.\n");
+  }
 
   return 0;
 }
@@ -145,7 +149,6 @@ int ls(int num, char **args, char *syntax){
   else {
     char buffer[BUFSIZ];
     if(strcmp(args[1], "-c") == 0){
-
       if(listConfigured(buffer, BUFSIZ) < 0)
         printf("Error listing configured networks.\n");
       else
@@ -181,15 +184,10 @@ int do_exit(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  if(surf_init() < 0){
-
+  if(surf_init() < 0)
     printf("Error connecting to wpa_supplicant.\n");
-  }
-  
-  else{
-
+  else
     printf("Success connecting to wpa_supplicant.\n");
-  }
 
   /* Run command loop */
   command_loop();
