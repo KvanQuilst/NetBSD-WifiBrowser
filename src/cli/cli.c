@@ -43,6 +43,7 @@
  * Function PROCS to be used with program 
  */
 CMD_PROC (do_exit);
+CMD_PROC (help);
 CMD_PROC (conf);
 CMD_PROC (ls);
 
