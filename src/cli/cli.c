@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "cmdtable.h"
 #include "command.h"
 #include "extern.h"
 #include "surf.h" 
@@ -53,14 +54,16 @@ CMD_PROC (ls);
 /* 
  * Don't understand how to implement help(num, args, syntax) on unknown arguments. 
  * Function is called as (*(cmd -> fn) (numargs, args, cmd->syntax)) 
- * Should I write conf as one method, then, auto configuration as a separate method? 
+ * getopt works by creating a structure like this: 
+ * {"configure", no_argument, 0, 'c'}   (The use for the entire string 'configure' is unnecessary)
+ * Should I only be including syntax in the help method? 
  * 
  * 
 */
 
 int conf(int num, char **args, char *syntax){
 
-  //help(num, args, syntax); 
+  help(num, args, syntax); 
 
   if(num < 2){
     
