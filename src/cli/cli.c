@@ -50,10 +50,19 @@ CMD_PROC (ls);
  * TODO: Allow user to enter a string of commands to be processed all at once
 */
 
+/* 
+ * Don't understand how to implement help(num, args, syntax) on unknown arguments. 
+ * Function is called as (*(cmd -> fn) (numargs, args, cmd->syntax)) 
+ * Should I write conf as one method, then, auto configuration as a separate method? 
+ * 
+ * 
+*/
+
 int conf(int num, char **args, char *syntax){
 
+  //help(num, args, syntax); 
+
   if(num < 2){
-    
     
     printf("Requires at least two additional arguments.\n");
   }
