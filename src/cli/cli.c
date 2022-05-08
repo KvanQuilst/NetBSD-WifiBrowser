@@ -55,7 +55,19 @@ CMD_PROC (ls);
  * getopt works by creating a structure like this: 
  * {"configure", no_argument, 0, 'c'}   (The use for the entire string 'configure' is unnecessary)
  * Should I only be including syntax in the help method? 
+ * Getopt_long requries only one character to be used for each option. Some commands are better suited 
+ * for two characters. 
  * 
+ * while(args[index][0] != '-' && index < num){  //end of additional command
+ *  
+ *  if(conf_editNetwork(args[2], args[index++], args[index++]))
+ * }
+ * 
+ * We can specify getopt_long at the start, but will need an index for the command array 
+ * for the ssid and additional fields. We would need brackets to the if statements and 
+ * additional lines of code. 
+ * 
+ * Each argument to getopt_long uses a double hyphen '--' and each option uses a single hyphen '-'
  * 
 */
 
@@ -81,7 +93,7 @@ int conf(int num, char **args, char *syntax){
         printf("Error setting auto configuration eap of network.\n");
       else
         printf("Success setting auto configuration eap of network.\n");
-
+        
   else if(strcmp(args[1], "-an") == 0)
     if(num < 3)
       help(num, args, syntax);
@@ -131,8 +143,7 @@ int conf(int num, char **args, char *syntax){
       if(conf_deleteNetwork(args[2]) < 0)
         printf("Error deleting network.\n");
       else
-        printf("Success deleting network.\n");
-
+        printf("Success deleting network.\n"); 
   return 0;
 }
 
