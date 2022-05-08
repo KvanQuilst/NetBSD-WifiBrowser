@@ -64,7 +64,7 @@ int conf(int num, char **args, char *syntax){
   if(num < 2)
     help(num, args, syntax);
 
-  else if(strcmp(args[1], "-a") == 0){
+  else if(strcmp(args[1], "-a") == 0)
     if(num < 4)
       help(num, args, syntax);
     else
@@ -72,9 +72,8 @@ int conf(int num, char **args, char *syntax){
         printf("Error setting auto configuration of network.\n");
       else
         printf("Success setting auto configuration of network.\n");
-  }
       
-  else if(strcmp(args[1], "-ae") == 0){
+  else if(strcmp(args[1], "-ae") == 0)
     if(num < 5)
       help(num, args, syntax);
     else
@@ -82,9 +81,8 @@ int conf(int num, char **args, char *syntax){
         printf("Error setting auto configuration eap of network.\n");
       else
         printf("Success setting auto configuration eap of network.\n");
-  }
 
-  else if(strcmp(args[1], "-an") == 0){
+  else if(strcmp(args[1], "-an") == 0)
     if(num < 3)
       help(num, args, syntax);
     else{
@@ -116,9 +114,8 @@ int conf(int num, char **args, char *syntax){
           printf("Success enabling new network in configuration file.\n");
       }
     }
-  }
 
-  else if(strcmp(args[1], "-en") == 0){
+  else if(strcmp(args[1], "-en") == 0)
     if(num < 3)
       help(num, args, syntax);
     else
@@ -126,9 +123,8 @@ int conf(int num, char **args, char *syntax){
         printf("Error enabling network.\n");
       else
         printf("Success enabling network.\n");
-  }
 
-  else if(strcmp(args[1], "-dn") == 0){
+  else if(strcmp(args[1], "-dn") == 0)
     if(num < 3)
       help(num, args, syntax);
     else
@@ -136,7 +132,6 @@ int conf(int num, char **args, char *syntax){
         printf("Error deleting network.\n");
       else
         printf("Success deleting network.\n");
-  }
 
   return 0;
 }
