@@ -67,7 +67,8 @@ CMD_PROC (ls);
  * for the ssid and additional fields. We would need brackets to the if statements and 
  * additional lines of code. 
  * 
- * Each argument to getopt_long uses a double hyphen '--' and each option uses a single hyphen '-'
+ * Each argument to getopt_long uses a double hyphen '--' and each option uses a single hyphen '-' 
+ * conf -a --ssid --psk 
  * 
 */
 
