@@ -47,9 +47,14 @@ CMD_PROC (help);
 */ 
 
 /* hdsetup commands. */
+CMD_PROC (disconnect);
+CMD_PROC (configure);
+CMD_PROC (connect);
 CMD_PROC (do_exit);
-CMD_PROC (conf);
-CMD_PROC (ls);
+CMD_PROC (forget);
+CMD_PROC (edit);
+CMD_PROC (list);
+CMD_PROC (add);
 
 /* The command definitions. This is where the user should add new
    command definitions.
@@ -71,19 +76,14 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ conf, "conf", "a:ae:an:e:en:dn", "Perform operations on the configuration file. Usage: \n"
-                     "-a (auto configuration) (ssid, psk)\n"
-                     "-ae (auto configuration eap) (ssid, user, pwd)\n"
-                     "-an (add entry to configuration file) (ssid)\n"
-                     "-e (edit network in configuration file) (ssid, field, value)\n"
-                     "-en (enable network in configuration file) (ssid)\n"
-                     "-dn (delete network in configuration file) (ssid)\n"},
-
-{ ls, "ls", "c:a", "List available networks. Usage: \n"
-                     "-c (list configured) \n"
-                     "-a (list available) \n"},
-
-{ do_exit, "exit", "e", "Exit program"},
+{ connect, "connect", "connect ssid", "Connect to an already existing network."},
+{ disconnect, "disconnect", "disconnect ssid", "Disconnect from an already existing connection."},
+{ add, "add", "add ssid", "Adds a new network to the configuration file."},
+{ forget, "forget", "forget ssid", "Removes a network in the configuration file."},
+{ edit, "edit", "edit ssid / edit ssid field value", "Edits a network in the configuration file."},
+{ configure, "configure", "configure auto ssid passkey / configure eap ssid user password", "Auto configures a network and adds it to the configuration file.\n"},
+{ list, "list", "list configured / list available", "List all configured and available networks.\n"},
+{ do_exit, "exit", "exit", "Exit program"},
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
