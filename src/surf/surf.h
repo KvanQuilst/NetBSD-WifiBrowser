@@ -69,6 +69,13 @@ int conf_editNetwork(const char *ssid, const char *field, const char *value);
 int conf_enableNetwork(const char *ssid);
 
 /*
+ * conf_disableNetwork - Enables a disabled network
+ * requires: string of ssid name
+ * returns: 0 on success, -1 user error, -2 wpa_supplicant error
+ */
+int conf_disableNetwork(const char *ssid);
+
+/*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused
  * configuration file
  * requires: string of ssid to be deleted

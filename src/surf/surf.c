@@ -500,6 +500,43 @@ int conf_enableNetwork(const char *ssid)
   return save();
 }
 
+int conf_disableNetwork(const char *ssid)
+{
+  char repl[128] = {0};
+  char cmd[64] = {0};
+  int id, slen;
+
+  if (!wpa) {
+    errMsg("not connected to wpa_supplicant...");
+    return -1;
+  }
+
+  /* verify ssid */
+  if (ssid == NULL) {
+    errMsg("no ssid provided");
+    return -1;
+  }
+
+  slen = strnlen(ssid, MAX_SSID_LEN+1);
+  if (slen == 0 || slen > MAX_SSID_LEN) {
+    errMsg("provided ssid is invalid. ssid length: 1-32 characters");
+    return -1;
+  }
+
+  id = getNetworkID(ssid);
+  if (id < 0)
+    return id;
+
+  snprintf(cmd, sizeof(cmd), "DISABLE_NETWORK %d", id);
+  if (wpaReq(cmd, sizeof(cmd), repl, sizeof(repl)) < 0)
+    return -2;
+  if (strncmp("OK", repl, 2)) {
+    errMsg("error in enabling network %s", ssid);
+    return -2;
+  }
+  return save();
+}
+
 int conf_deleteNetwork(const char *ssid)
 {
   char repl[128] = {0};
