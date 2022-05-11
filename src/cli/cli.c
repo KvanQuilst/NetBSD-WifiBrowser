@@ -205,8 +205,9 @@ int do_exit(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  if(surf_init() < 0)
-    printf("Error connecting to wpa_supplicant.\n");
+  int result = surf_init();
+  if(result  < 0)
+    printf("Error connecting to wpa_supplicant. Error: %d\n", result);
   else
     printf("Success connecting to wpa_supplicant!\n");
 
