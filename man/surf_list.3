@@ -18,6 +18,8 @@ Surf Library (libsurf, -lsurf)
 .Fn listAvailable "char *buf, size_t len"
 .Ft int
 .Fn listConfigured "char *buf, size_t len"
+.Ft char *
+.Fn currConection
 .Sh DESCRIPTION
 The
 .Fn listAvailable
@@ -37,8 +39,16 @@ function will fill
 of length
 .Fa len
 with the list of the ssids of configured networks.
+.Pp
+The
+.Fn currConnection
+returns a string holding the currently connected network.
 .Sh RETURN VALUES
-Both functions will return 0 on success and a -1 on failure.
+Both functions will return 0 on success and a -1 on user error
+and -2 on wpa_supplicant related error. Note: User error includes
+Surf not being connected to wpa_supplicant (call
+.Xr surf_init 3
+).
 .Sh SEE ALSO
 .Xr surf 3  ,
 .Xr surf_init 3 ,

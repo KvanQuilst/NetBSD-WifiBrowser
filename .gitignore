@@ -7,8 +7,10 @@
 .~*
 ~*
 .gdbinit
+.depend
 *html*
 tui
 cli
 surf
+hangten
 .vscode/

@@ -3,10 +3,10 @@
 /* 
  * Copyright (c) 1994 Philip A. Nelson.
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
- * are met:
+ * are met: 
  * 1. Redistributions of source code must retain the above copyright
  *    notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
@@ -47,17 +47,14 @@ CMD_PROC (help);
 */ 
 
 /* hdsetup commands. */
-CMD_PROC (say_hello);
+CMD_PROC (disconnect);
+CMD_PROC (configure);
+CMD_PROC (connect);
 CMD_PROC (do_exit);
-CMD_PROC (configAuto);
-CMD_PROC (configAutoEAP);
-CMD_PROC (addEntry);
-CMD_PROC (editNetwork);
-CMD_PROC (enableNetwork);
-CMD_PROC (deleteNetwork);
-CMD_PROC (cleanNetworks);
-CMD_PROC (lsConfigured);
-CMD_PROC (lsAvailable);
+CMD_PROC (forget);
+CMD_PROC (edit);
+CMD_PROC (list);
+CMD_PROC (add);
 
 /* The command definitions. This is where the user should add new
    command definitions.
@@ -71,26 +68,22 @@ CMD_PROC (lsAvailable);
 
 const struct command cmd_table [] = {		/* Command Table */
 
-{ say_hello, "hello", "HELLO", "Says hello back" },
-
 #ifndef NO_HELP
 { help, "help", "HELP [<command>].", "Provides help for all listed <command>s.  If there none, prints a list \n of the commands." },
-#endif
+#endif 
 
 #ifndef NO_HELP
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ do_exit, "exit", "EXIT", "Just get out of here." }, 
-{ configAuto, "conf_auto ssid psk", "CONF_AUTO", "Adds a new network to the configuration file and automatically supplies the info for wpa_supplicant." },
-{ configAutoEAP, "conf_auto_eap ssid user pwd", "CONF_AUTO_EAP", "Adds a new eap network to the configuration file and automatically supplies the additional adata needed for wpa_supplicant. "},
-{ addEntry, "conf_add ssid", "CONF_ADD_ENTRY", "Adds a new network to the configuration file to manually configure network. "},
-{ editNetwork, "conf_edit_network ssid field value", "CONF_EDIT_NETWORK", "Edits the specified network field in the configuration file. "}, 
-{ enableNetwork, "conf_enable_network ssid", "CONF_ENABLE_NETWORK", "Enables the specified network to be used in the configuration file. "},
-{ deleteNetwork, "conf_delete_network ssid", "CONF_DELETE_NETWORK", "Deletes the specified network from the configuration file. "},
-{ cleanNetworks, "clean_networks", "CLEAN_NETWORKS", "Removes all networks from the configuration file. "},
-{ lsConfigured, "list_configured", "LIST_CONFIGURED", "Lists all networks in the configuration file. "},
-{ lsAvailable, "list_available", "LIST_AVAILABLE", "Lists all available networks. "}, 
+{ connect, "connect", "connect ssid", "Connect to an already existing network."},
+{ disconnect, "disconnect", "disconnect ssid", "Disconnect from an already existing connection."},
+{ add, "add", "add ssid", "Adds a new network to the configuration file."},
+{ forget, "forget", "forget ssid", "Removes a network in the configuration file."},
+{ edit, "edit", "edit ssid / edit ssid field value", "Edits a network in the configuration file."},
+{ configure, "configure", "configure auto ssid passkey / configure eap ssid user password", "Auto configures a network and adds it to the configuration file."},
+{ list, "list", "list configured / list available", "List all configured and available networks."},
+{ do_exit, "exit", "exit", "Exit program"},
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))

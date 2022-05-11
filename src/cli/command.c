@@ -77,11 +77,6 @@ void command_loop(void) {
 		numargs = parse(cmdline, args);
 		if (numargs == BLANK_LINE)
 			continue;
-
-		/* 
-		* Looks at first entry for function name. Again, first time I have seen the syntax like this. 
-		* Done should return false if the input does not match command syntax. (*cmd -> fn) (args)
-		*/ 
 		cmd = find_entry(args[0]);
 		if (cmd != NULL) {
 			done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
@@ -104,10 +99,6 @@ int one_command(char *cmdline) {
 		return 0;
 	cmd = find_entry(args[0]);
 	if (cmd != NULL) {
-
-		/* 
-		* Function gets called here. 
-		*/
 		done = (*(cmd->fn)) (numargs, args, cmd->syntax); 
 		if (after_cmd != NULL)
 			(*(after_cmd)) (done);
@@ -117,13 +108,6 @@ int one_command(char *cmdline) {
 }
 
 /* prompt procedure....  Write out the prompt and then read a response. */
-
-/* 
- * My Summary: getchar() will block until a character is to be read. Once a string is 
- * entered by the user, continue to read characters until newline or EOF. Increment the command 
- * line array and set each index to each character. At the end, we will null terminate command line 
- * by setting it equal to zero. Return whether or not the end of line character has been read. 
-*/
 int prompt(char *cmdline, int linelen, const char *promptstr) {
 	int     incount = 0;
 	int     inchar;
@@ -150,11 +134,6 @@ int prompt(char *cmdline, int linelen, const char *promptstr) {
  * pointers to substrings in the original string.  It puts the string
  * terminator in the original line.
  */
-
-/* 
- * My Summary: cmdline takes in every argument for the user input at each index, minus 
- * the first command of the previous index. 
-*/ 
 int parse(char *cmdline, char **args) {
 	int     index;
 	int     argcnt = BLANK_LINE;

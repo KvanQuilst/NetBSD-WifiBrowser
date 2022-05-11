@@ -35,6 +35,7 @@ Surf Library (libsurf, -lsurf)
 .Fn conf_editNetwork "const char *ssid, const char *field, const char *value"
 .Ft int
 .Fn conf_enableNetwork "const char *ssid"
+.Fn conf_disableNetwork "const char *ssid"
 .Sh DESCRIPTION
 These functions interact with
 .Xr wpa_supplicant 8
@@ -106,11 +107,17 @@ enables the network having
 allowing to be utilized by 
 .Xr wpa_supplicant 8
 in a connection.
-Note: Disabled networks on reboot or reconnection to 
+.Fn conf_disableNetwork
+disable the network having
+.Fa ssid  ,
+allowing to be utilized by 
 .Xr wpa_supplicant 8
-may result in that network being lost.
+in a connection.
 .Sh RETURN VALUES
-Functions will return 0 on success and a -1 on failure.
+Functions will return 0 on success, -1 on a user input error, and -2 on a
+wpa_supplicant related error. Note: user does include not being connected
+to wpa_supplicant (call 
+.Xr surf_init 3 ).
 .Sh SEE ALSO
 .Xr surf 3  ,
 .Xr surf_init 3 ,

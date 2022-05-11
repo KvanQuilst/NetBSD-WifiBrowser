@@ -1,6 +1,6 @@
 /*
  * Surf API / surf.h
- * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+ * Copyright (c) 2022 Dylan Eskew
  * 
  * This software is under the terms of the BSD license.
  * See README for more details.
@@ -24,7 +24,7 @@ int surf_init();
  * and automatically supplies the additional info for wpa_supplicant connection
  * Set PSK to NULL if no passkey for network
  * requires: string of ssid, string of passkey for ssid
- * returns: 0 if success, -1 if fail
+ * returns: 0 if success, -1 user error, -2 wpa_supplicant error
  */
 int conf_configAuto(const char *ssid, const char *psk);
 
@@ -34,7 +34,7 @@ int conf_configAuto(const char *ssid, const char *psk);
  * wpa_supplicant connection
  * requires: string of ssid, string of username for network,
  *           string of password for user for network
- * returns: 0 if success, -1 if fail
+ * returns: 0 if success, -1 user error, -2 wpa_supplicant error
  */
 int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
 
@@ -45,7 +45,7 @@ int conf_configAutoEAP(const char *ssid, const char *user, const char *pwd);
  * NETWORK IS DISABLED WHEN FIRST MADE. MAKE EDITS WITH conf_editNetwork()
  * THEN ENABLE WITH conf_enableNetwork()
  * requires: string of ssid 
- * returns: 0 if success, -1 if fail 
+ * returns: 0 if success, -1 user error, -2 wpa_supplicant error
  */
 int conf_addEntry(const char *ssid);
 
@@ -57,28 +57,35 @@ int conf_addEntry(const char *ssid);
  * !!! You MUST re-enable the network for it save. Network configuration will be 
  * deleted otherwise. !!!
  * requires: string of ssid name, string of field name, string of value
- * returns: 0 on success, -1 on fail
+ * returns: 0 on success, -1 user error, -2 wpa_supplicant error
  */
 int conf_editNetwork(const char *ssid, const char *field, const char *value);
 
 /*
  * conf_enableNetwork - Enables a disabled network
  * requires: string of ssid name
- * returns: 0 on success, -1 on fail
+ * returns: 0 on success, -1 user error, -2 wpa_supplicant error
  */
 int conf_enableNetwork(const char *ssid);
+
+/*
+ * conf_disableNetwork - Enables a disabled network
+ * requires: string of ssid name
+ * returns: 0 on success, -1 user error, -2 wpa_supplicant error
+ */
+int conf_disableNetwork(const char *ssid);
 
 /*
  * conf_deleteNetwork - deletes the specified network (by ssid) from the focused
  * configuration file
  * requires: string of ssid to be deleted
- * returns: 0 on success, -1 on fail
+ * returns: 0 on success, -1 user error, -2 wpa_supplicant error
  */
 int conf_deleteNetwork(const char *ssid);
 
 /*
  * conf_cleanNetworks - remove all networks from the selected configuration file
- * returns: 0 on success, -1 on fail
+ * returns: 0 on success, -1 user error, -2 wpa_supplicant error
  */
 int conf_cleanNetworks(void);
 
@@ -98,6 +105,12 @@ int listConfigured(char *buf, size_t len);
 /*
  * listAvailable - list available visible networks
  * requires: buffer pointer, buffer size
- * returns: length of scan results, 0 - no networks, -1 - failed
+ * returns: length of scan results, 0 no networks, -1 user error, -2 wpa_supplicant error
  */
 int listAvailable(char *buf, size_t len);
+
+/*
+ * currConnection - what's the current connection?
+ * returns: size 32 character string
+ */
+char *currConnection();

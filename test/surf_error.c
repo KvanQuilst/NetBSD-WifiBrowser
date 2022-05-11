@@ -1,6 +1,6 @@
 /*
  * Surf API / surf_error.c
- * Copyright (c) 2022 Dylan Eskew, Stephen Loudiana, Kevin McGrane
+ * Copyright (c) 2022 Dylan Eskew
  * * This software is under the terms of the BSD license.  * See README for more details.
  *
  * Test for anticipated errors in Surf
@@ -64,6 +64,31 @@ static void eapNoPWD()
     printf("OK\n");
 }
 
+static void addNoSSID()
+{
+  printf("/* addEntry no provided SSID */\n");
+  if (conf_addEntry(NULL) != -1)
+    printf("Test failed: No error when no SSID is provided in addEntry\n");
+  else
+    printf("OK\n");
+}
+
+static void editNoField() {
+  printf("/* editNetwork no provided field */\n");
+  if (conf_editNetwork("ValidSSID", NULL, "VALUE") != -1)
+    printf("Test failed: No error when no field is provided in editNetwork\n");
+  else
+    printf("OK\n");
+}
+
+static void editNoValue() {
+  printf("/* editNetwork no provided field value */\n");
+  if (conf_editNetwork("ValidSSID", "FIELD", NULL) != -1)
+    printf("Test failed: No error when no field is provided in editNetwork\n");
+  else
+    printf("OK\n");
+}
+
 void testErrors()
 {
   printf("/*********************************/\n");
@@ -73,7 +98,6 @@ void testErrors()
   noInit();
   printf("\n");
 
-  printf("Disregard: connecting to wpa_supplicant for further testing.\n");
   if (surf_init() < 0) {
     printf("Error connecting to wpa_supplicant... Is it running?\n");
     return;
@@ -93,5 +117,14 @@ void testErrors()
   printf("\n");
 
   eapNoPWD();
+  printf("\n");
+
+  addNoSSID();
+  printf("\n");
+
+  editNoField();
+  printf("\n");
+
+  editNoValue();
   printf("\n");
 }
