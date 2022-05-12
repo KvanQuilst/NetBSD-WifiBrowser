@@ -125,11 +125,11 @@ int edit(int num, char **args, char *syntax){
 
     else
       if(conf_editNetwork(args[1], args[2], args[3]) < 0)
-        printf("Error editing specified field to network.\n " 
-                  "%s, %s, %s", args[1], args[2], args[3]); 
+        printf("Error editing specified field to network.\n" 
+                  "%s, %s, %s\n", args[1], args[2], args[3]); 
       else
-        printf("Success editing specified field to network.\n "
-                "%s, %s, %s", args[1], args[2], args[3]);
+        printf("Success editing specified field to network.\n"
+                "%s, %s, %s\n", args[1], args[2], args[3]);
                 
   return 0;
 }
@@ -155,6 +155,7 @@ int configure(int num, char **args, char *syntax){
         printf("Error setting auto configuration of eap network %s.\n", args[2]);
       else
         printf("Success setting auto configuration of eap network %s!\n", args[2]);
+  return 0;
 }
 
 int list(int num, char **args, char *syntax){
@@ -176,7 +177,7 @@ int list(int num, char **args, char *syntax){
   }
 
   else {
-    if(strcmp(args[1], "configured") == 0 || strcmp(args[1], "-c")){
+    if(strcmp(args[1], "configured") == 0 || strcmp(args[1], "-c") == 0){
       printf("Configured networks:\n");
       if(listConfigured(buffer, BUFSIZ) < 0)
         printf("Error listing configured networks.\n");
