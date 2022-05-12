@@ -77,7 +77,7 @@ const struct command cmd_table [] = {		/* Command Table */
 #endif
 
 { conn, "connect", "connect \%ssid", "Connect to an already existing network. The network must already exist in the configuration file."},
-{ disconnect, "disconnect", "disconnect", "Disconnect from an already existing connection."},
+{ disconnect, "disconnect \%ssid", "disconnect", "Disconnect from an already existing connection."},
 { add, "add", "add \%ssid", "Adds a new network to the configuration file."},
 { forget, "forget", "forget \%ssid", "Removes a network in the configuration file."},
 { edit, "edit", "edit \%ssid / edit \%ssid \%field \%value", "Edits a network in the configuration file."},
