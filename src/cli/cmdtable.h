@@ -76,12 +76,12 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ conn, "connect", "connect %%ssid", "Connect to an already existing network. The network must already exist in the configuration file."},
+{ conn, "connect", "connect \%ssid", "Connect to an already existing network. The network must already exist in the configuration file."},
 { disconnect, "disconnect", "disconnect", "Disconnect from an already existing connection."},
-{ add, "add", "add %%ssid", "Adds a new network to the configuration file."},
-{ forget, "forget", "forget %%ssid", "Removes a network in the configuration file."},
-{ edit, "edit", "edit %%ssid / edit %%ssid %%field %%value", "Edits a network in the configuration file."},
-{ configure, "configure", "configure auto %%ssid %%passkey / configure eap %%ssid %%user %%password", "Auto configures a network and adds it to the configuration file."},
+{ add, "add", "add \%ssid", "Adds a new network to the configuration file."},
+{ forget, "forget", "forget \%ssid", "Removes a network in the configuration file."},
+{ edit, "edit", "edit \%ssid / edit \%ssid \%field \%value", "Edits a network in the configuration file."},
+{ configure, "configure", "configure auto \%ssid \%passkey / configure eap \%ssid \%user \%password", "Auto configures a network and adds it to the configuration file."},
 { list, "list", "list configured / list available", "List all configured and available networks."},
 { do_exit, "exit", "exit", "Exit program"},
 };
