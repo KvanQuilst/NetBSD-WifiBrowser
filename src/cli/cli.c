@@ -66,12 +66,14 @@ int conn(int num, char **args, char *syntax){
 
 int disconnect(int num, char **args, char *syntax){
 
-  char connection[32] = currConnection();
+  char *connection = malloc(sizeof(char) * 32);
+  connection = currConnection();
     if(conf_disableNetwork(connection) < 0)
       printf("Error disconnecting from %s.\n", connection);
     else
       printf("Network %s disconnected!\n", connection);
 
+  free(connection);
   return 0;
 }
 
