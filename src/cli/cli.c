@@ -51,6 +51,7 @@ CMD_PROC (edit);
 CMD_PROC (list);
 CMD_PROC (add);
 
+/* Connect to an already existing network */
 int conn(int num, char **args, char *syntax){
 
   if(num < 2)
@@ -64,6 +65,7 @@ int conn(int num, char **args, char *syntax){
   return 0;
 }
 
+/* Disconnect from an already exisiting connection */
 int disconnect(int num, char **args, char *syntax){
 
   if(num < 2)
@@ -77,6 +79,7 @@ int disconnect(int num, char **args, char *syntax){
   return 0;
 }
 
+/* Add a new network to the configuration file */
 int add(int num, char **args, char *syntax){
 
   if(num < 2)
@@ -90,6 +93,7 @@ int add(int num, char **args, char *syntax){
   return 0;
 }
 
+/* Forget a network in the configuration file */
 int forget(int num, char **args, char *syntax){
 
    if(num < 2)
@@ -103,6 +107,7 @@ int forget(int num, char **args, char *syntax){
   return 0;
 }
 
+/* Edit a network in the configuration file */
 int edit(int num, char **args, char *syntax){
 
    if(num < 2)
@@ -117,10 +122,10 @@ int edit(int num, char **args, char *syntax){
 
       if(conf_editNetwork(args[1], field, value) < 0)
         printf("Error editing specified field to network.\n " 
-                  "%s, %s, %s", args[1], field, value); 
+                  "%s, %s, %s\n", args[1], field, value); 
       else
         printf("Success editing specified field to network.\n "
-                "%s, %s, %s", args[1], field, value);
+                "%s, %s, %s\n", args[1], field, value);
     }
 
     else
@@ -134,8 +139,10 @@ int edit(int num, char **args, char *syntax){
   return 0;
 }
 
+/* Configure a new network connection. */
 int configure(int num, char **args, char *syntax){
 
+  /* Auto configure network connection */
   if(num < 3)
     printf("Usage: %s\n", syntax);
   else if(strcmp(args[1], "auto") == 0 || strcmp(args[1], "-a") == 0)
@@ -147,6 +154,7 @@ int configure(int num, char **args, char *syntax){
       else
         printf("Success setting auto configuration of network %s!\n", args[2]);
       
+  /* Auto configure eap network connection */
   else if(strcmp(args[1], "eap") == 0 || strcmp(args[1], "-e") == 0)
     if(num < 5)
       printf("Usage: %s\n", syntax);
@@ -158,6 +166,7 @@ int configure(int num, char **args, char *syntax){
   return 0;
 }
 
+/* List all available connections */
 int list(int num, char **args, char *syntax){
 
   char buffer[BUFSIZ];
@@ -176,6 +185,7 @@ int list(int num, char **args, char *syntax){
         printf("%s\n", buffer);
   }
 
+  /* List configured networks only */
   else {
     if(strcmp(args[1], "configured") == 0 || strcmp(args[1], "-c") == 0){
       printf("Configured networks:\n");
@@ -185,6 +195,7 @@ int list(int num, char **args, char *syntax){
         printf("%s\n", buffer);
     }
 
+    /* List available networks only */
     if(strcmp(args[1], "available") == 0 || strcmp(args[1], "-a") == 0){
       printf("Available networks:\n");
       if(listAvailable(buffer, BUFSIZ) < 0)
@@ -197,8 +208,8 @@ int list(int num, char **args, char *syntax){
   return 0;
 }
 
-int do_exit(int num, char **args, char *syntax){
-
+/* Exit program */
+int do_exit(int num, char **args, char *syntax){ 
   return 1;
 }
 
@@ -206,9 +217,8 @@ int do_exit(int num, char **args, char *syntax){
 int main (int argc, char **argv) {
   
   /* Initiate API at start of program */
-  int result = surf_init();
-  if(result  < 0)
-    printf("Error connecting to wpa_supplicant. Error: %d\n", result);
+  if(surf_init() < 0)
+    printf("Error connecting to wpa_supplicant.\n");
   else
     printf("Success connecting to wpa_supplicant!\n");
 
