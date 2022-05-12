@@ -49,10 +49,10 @@ CMD_PROC (help);
 /* hdsetup commands. */
 CMD_PROC (disconnect);
 CMD_PROC (configure);
-CMD_PROC (connect);
 CMD_PROC (do_exit);
 CMD_PROC (forget);
 CMD_PROC (edit);
+CMD_PROC (conn);
 CMD_PROC (list);
 CMD_PROC (add);
 
@@ -76,7 +76,7 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ connect, "connect", "connect ssid", "Connect to an already existing network."},
+{ conn, "connect", "connect ssid", "Connect to an already existing network."},
 { disconnect, "disconnect", "disconnect ssid", "Disconnect from an already existing connection."},
 { add, "add", "add ssid", "Adds a new network to the configuration file."},
 { forget, "forget", "forget ssid", "Removes a network in the configuration file."},

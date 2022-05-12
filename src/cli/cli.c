@@ -43,15 +43,15 @@
  */
 CMD_PROC (disconnect);
 CMD_PROC (configure);
-CMD_PROC (connect);
 CMD_PROC (do_exit);
 CMD_PROC (forget);
+CMD_PROC (conn);
 CMD_PROC (conf);
 CMD_PROC (edit);
 CMD_PROC (list);
 CMD_PROC (add);
 
-int connect(int num, char **args, char *syntax){
+int conn(int num, char **args, char *syntax){
 
   if(num < 2)
     printf("Usage: %s\n", syntax);
