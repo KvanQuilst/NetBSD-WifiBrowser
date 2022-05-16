@@ -8,6 +8,11 @@
 
 #include <curses.h>
 #include <stdlib.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include "surf.h"
+
 
 int main(int argc, char *argv[]) {
 
@@ -26,20 +31,30 @@ int main(int argc, char *argv[]) {
 	refresh();
 	box(win, '*', '*');
 	mvwprintw(win, 1, 1, "Checking for WIFI Conncection...");
-	for(int i = 0; i < connectSize; i++){
- 		mvwaddstr(win, (i*2+5), 1, connects[i]);
-		wrefresh(win);
+
+	//Create available network buffer
+	int buffSize = BUFSIZE;
+        char buffer[buffSize];
+        if(listAvailable(buffer, BUFSIZE) < 0){
+		mvwprintw(win, 3, 1, "Error Printing configured networks");
+	} else {
+		for(int i = 0; i < BUFSIZE; i++){
+ 			mvwaddstr(win, (i*2+5), 1, "%d:  %s \n", i, buffer[i]);
+			wrefresh(win);
+		}
+		mvwaddstr(win, BUFSIZE*2 + 5, 1, "Select number of network");
 	}
+
 	wrefresh(win);
 	char ch;
 	while((ch = getch()) != 'q'){
-		switch(ch){
-			case '1':
-				win2 = newwin(height, width, 0, width + 1);
-				mvwprintw(win2, 1, 1, "Connection 1 selected");
-				box(win2, '*', '*');
-				wrefresh(win2);
-				break;
+		if(!isdigit(ch)){
+			mvwaddstr(win, BUFSIZE*2 + 8, 1, "Please input a number");
+		} else {
+			win2 = newwin(height, width, 0, width + 1);
+			mvwprintw(win2, 1, 1, "Connection %c selected", ch);	}
+			box(win2, '*', '*');
+			wrefresh(win2);
 		}
 	}
 	endwin();
