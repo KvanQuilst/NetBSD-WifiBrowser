@@ -110,7 +110,7 @@ int listConfigured(char *buf, size_t len);
 int listAvailable(char *buf, size_t len);
 
 /*
- * currConnection - what's the current connection?
- * returns: size 32 character string
+ * currConnection - what's the current connection? 
+ * returns: size 32 character string 
  */
 char *currConnection();
