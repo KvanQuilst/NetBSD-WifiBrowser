@@ -1,4 +1,3 @@
-//TUI Makefile
 
 PROG = tui
 SRCS = tui.c
