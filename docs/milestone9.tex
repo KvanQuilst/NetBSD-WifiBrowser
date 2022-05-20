@@ -18,7 +18,12 @@ presentation has begun. CLI is fully functional and can implement the
 commands needed to run the methods in the API. I wrote some stuff on 
 targets not met but wasn't aware to implement those until after our 
 meeting. Will work on those this week. CLI has the functionality to 
-implement the methods in the API and connect with wap_supplicant. 
+implement the methods in the API and connect with wpa\_supplicant. 
+The API implementation has taken a few big steps in that the layour of the
+program is fully fucntioning, and user interactions can be taken and dealt
+with. While the TUI BSD Makefile has been implemented, and the API call for
+Available networks is not implemented to gain and display possible network
+connections.
 
 \textbf{Accomplishments}
 \begin{itemize}
@@ -29,23 +34,28 @@ implement the methods in the API and connect with wap_supplicant.
 \begin{itemize}
   \item CLI should be able to determine the current connection. 
   \item CLI should be able to determine if a network is an EAP network. 
+  \item API implementation not quite at 50 percent but very close 
 \end{itemize}
 
 \textbf{New Expectations:}
-Hangten should at the very least be able to connect to simple networks by the
-next milestone, if not EAP networks too.
+API should at the very least be able 
+to display Available networks and have the user be able to select a network,
+possible implementation of network info on sub window is also very attainable.
 
 \section{Git Branch Report}
 
 \newpage
 \section{Individual Progress}
 
-\textbf{Kevin:}
+\textbf{Kevin: 7 hours, 45 minutes}
 \begin{itemize}
-  \item
+  \item implemented sub window for network information display
+  \item Created and implemented BSD Makefile almost fully
+  \item Implemented API functions to get Available networks
+  \item Moved all of the TUI\_test branch into master
 \end{itemize}
 
-\textbf{Dylan:}
+\textbf{Dylan:} 4 hours
 \begin{itemize}
   \item Marginal progress on GUI
   \item Started prep for our presentation
