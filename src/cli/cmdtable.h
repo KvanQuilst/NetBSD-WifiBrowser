@@ -76,48 +76,40 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ conn,        "connect", "Usage: connect [SSID]\n", 
-               "Usage: connect [SSID]\n"
+{ conn,        "connect", "connect [SSID]", 
                "Connect to [SSID] network in configuration file.\n"
-               "--ssid     The ssid of the network in the configuration file\n"},
-{ disconnect,  "disconnect", "Usage: disconnect [SSID]\n", 
-               "Usage: disconnect [SSID]\n"
+               "--ssid     The ssid of the network in the configuration file"},
+{ disconnect,  "disconnect", "disconnect [SSID]", 
                "Disconnect from an already existing network connection.\n"
-               "--ssid        The ssid of the network in the configuration file\n"},
-{ add,         "add",  "Usage: add [SSID]\n", 
-               "Usage: add [SSID]\n"
+               "--ssid        The ssid of the network in the configuration file"},
+{ add,         "add",  "add [SSID]", 
                "Add a new network to the configuration file.\n"
-               "--ssid        The ssid of the network added to the configuration file\n"},
-{ forget,      "forget", "Usage: forget [SSID]\n", 
-               "Usage: forget [SSID]\n"
+               "--ssid        The ssid of the network added to the configuration file"},
+{ forget,      "forget", "forget [SSID]", 
                "Removes an already existing network in the configuration file.\n"
-               "--ssid        The ssid of the network to be removed from the configuration file\n"},
-{ edit,        "edit", "Usage: edit [SSID]\n" 
-                        "edit [SSID] [FIELD] [VALUE]\n",
+               "--ssid        The ssid of the network to be removed from the configuration file"},
+{ edit,        "edit", "edit [SSID]\n" 
+                        "edit [SSID] [FIELD] [VALUE]",
                "Edits an already existing network in the configuration file.\n"
                "--ssid        The ssid of the network in the configuration file\n"
                "--field       The field of the network to be edited in the configuration file\n"
-               "--value       The value the field will changed to of the network in the configuration file\n"},
-{ configure,   "configure", "Usage: configure auto [SSID] [PASSKEY]\n" 
-                            "Usage: configure eap [SSID] [USER] [PASSWORD]\n",
-               "Usage: configure auto [SSID] [PASSKEY]\n" 
+               "--value       The value the field will changed to of the network in the configuration file"},
+{ configure,   "configure", "configure auto [SSID] [PASSKEY]\n" 
+                            "configure eap [SSID] [USER] [PASSWORD]",
                "Auto configures a network in the configuration file and enables the network connection.\n"
                "--ssid        The ssid of the network to be auto configured in the configuration file\n"
                "--passkey     The passkey of the network [SSID]\n\n"
 
-               "Usage: configure eap [SSID] [USER] [PASSWORD]\n"
                "Auto configures an eap network in the configuration file and enabbles the network connection.\n"
                "--ssid        The ssid of the eap network to be auto configured in the configuration file\n"
                "--user        The username of the eap network [SSID]\n"
-               "--password    The password of the user [USER] of the eap network [SSID]\n"},
-{ list,        "list",  "Usage: list\n",
-               "Usage: list\n" 
+               "--password    The password of the user [USER] of the eap network [SSID]"},
+{ list,        "list",  "list", 
                "Lists all available networks and configured networks in the configuration file.\n"
                "-a           List all available networks only\n"
-               "-c           List all configured networks in the configuration file\n"},
-{ do_exit,     "exit", "Usage: exit\n", 
-                   "Usage: exit\n"
-                   "Exit API interface and return to standard terminal.\n"},
+               "-c           List all configured networks in the configuration file"},
+{ do_exit,     "exit",  "exit", 
+                        "Exit API interface and return to terminal"},
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
