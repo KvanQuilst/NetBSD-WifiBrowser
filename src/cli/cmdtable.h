@@ -93,7 +93,7 @@ const struct command cmd_table [] = {		/* Command Table */
                "Edits an already existing network in the configuration file.\n"
                "--ssid        The ssid of the network in the configuration file\n"
                "--field       The field of the network to be edited in the configuration file\n"
-               "--value       The value the field will changed to of the network in the configuration file"},
+               "--value       The value the field will be changed to of the network in the configuration file"},
 { configure,   "configure", "configure auto [SSID] [PASSKEY]\n" 
                             "configure eap [SSID] [USER] [PASSWORD]",
                "Auto configures a network in the configuration file and enables the network connection.\n"

@@ -1,6 +1,6 @@
 /*	$NetBSD: $	*/
 
-/*
+/* 
  * Copyright (c) 2022 Philip A. Nelson.
  * All rights reserved. 
  * 
@@ -86,9 +86,11 @@ int disconnect(int num, char **args, char *syntax){
 
   else{
 
-    if(currConnection() != NULL){
+    char *current = malloc(sizeof(char) * 32);
+    strncpy(current, currConnection(), sizeof(char) * 32);
+    if(current != NULL){
 
-      if(conf_disableNetwork(currConnection()) < 0){
+      if(conf_disableNetwork(current) < 0){
 
         printf("Error: Could not disconnect from netowrk %s\n", args[1]);
       }
@@ -103,6 +105,8 @@ int disconnect(int num, char **args, char *syntax){
 
       printf("Not connected to a network!\n");
     }
+
+    free(current);
   }
 
   return 0;
@@ -175,13 +179,13 @@ int edit(int num, char **args, char *syntax){
 
       if(conf_editNetwork(args[1], field, value) < 0){
 
-        printf("Error: Could not edit specified field in network %s\n " 
+        printf("Error: Could not edit specified field in network %s\n" 
                   "field: %s\nvalue: %s\n", args[1], field, value); 
       }
 
       else{
 
-         printf("Success editing specified field to network %s!\n "
+         printf("Success editing specified field to network %s!\n"
                 "field: %s\nvalue: %s\n", args[1], field, value);
       }
     }
@@ -201,7 +205,7 @@ int edit(int num, char **args, char *syntax){
       }
     }
   }
-                
+  
   return 0;
 }
 
@@ -291,7 +295,6 @@ int list(int num, char **args, char *syntax){
   /* List configured networks only */
   else {
 
-
     if(strcmp(args[1], "configured") == 0 || strcmp(args[1], "-c") == 0){
 
       if(listConfigured(buffer, BUFSIZ) < 0){
@@ -325,7 +328,8 @@ int list(int num, char **args, char *syntax){
 
 int current(int num, char **args, char *syntax){ 
 
-  char *current = currConnection();
+  char *current = malloc(sizeof(char) * 32);
+  strncpy(current, currConnection(), sizeof(char) * 32);
   if(current != NULL){
 
     printf("%s\n", current);
@@ -335,6 +339,8 @@ int current(int num, char **args, char *syntax){
 
     printf("Not connected to a network!\n");
   }
+
+  free(current);
 }
 
 void surf(){
