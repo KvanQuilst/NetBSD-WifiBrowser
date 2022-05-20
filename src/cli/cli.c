@@ -86,11 +86,11 @@ int disconnect(int num, char **args, char *syntax){
 
   else{
 
-    char *current = malloc(sizeof(char) * 32);
-    strncpy(current, currConnection(), sizeof(char) * 32);
-    if(current != NULL){
+    //char *current = malloc(sizeof(char) * 32);
+    //strncpy(current, currConnection(), sizeof(char) * 32);
+    if(currConnection() != NULL){
 
-      if(conf_disableNetwork(current) < 0){
+      if(conf_disableNetwork(currConnection()) < 0){
 
         printf("Error: Could not disconnect from netowrk %s\n", args[1]);
       }
@@ -106,7 +106,7 @@ int disconnect(int num, char **args, char *syntax){
       printf("Not connected to a network!\n");
     }
 
-    free(current);
+    //free(current);
   }
 
   return 0;
@@ -328,11 +328,11 @@ int list(int num, char **args, char *syntax){
 
 int current(int num, char **args, char *syntax){ 
 
-  char *current = malloc(sizeof(char) * 32);
-  strncpy(current, currConnection(), sizeof(char) * 32);
-  if(current != NULL){
+  //char *current = malloc(sizeof(char) * 32);
+  //strncpy(current, currConnection(), sizeof(char) * 32);
+  if(currConnection() != NULL){
 
-    printf("%s\n", current);
+    printf("%s\n", currConnection());
   }
 
   else{
@@ -340,7 +340,7 @@ int current(int num, char **args, char *syntax){
     printf("Not connected to a network!\n");
   }
 
-  free(current);
+  //free(current);
 }
 
 void surf(){
