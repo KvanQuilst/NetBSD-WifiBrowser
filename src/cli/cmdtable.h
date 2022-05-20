@@ -78,7 +78,7 @@ const struct command cmd_table [] = {		/* Command Table */
 
 { conn,        "connect", "Usage: connect [SSID]\n", 
                "Usage: connect [SSID]\n"
-               "Connect to SSID network in configuration file.\n"
+               "Connect to [SSID] network in configuration file.\n"
                "--ssid     The ssid of the network in the configuration file\n"},
 { disconnect,  "disconnect", "Usage: disconnect [SSID]\n", 
                "Usage: disconnect [SSID]\n"

@@ -55,12 +55,12 @@ CMD_PROC (add);
 int conn(int num, char **args, char *syntax){
 
   if(num < 2)
-    printf("Usage: %s\n", syntax);
+    printf("%s", syntax);
   else
     if(conf_enableNetwork(args[1]) < 0)
-      printf("Error connecting to %s.\n", args[1]);
+      printf("Error: Could not connect to network %s\n", args[1]);
     else
-      printf("Network %s connected!\n", args[1]);
+      printf("Connected to network %s successfully!\n", args[1]);
 
   return 0;
 }
@@ -69,13 +69,13 @@ int conn(int num, char **args, char *syntax){
 int disconnect(int num, char **args, char *syntax){
 
   if(num < 2)
-    printf("Usage: %s\n", syntax);
+    printf("%s", syntax);
   else{
     if(currConnection() != NULL)
     if(conf_disableNetwork(currConnection()) < 0)
-      printf("Error disconnecting from %s.\n", args[1]);
+      printf("Error: Could not disconnect from netowrk %s\n", args[1]);
     else
-      printf("Network %s disconnected!\n", args[1]);
+      printf("Disconnected from network %s successfully!\n", args[1]);
     else
       printf("Not connected to a network!\n");
   }
@@ -86,12 +86,12 @@ int disconnect(int num, char **args, char *syntax){
 int add(int num, char **args, char *syntax){
 
   if(num < 2)
-      printf("Usage: %s\n", syntax);
+      printf("%s", syntax);
     else
       if(conf_addEntry(args[1]) < 0)
-        printf("Error adding %s.\n", args[1]);
+        printf("Error: Could not add new network connection %s\n", args[1]);
       else
-        printf("Success adding %s!\n", args[1]);
+        printf("Network %s added successfully!\n", args[1]);
 
   return 0;
 }
@@ -100,12 +100,12 @@ int add(int num, char **args, char *syntax){
 int forget(int num, char **args, char *syntax){
 
    if(num < 2)
-    printf("Usage: %s\n", syntax);
+    printf("%s", syntax);
   else
     if(conf_deleteNetwork(args[1]) < 0)
-      printf("Error deleting network %s.\n", args[1]);
+      printf("Error: Could not remove network %s from configuration file.\n", args[1]);
     else
-      printf("Network %s deleted!\n", args[1]);
+      printf("Network %s removed successfully!\n", args[1]);
 
   return 0;
 }
@@ -114,7 +114,7 @@ int forget(int num, char **args, char *syntax){
 int edit(int num, char **args, char *syntax){
 
    if(num < 2)
-    printf("Usage: %s\n", syntax);
+    printf("%s", syntax);
   else
     if(num < 4){
       char field[FIELDLEN], value[FIELDLEN]; 
@@ -124,20 +124,20 @@ int edit(int num, char **args, char *syntax){
       value[strlen(value) - 1] = 0; 
 
       if(conf_editNetwork(args[1], field, value) < 0)
-        printf("Error editing specified field to network.\n " 
-                  "%s, %s, %s\n", args[1], field, value); 
+        printf("Error: Could not edit specified field in network %s\n " 
+                  "field: %s\n, value: %s\n", args[1], field, value); 
       else
-        printf("Success editing specified field to network.\n "
-                "%s, %s, %s\n", args[1], field, value);
+        printf("Success editing specified field to network %s!\n "
+                "field %s\n, value: %s\n", args[1], field, value);
     }
 
     else
       if(conf_editNetwork(args[1], args[2], args[3]) < 0)
-        printf("Error editing specified field to network.\n" 
-                  "%s, %s, %s\n", args[1], args[2], args[3]); 
+        printf("Error: Could not edit specified field in network %s\n" 
+                  "field: %s\n, value: %s\n", args[1], args[2], args[3]); 
       else
-        printf("Success editing specified field to network.\n"
-                "%s, %s, %s\n", args[1], args[2], args[3]);
+        printf("Success editing specified field to network %s!\n"
+                "field: %s\n, value: %s\n", args[1], args[2], args[3]);
                 
   return 0;
 }
@@ -147,25 +147,25 @@ int configure(int num, char **args, char *syntax){
 
   /* Auto configure network connection */
   if(num < 3)
-    printf("Usage: %s\n", syntax);
+    printf("%s", syntax);
   else if(strcmp(args[1], "auto") == 0 || strcmp(args[1], "-a") == 0)
     if(num < 4)
-      printf("Usage: %s\n", syntax);
+      printf("%s", syntax);
     else
       if(conf_configAuto(args[2], args[3]) < 0)
-        printf("Error setting auto configuration of network %s.\n", args[2]);
+        printf("Error: Unsuccessful auto configuration of network %s\n", args[2]);
       else
-        printf("Success setting auto configuration of network %s!\n", args[2]);
+        printf("Successful auto configuration of network %s!\n", args[2]);
       
   /* Auto configure eap network connection */
   else if(strcmp(args[1], "eap") == 0 || strcmp(args[1], "-e") == 0)
     if(num < 5)
-      printf("Usage: %s\n", syntax);
+      printf("%s", syntax);
     else
       if(conf_configAutoEAP(args[2], args[3], args[4]) < 0)
-        printf("Error setting auto configuration of eap network %s.\n", args[2]);
+        printf("Error: Unsuccessful auto configuration of eap network %s\n", args[2]);
       else
-        printf("Success setting auto configuration of eap network %s!\n", args[2]);
+        printf("Successful auto configuration of eap network %s!\n", args[2]);
   return 0;
 }
 
@@ -176,14 +176,14 @@ int list(int num, char **args, char *syntax){
   if(num < 2){
     printf("Configured networks:\n");
     if(listConfigured(buffer, BUFSIZ) < 0)
-        printf("Error listing configured networks.\n");
+        printf("Error: Unsuccessful listing of configured networks\n");
       else
         printf("%s\n", buffer);
 
     bzero(buffer, BUFSIZ);
     printf("Available networks:\n");
     if(listAvailable(buffer, BUFSIZ) < 0)
-        printf("Error listing available networks.\n");
+        printf("Error: Unsuccessful listing of available networks\n");
       else
         printf("%s\n", buffer);
   }
@@ -193,7 +193,7 @@ int list(int num, char **args, char *syntax){
     if(strcmp(args[1], "configured") == 0 || strcmp(args[1], "-c") == 0){
       printf("Configured networks:\n");
       if(listConfigured(buffer, BUFSIZ) < 0)
-        printf("Error listing configured networks.\n");
+        printf("Error: Unsuccessful listing of configured networks\n");
       else
         printf("%s\n", buffer);
     }
@@ -202,7 +202,7 @@ int list(int num, char **args, char *syntax){
     if(strcmp(args[1], "available") == 0 || strcmp(args[1], "-a") == 0){
       printf("Available networks:\n");
       if(listAvailable(buffer, BUFSIZ) < 0)
-        printf("Error listing available networks.\n");
+        printf("Error: Unsuccessful listing of available networks\n");
       else
         printf("%s\n", buffer);
     }
