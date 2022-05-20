@@ -88,7 +88,7 @@ const struct command cmd_table [] = {		/* Command Table */
 { forget,      "forget", "forget [SSID]", 
                "Removes an already existing network in the configuration file.\n"
                "--ssid        The ssid of the network to be removed from the configuration file"},
-{ edit,        "edit", "edit [SSID]\n" 
+{ edit,        "edit",  "edit [SSID]\n" 
                         "edit [SSID] [FIELD] [VALUE]",
                "Edits an already existing network in the configuration file.\n"
                "--ssid        The ssid of the network in the configuration file\n"

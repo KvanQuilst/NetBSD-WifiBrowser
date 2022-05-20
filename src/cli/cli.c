@@ -90,7 +90,7 @@ int disconnect(int num, char **args, char *syntax){
 
       if(conf_disableNetwork(currConnection()) < 0){
 
-        printf("Error: Could not disconnect from netowrk %s\n", args[1]);
+        printf("Error: Could not disconnect from network %s\n", args[1]);
       }
 
       else{
