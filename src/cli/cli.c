@@ -222,6 +222,10 @@ int main (int argc, char **argv) {
   else
     printf("Success connecting to wpa_supplicant!\n");
 
+
+  char *connect = currConnection();
+  printf("%s\n", connect);
+
   /* Run command loop */
   command_loop();
 }

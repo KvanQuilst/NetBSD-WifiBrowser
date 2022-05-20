@@ -1,7 +1,7 @@
 /*	$NetBSD: $	*/
 
 /* 
- * Copyright (c) 1994 Philip A. Nelson.
+ * Copyright (c) 1994 Philip A. Nelson. 
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
