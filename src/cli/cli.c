@@ -223,8 +223,10 @@ int main (int argc, char **argv) {
     printf("Success connecting to wpa_supplicant!\n");
 
 
-  char *connect = currConnection();
+  char *connect = malloc(sizeof(char) * 32); 
+  connect = currConnection();
   printf("%s\n", connect);
+  free(connect);
 
   /* Run command loop */
   command_loop();
