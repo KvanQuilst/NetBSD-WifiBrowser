@@ -70,12 +70,15 @@ int disconnect(int num, char **args, char *syntax){
 
   if(num < 2)
     printf("Usage: %s\n", syntax);
-  else
-    if(conf_disableNetwork(args[1]) < 0)
+  else{
+    if(currConnection() != NULL)
+    if(conf_disableNetwork(currConnection()) < 0)
       printf("Error disconnecting from %s.\n", args[1]);
     else
       printf("Network %s disconnected!\n", args[1]);
-
+    else
+      printf("Not connected to a network!\n");
+  }
   return 0;
 }
 
@@ -221,12 +224,6 @@ int main (int argc, char **argv) {
     printf("Error connecting to wpa_supplicant.\n");
   else
     printf("Success connecting to wpa_supplicant!\n");
-
-
-  char *connect = currConnection();
-  printf("here\n");
-  printf("%s\n", connect);
-  free(connect);
 
   /* Run command loop */
   command_loop();
