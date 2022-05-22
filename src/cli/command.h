@@ -62,7 +62,7 @@ struct command {
 
 /*  The command loop will do the following: 
 	a) prompt the user for a command.
-	b) read the command line.
+	b) read the command line. 
 	c) break the input line into arguments.
 	d) search for the command in the command table.
 	e) If the command is found, call the routine to process it.

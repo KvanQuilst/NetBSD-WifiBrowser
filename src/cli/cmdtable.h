@@ -1,7 +1,7 @@
 /*	$NetBSD: $	*/
 
 /* 
- * Copyright (c) 1994 Philip A. Nelson.
+ * Copyright (c) 1994 Philip A. Nelson. 
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -49,6 +49,7 @@ CMD_PROC (help);
 /* hdsetup commands. */
 CMD_PROC (disconnect);
 CMD_PROC (configure);
+CMD_PROC (current);
 CMD_PROC (do_exit);
 CMD_PROC (forget);
 CMD_PROC (edit);
@@ -76,14 +77,41 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ conn, "connect", "connect \%ssid", "Connect to an already existing network. The network must already exist in the configuration file."},
-{ disconnect, "disconnect \%ssid", "disconnect", "Disconnect from an already existing connection."},
-{ add, "add", "add \%ssid", "Adds a new network to the configuration file."},
-{ forget, "forget", "forget \%ssid", "Removes a network in the configuration file."},
-{ edit, "edit", "edit \%ssid / edit \%ssid \%field \%value", "Edits a network in the configuration file."},
-{ configure, "configure", "configure auto \%ssid \%passkey / configure eap \%ssid \%user \%password", "Auto configures a network and adds it to the configuration file."},
-{ list, "list", "list configured / list available", "List all configured and available networks."},
-{ do_exit, "exit", "exit", "Exit program"},
+{ conn,        "connect", "connect [SSID]", 
+               "Connect to [SSID] network in configuration file.\n"
+               "--ssid     The ssid of the network in the configuration file"},
+{ disconnect,  "disconnect", "disconnect", 
+               "Disconnect from an already existing network connection."},
+{ add,         "add",  "add [SSID]", 
+               "Add a new network to the configuration file.\n"
+               "--ssid        The ssid of the network added to the configuration file"},
+{ forget,      "forget", "forget [SSID]", 
+               "Removes an already existing network in the configuration file.\n"
+               "--ssid        The ssid of the network to be removed from the configuration file"},
+{ edit,        "edit",  "edit [SSID]\n" 
+                        "edit [SSID] [FIELD] [VALUE]",
+               "Edits an already existing network in the configuration file.\n"
+               "--ssid        The ssid of the network in the configuration file\n"
+               "--field       The field of the network to be edited in the configuration file\n"
+               "--value       The value the field will be changed to of the network in the configuration file"},
+{ configure,   "configure", "configure auto [SSID] [PASSKEY]\n" 
+                            "configure eap [SSID] [USER] [PASSWORD]",
+               "Auto configures a network in the configuration file and enables the network connection.\n"
+               "--ssid        The ssid of the network to be auto configured in the configuration file\n"
+               "--passkey     The passkey of the network [SSID]\n\n"
+
+               "Auto configures an eap network in the configuration file and enabbles the network connection.\n"
+               "--ssid        The ssid of the eap network to be auto configured in the configuration file\n"
+               "--user        The username of the eap network [SSID]\n"
+               "--password    The password of the user [USER] of the eap network [SSID]"},
+{ list,        "list",  "list", 
+               "Lists all available networks and configured networks in the configuration file.\n"
+               "-a           List all available networks only\n"
+               "-c           List all configured networks in the configuration file"},
+{ current,     "current", "current", 
+               "Returns the SSID of the current network connection"},
+{ do_exit,     "exit",  "exit", 
+                        "Exit API interface and return to terminal"},
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
