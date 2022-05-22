@@ -19,8 +19,10 @@ int main(int argc, char *argv[]) {
 	char connects[5][256] = {"Connection 1", "Connection 2", "Connection 3", "Connection 4", "Connection 5"};
 	int connectSize = sizeof connects / sizeof connects[0];
 
+	surf();
 	initscr();
 	noecho();
+
 	WINDOW *win2;
 	WINDOW *win;
 	int height = LINES-10;
@@ -33,15 +35,11 @@ int main(int argc, char *argv[]) {
 	mvwprintw(win, 1, 1, "Checking for WIFI Conncection...");
 
 	//Create available network buffer
-	int buffSize = BUFSIZE;
         char buffer[buffSize];
         if(listAvailable(buffer, BUFSIZE) < 0){
 		mvwprintw(win, 3, 1, "Error Printing configured networks");
 	} else {
-		for(int i = 0; i < BUFSIZE; i++){
- 			mvwaddstr(win, (i*2+5), 1, "%d:  %s \n", i, buffer[i]);
-			wrefresh(win);
-		}
+ 		mvwaddstr(win, (i*2+5), 1, buffer);
 		mvwaddstr(win, BUFSIZE*2 + 5, 1, "Select number of network");
 	}
 
@@ -52,11 +50,11 @@ int main(int argc, char *argv[]) {
 			mvwaddstr(win, BUFSIZE*2 + 8, 1, "Please input a number");
 		} else {
 			win2 = newwin(height, width, 0, width + 1);
-			mvwprintw(win2, 1, 1, "Connection %c selected", ch);	}
+			mvwprintw(win2, 1, 1, "Connection %c selected", ch);
 			box(win2, '*', '*');
 			wrefresh(win2);
 		}
 	}
-	endwin();
+	endwin()
 	return 0;
 }
