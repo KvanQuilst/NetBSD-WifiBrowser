@@ -46,6 +46,7 @@ CMD_PROC (configure);
 CMD_PROC (current);
 CMD_PROC (do_exit);
 CMD_PROC (forget);
+CMD_PROC (clear);
 CMD_PROC (conn);
 CMD_PROC (conf);
 CMD_PROC (edit);
@@ -352,6 +353,12 @@ void surf(){
 int do_exit(int num, char **args, char *syntax){ 
 
   return 1;
+}
+
+int clear(int num, char **args, char *syntax){ 
+
+  system("clear"); 
+  return 0;
 }
 
 /* Main program */

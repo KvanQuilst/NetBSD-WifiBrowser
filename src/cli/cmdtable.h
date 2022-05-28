@@ -52,6 +52,7 @@ CMD_PROC (configure);
 CMD_PROC (current);
 CMD_PROC (do_exit);
 CMD_PROC (forget);
+CMD_PROC (clear);
 CMD_PROC (edit);
 CMD_PROC (conn);
 CMD_PROC (list);
@@ -112,6 +113,8 @@ const struct command cmd_table [] = {		/* Command Table */
                "Returns the SSID of the current network connection"},
 { do_exit,     "exit",  "exit", 
                         "Exit API interface and return to terminal"},
+{ clear,       "clear",  "clear", 
+                        "Clear screen and display terminal prompt"},
 };
 
 #define CMDLEN  (sizeof (cmd_table) / sizeof (struct command))
