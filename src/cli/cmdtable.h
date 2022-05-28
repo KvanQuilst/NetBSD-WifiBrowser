@@ -78,25 +78,25 @@ const struct command cmd_table [] = {		/* Command Table */
 { help, "?", "", "Prints a list of commands." },
 #endif
 
-{ conn,        "connect", "connect [SSID]", 
+{ conn,        "connect", "connect [SSID]\n", 
                "Connect to [SSID] network in configuration file.\n"
                "--ssid     The ssid of the network in the configuration file"},
-{ disconnect,  "disconnect", "disconnect", 
+{ disconnect,  "disconnect", "disconnect\n", 
                "Disconnect from an already existing network connection."},
-{ add,         "add",  "add [SSID]", 
+{ add,         "add",  "add [SSID]\n", 
                "Add a new network to the configuration file.\n"
                "--ssid        The ssid of the network added to the configuration file"},
-{ forget,      "forget", "forget [SSID]", 
+{ forget,      "forget", "forget [SSID]\n", 
                "Removes an already existing network in the configuration file.\n"
                "--ssid        The ssid of the network to be removed from the configuration file"},
 { edit,        "edit",  "edit [SSID]\n" 
-                        "edit [SSID] [FIELD] [VALUE]",
+                        "edit [SSID] [FIELD] [VALUE]\n",
                "Edits an already existing network in the configuration file.\n"
                "--ssid        The ssid of the network in the configuration file\n"
                "--field       The field of the network to be edited in the configuration file\n"
                "--value       The value the field will be changed to of the network in the configuration file"},
 { configure,   "configure", "configure auto [SSID] [PASSKEY]\n" 
-                            "configure eap [SSID] [USER] [PASSWORD]",
+                            "configure eap [SSID] [USER] [PASSWORD]\n",
                "Auto configures a network in the configuration file and enables the network connection.\n"
                "--ssid        The ssid of the network to be auto configured in the configuration file\n"
                "--passkey     The passkey of the network [SSID]\n\n"
@@ -105,15 +105,15 @@ const struct command cmd_table [] = {		/* Command Table */
                "--ssid        The ssid of the eap network to be auto configured in the configuration file\n"
                "--user        The username of the eap network [SSID]\n"
                "--password    The password of the user [USER] of the eap network [SSID]"},
-{ list,        "list",  "list", 
+{ list,        "list",  "list\n", 
                "Lists all available networks and configured networks in the configuration file.\n"
                "-a           List all available networks only\n"
                "-c           List all configured networks in the configuration file"},
-{ current,     "current", "current", 
+{ current,     "current", "current\n", 
                "Returns the SSID of the current network connection"},
-{ do_exit,     "exit",  "exit", 
+{ do_exit,     "exit",  "exit\n", 
                         "Exit API interface and return to terminal"},
-{ clear,       "clear",  "clear", 
+{ clear,       "clear",  "clear\n", 
                         "Clear screen and display terminal prompt"},
 };
 
