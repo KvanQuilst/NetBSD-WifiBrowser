@@ -1,0 +1,108 @@
+\documentclass[11pt]{article}
+\setlength{\parindent}{0em}
+\usepackage[margin=1in]{geometry}
+
+\begin{document}
+
+\begin{center}
+  \textbf{\Large Final Report}\\\large NetBSD Wifi Browser Project 2022\\
+  Dylan Roy, Stephen Loudiana, Kevin McGrane
+\end{center}
+
+\section*{Summary of Project}
+The NetBSD Wifi Browser Project was executed in order to bring a way
+to simplify the wifi connection process in NetBSD-base.
+To support this goal, a library was developed called \texttt{Surf} to
+handle the interfacing with \texttt{wpa\_supplicant} and handle the
+configuration of networks to the extent necessary for a complete connection.
+The \texttt{Surf} library is intended to be used in the development of
+user interfaces that handle interactions with wifi connections, including
+connecting, disconnecting, forgetting, and manually configuring how
+\texttt{wpa\_supplicant} is to connect to a network.
+As an example of how \texttt{Surf} could be used in a user interface, as
+well as to provide interfaces for NetBSD-base to connect to wifi access points, 
+a CLI (command line interface), a TUI (terminal user interface), and a GUI
+(graphical user interface) were in development in addition to the \texttt{Surf} library. 
+A fully interactive command line interface is included in the Wifi Browser Project. The 
+CLI can interact with all methods of the Surf library. These methods help users interact 
+with the configuration file. The CLI automatically connects users to \texttt{wpa\_supplicant} 
+at startup and allows users to add, edit, or delete networks from the configuration file. 
+In addition to listing available and configured networks, connecting and disconnecting from 
+already existing connections, auto configuration of networks and eap networks, clearing 
+the screen and exiting the interface. The CLI is fully interactive with all methods in the 
+surf library and allows users to edit the fields in the configuration file and connect to 
+\texttt{wpa\_supplicant}. 
+
+\section*{Details of Completed Parts}
+The only part of the project that reached total completion was the 
+\texttt{Surf} library.
+\texttt{Surf} interfaced with \texttt{wpa\_supplicant}'s own API, \texttt{wpa\_ctrl}
+in order to edit the configuration file for \texttt{wpa\_supplicant} without the need
+for root privileges.
+Through \texttt{wpa\_ctrl}, \texttt{Surf} was able to support automatic configuration
+for basic networks that rely on PSK's (pre-shared keys), or WPA-PSK networks,
+and networks that rely on usernames and passwords, or WPA-EAP networks.
+So in essence, the minimum amount of information required to connect to a specific 
+network will typically be only the SSID of the network and its PSK, or the SSID
+of a the network and a username and accompanying password.
+In addition to automatic configuration, \texttt{Surf} supports editing network
+configurations for advanced users, forgetting networks from known networks,
+disabling and enabling networks without forgetting, and listing visible networks
+in range of the connected wireless device and the known networks to \texttt{wpa\_supplicant}.
+These features will allow a user interface implementer to worry only about presenting
+information and getting information from the user instead of also dealing with
+how to interface effectively with \texttt{wpa\_supplicant}. 
+CLI has reached full completion on essential implementation of required parts. Users can 
+fully interact with all methods in the surf API. Common commands users can enter include:
+\begin{enumerate}
+\item Connect to existing connections in the configuration file
+\item Disconnect from an already existing connection
+\item Add a new entry to the configuration file
+\item Allow for both auto configuration and auto configuration of eap networks in the configuration file
+\item Remove an already existing network in the configuration file
+\item Edit an already existing network in the configuration file
+\item List all configured networks in the configuration file
+\item List all available networks
+\item Connect to \texttt{wpa\_supplicant}
+\item Check the current connection
+\item Clear the terminal screen and exit program
+\end{enumerate}
+Commands for the CLI involve common words such as 'connect', 'disconnect', 'forget', 'edit', 
+'current', 'list', 'configure', 'add', 'clear', and 'exit'. Help methods with the CLI are 
+detailed and easy for users to understand and include the correct syntax for each command. 
+CLI has required implementation for users to edit and interact with existing networks in the 
+configuration file, connect and disconnect from already existing networks, list networks, in 
+addition to descriptive help methods given with each command. 
+
+\section*{Details of Incomplete Parts}
+CLI does not grant users the ability to enter commands using hyphens for shortened commands. 
+Additionally, multiple commands cannot be processed simultaneously. However, implementation for 
+standard \texttt{getopt\_long} would require minimal implementation. Standard string comparsions 
+are used for some commands where hyphens are detected for user input. Additional implementation 
+would require \texttt{getopt\_long} to detect all commands with each function call in the command 
+table. Additional implementation for listing the fields associated with an existing network in the 
+configuration file, in addition to detecting whether or not a network connection is an eap network 
+would be required for full completion of the CLI. Additional methods might be preferred by the 
+developer to be considered complete. 
+\subsection*{CLI}
+
+%% TUI details here 
+\subsection*{TUI}
+
+%% GUI details here
+\subsection*{GUI}
+Since \texttt{Surf} was completed many weeks before the end of the senior project cycle,
+the scope of the NetBSD Wifi Browser Project was expanded to include the development of 
+GUI implementation for \texttt{Surf}.
+In order to stay in compliance with NetBSD-base, the GUI was developed using the bare bones
+\texttt{XLib} library, which is the basic graphics library included with \texttt{XOrg} 
+(the default display environment on NetBSD).
+This meant that development of the GUI would also include developing a library of graphics
+elements to simplify the development of a GUI interface.
+As such, combined with only 5 weeks of time left in the project, the GUI was only able
+to reach a state of listing the known and available networks.
+Progress was being made towards actually connecting to one of the available networks,
+but was ultimately not achieved due to a lack of time and a complexity of the task
+being performed.
+
+\end{document}
