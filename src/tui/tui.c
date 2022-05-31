@@ -27,8 +27,8 @@ int main(int argc, char *argv[]) {
 	WINDOW *win;
 	int height = LINES-10;
 	int width = (COLS/2) - 10;
-	//int startx = (LINES - height) / 2;
-	//int starty = (COLS - width) / 2;
+	int startx = (LINES - height) / 2;
+	int starty = (COLS - width) / 2;
 	win = newwin(height, width, 0,0);
 	refresh();
 	box(win, '*', '*');
@@ -49,10 +49,35 @@ int main(int argc, char *argv[]) {
 		if(!isdigit(ch)){
 			mvwaddstr(win, BUFSIZ*2 + 8, 1, "Please input a number");
 		} else {
-			win2 = newwin(height, width, 0, width + 1);
-			mvwprintw(win2, 1, 1, "Connection %c selected", ch);
-			box(win2, '*', '*');
-			wrefresh(win2);
+			win2 = subwin(win, height, width, starty, startx);
+                        win2 = newwin(height, width, 0, width + 1);
+                        mvwprintw(win2, 2, width/2 - 6, "Connection 1");
+                        mvwprintw(win2, 6, 1, "\t[C]onnect");
+                        mvwprintw(win2, 8, 1, "\t[E]dit Network");
+                        mvwprintw(win2, 10, 1, "\t[M]ake known Networks");
+                        mvwprintw(win2, 12, 1, "\t[A]uto Connect");
+			mvwprintw(win2, 14, 1, "\t[Q]uit");
+                        box(win2, '*', '*');
+                        wrefresh(win2);
+
+			while((ch = getch()) != 'q'){
+				switch(ch){
+					case 'c':
+						//connect to wifi
+						break;
+					case 'e':
+						//edit network
+                                                break;
+					case 'm':
+						//edit network
+                                                break;
+					case 'a':
+						//edit network
+                                                break;
+				}
+			}
+
+                        break;
 		}
 	}
 	endwin();
