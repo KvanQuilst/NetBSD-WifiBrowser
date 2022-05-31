@@ -51,7 +51,8 @@ disabling and enabling networks without forgetting, and listing visible networks
 in range of the connected wireless device and the known networks to \texttt{wpa\_supplicant}.
 These features will allow a user interface implementer to worry only about presenting
 information and getting information from the user instead of also dealing with
-how to interface effectively with \texttt{wpa\_supplicant}. 
+how to interface effectively with \texttt{wpa\_supplicant}.\\
+
 CLI has reached full completion on essential implementation of required parts. Users can 
 fully interact with all methods in the surf API. Common commands users can enter include:
 \begin{enumerate}
@@ -75,6 +76,7 @@ configuration file, connect and disconnect from already existing networks, list 
 addition to descriptive help methods given with each command. 
 
 \section*{Details of Incomplete Parts}
+\subsection*{CLI}
 CLI does not grant users the ability to enter commands using hyphens for shortened commands. 
 Additionally, multiple commands cannot be processed simultaneously. However, implementation for 
 standard \texttt{getopt\_long} would require minimal implementation. Standard string comparsions 
@@ -84,7 +86,6 @@ table. Additional implementation for listing the fields associated with an exist
 configuration file, in addition to detecting whether or not a network connection is an eap network 
 would be required for full completion of the CLI. Additional methods might be preferred by the 
 developer to be considered complete. 
-\subsection*{CLI}
 
 %% TUI details here 
 \subsection*{TUI}
