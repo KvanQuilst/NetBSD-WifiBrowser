@@ -31,7 +31,17 @@ In addition to listing available and configured networks, connecting and disconn
 already existing connections, auto configuration of networks and eap networks, clearing 
 the screen and exiting the interface. The CLI is fully interactive with all methods in the 
 surf library and allows users to edit the fields in the configuration file and connect to 
-\texttt{wpa\_supplicant}. 
+\texttt{wpa\_supplicant}. The implementation of the TUI was gone about by using the
+curses library and was aimed to use a combination of windows and sub windows to display all
+the available and configured networks, while also allowing the user to edit networks
+using the various calls to \texttt{wpa\_supplicant} that \texttt{Surf} supplied. 
+The interactive portion of the TUI is almost complete apart from a handful of bugs that arose
+in the transition from development on a Linux machine to development on a NetBSD machine.
+The TUI is ready for API call implementation with some of the network retrieving calls already
+partially implemented. The TUI is still in need of some bug fixing when it comes to intaking and
+outputting the network lists for available and configured networks. Other than that the TUI
+still needs the implementation of the connect, edit network, auto connect, and configure network
+options after selecting the network that the user wants to work with.
 
 \section*{Details of Completed Parts}
 The only part of the project that reached total completion was the 
@@ -73,7 +83,7 @@ Commands for the CLI involve common words such as 'connect', 'disconnect', 'forg
 detailed and easy for users to understand and include the correct syntax for each command. 
 CLI has required implementation for users to edit and interact with existing networks in the 
 configuration file, connect and disconnect from already existing networks, list networks, in 
-addition to descriptive help methods given with each command. 
+addition to descriptive help methods given with each command. \\
 
 \section*{Details of Incomplete Parts}
 \subsection*{CLI}
@@ -89,6 +99,16 @@ developer to be considered complete.
 
 %% TUI details here 
 \subsection*{TUI}
+The main section of the TUI that was not completed was the implementation of the API calls 
+and network minipulation. The TUI is set up to print out available networks and waits for the user
+to select which network they want to work with, after this it opens up a seperate sub window with
+the various options one can do with a network that are supplied by the \texttt{Surf} API. The actual
+implementation of the \texttt{Surf} API calls are still needed but the area they should be implemented
+in are set up and functional. There are still some bugs that need to be fixed when getting the network 
+that the user is currently connected to, and also getting the available/configured networks and displaying 
+them to the user on the left window that is visible when the TUI is started up. The quitting functionality 
+is working when navigating from the left window after selecting a network back to the right window to select 
+a seperate network to edit, and while also quitting the TUI as a whole from the network selection screen.
 
 %% GUI details here
 \subsection*{GUI}
